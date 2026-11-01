@@ -38,22 +38,16 @@ def retitle(sec, old, new):
 PUB = '<span class="status published">Published</span>'
 
 old = []
-for i in (2, 3, 4):
+for i in (2, 3, 17, 25, 26, 33, 35):
     old.append(ch(secs[i], '1'))
-for i in (17, 21, 25, 26, 29):
-    old.append(ch(secs[i], '2'))
-x = ch(secs[32], '3'); x = retitle(x, '3.7 Knowledge editing', '3. Knowledge editing'); old.append(x)
-for i in (33, 34, 35, 38):
-    old.append(ch(secs[i], '3'))
-x = ch(secs[40], '3'); x = retitle(x, '4. Eight surgeries, three lessons', 'Eight surgeries, three lessons'); old.append(x)
-x = ch(secs[41], '4'); x = retitle(x, '<h2>5. The exam', '<h2>4. The exam'); old.append(x)
+x = ch(secs[40], '1'); x = retitle(x, '4. Eight surgeries, three lessons', 'Eight surgeries, three lessons'); old.append(x)
 for i in (45, 46):
-    old.append(ch(secs[i], '4'))
+    old.append(ch(secs[i], '1'))
 for i in (48, 49, 50, 51):
-    x = ch(secs[i], '4'); x = x.replace('</h2>', '</h2>' + PUB, 1); old.append(x)
+    x = ch(secs[i], '1'); x = x.replace('</h2>', '</h2>' + PUB, 1); old.append(x)
 
 hero = open('/tmp/claude-0/-home-claude/8c577477-01bb-5555-b0ea-1bb091fe4a25/scratchpad/hero.svg').read()
-cover = f'''<section class="title titlehero" data-ch="1" data-background-gradient="linear-gradient(120deg,#111111 0%,#161c24 55%,#1c2430 100%)">
+cover = f'''<section class="title titlehero" data-ch="0" data-background-gradient="linear-gradient(120deg,#111111 0%,#161c24 55%,#1c2430 100%)">
   <div class="th-left">
     <span class="th-kicker">RIT Computer Science Talk</span>
     <h1>Is There a Graph<br>Inside Generative<br>Models?</h1>
@@ -316,15 +310,14 @@ C.append('''<section data-ch="6">
 </section>''')
 
 tail = s[s.rfind('</section>') + len('</section>'):]
-tail = tail.replace("var CH=[['1','1 Background'],['3.1','3.1 Universal'],['3.2','3.2 Stitching'],['3.3','3.3 Merging'],['3.4','3.4 Pruning'],['3.5','3.5 Steering'],['3.6','3.6 Fine-tune'],['3.7','3.7 Editing'],['3.8','3.8 Diffing'],['4','4 Lessons'],['5','5 Why screen'],['6','6 Our paper'],['7','7 Open']];",
-  "var CH=[['1','1 Graphs in models'],['2','2 Surgeries'],['3','3 Editing'],['4','4 Delta graph'],['5','5 Music'],['6','6 Open']];")
-tail = re.sub(r"var NAMES=\{[^}]*\};", "var NAMES={'1':'1. A model is a graph','2':'2. Surgeries on models','3':'3. Knowledge editing','4':'4. Our work: delta graphs','5':'5. Music','6':'6. Open questions'};", tail)
-tail = re.sub(r"var CHN=\{[^}]*\};", "var CHN={'1':'1 A model is a graph','2':'2 Surgeries on models','3':'3 Knowledge editing','4':'4 Our work: delta graphs','5':'5 Music','6':'6 Open questions'};", tail)
-assert "1 Graphs in models" in tail and "5 Music" in tail
+tail = re.sub(r"var CH=\[\[.*?\]\];", "var CH=[['0','Vision'],['1','1 Depth: language'],['2','2 Time: music'],['3','3 Beyond'],['4','Close']];", tail, flags=re.S)
+tail = re.sub(r"var NAMES=\{[^}]*\};", "var NAMES={'0':'Vision','1':'Part 1. Depth: language','2':'Part 2. Time: music','3':'Part 3. Beyond','4':'Close'};", tail)
+tail = re.sub(r"var CHN=\{[^}]*\};", "var CHN={'0':'Vision','1':'Part 1. Depth: language','2':'Part 2. Time: music','3':'Part 3. Beyond','4':'Close'};", tail)
+assert "Depth: language" in tail
 
-import sys; sys.path.insert(0,'.'); import music
-M = music.MUSIC; C = music.CLOSE
-allsecs = [cover] + old + M + C
+import sys; sys.path.insert(0,'.'); import vision as VZ
+M = VZ.MUSIC; C = VZ.CL
+allsecs = [cover] + VZ.V + [VZ.P1DIV] + old + [VZ.BR1] + M + [VZ.BR2] + VZ.B + C
 html = head + '\n<div class="reveal"><div class="slides">\n\n' + '\n\n'.join(allsecs) + '\n' + tail
 bad = [c for c in ['—', '–'] if c in ''.join(M + C)]
 assert not bad, bad
@@ -333,4 +326,4 @@ os.makedirs(NEW + '/figs', exist_ok=True)
 for f in set(re.findall(r'figs/[A-Za-z0-9_]+\.png', html)):
     shutil.copy(OLD + '/' + f, NEW + '/' + f)
 shutil.copy(OLD + '/deck.js', NEW + '/deck.js')
-print('slides', len(allsecs), 'old', len(old), 'music', len(M), 'close', len(C))
+print('slides', len(allsecs), 'old', len(old), 'music', len(M))
