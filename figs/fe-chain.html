@@ -232,10 +232,16 @@ svg{width:100%;height:100vh;display:block}
           play();
         });
 
+        // ?act=learn loops the learning act only. ?act=compose starts with every
+        // arrow already drawn and loops the composing act only.
+        const act = new URLSearchParams(location.search).get('act');
         const play = async () => {
           for (;;) {
             await waitVisible();
             reset();
+            if (act === 'compose') {
+              chain.querySelectorAll('.fe-edge').forEach((e) => e.classList.add('is-on'));
+            } else {
             status.textContent = 'learning: every move draws an arrow';
             land(melody[0]);
             write(melody[0]).done();
@@ -250,7 +256,9 @@ svg{width:100%;height:100vh;display:block}
               await hop(a, b, U - 20, fraction(seen.get(`${a}>${b}`), fromA));
               await sleep(20);
             }
+            if (act === 'learn') { status.textContent = 'learned from Für Elise'; await sleep(2600); continue; }
             await sleep(700);
+            }
             chain.classList.add('is-composing');
             status.textContent = 'composing: a spinner at every note';
             chain.querySelector('.fe-composer').textContent = 'composer: the Markov chain';

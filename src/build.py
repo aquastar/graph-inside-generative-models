@@ -1,15 +1,16 @@
 import re, shutil, os
-OLD = '/home/claude/neural-networks-to-networks'
-NEW = '/home/claude/graph-inside-generative-models'
+HERE = os.path.dirname(os.path.abspath(__file__))
+NEW = os.path.dirname(HERE)
+OLD = os.environ.get('OLD_DECK', os.path.join(os.path.dirname(NEW), 'aquastar', 'neural-networks-to-networks'))
 s = open(OLD + '/index.html').read()
 head = s[:s.find('<body>') + len('<body>')]
 head = head.replace('<title>From Networks to Neural Networks</title>', '<title>Is There a Graph Inside Generative Models?</title>')
 EXTRA_CSS = '''
-.reveal .status{position:absolute;top:9px;right:16px;z-index:5;font:600 13px/1 "Fira Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:6px 11px;border-radius:3px;color:#fff}
+.reveal .status{position:absolute;top:48px;right:44px;z-index:5;font:600 13px/1 "Fira Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;padding:6px 11px;border-radius:3px;color:#fff}
 .reveal .status.published{background:#2f7d4f}
 .reveal .status.review{background:#4C5B66}
 .reveal .status.progress{background:#F76902}
-.reveal .status.open{background:#fff;color:#111;border:2px dashed #111;padding:4px 9px}
+.reveal .status.open,.reveal .status.plan{background:#fff;color:#111;border:2px dashed #111;padding:4px 9px}
 .reveal .mu{color:#1f8a9a;font-weight:600}
 .reveal .lm{color:#F76902;font-weight:600}
 .reveal .ph{border:2px dashed var(--line);color:var(--muted);font-size:.55em;padding:1.2em;text-align:center;background:#fafbfb}
@@ -46,7 +47,7 @@ for i in (45, 46):
 for i in (48, 49, 50, 51):
     x = ch(secs[i], '1'); x = x.replace('</h2>', '</h2>' + PUB, 1); old.append(x)
 
-hero = open('/tmp/claude-0/-home-claude/8c577477-01bb-5555-b0ea-1bb091fe4a25/scratchpad/hero.svg').read()
+hero = open(os.path.join(HERE, 'hero.svg')).read()
 cover = f'''<section class="title titlehero" data-ch="0" data-background-gradient="linear-gradient(120deg,#111111 0%,#161c24 55%,#1c2430 100%)">
   <div class="th-left">
     <span class="th-kicker">RIT Computer Science Talk</span>
@@ -315,15 +316,68 @@ tail = re.sub(r"var NAMES=\{[^}]*\};", "var NAMES={'0':'Vision','1':'Part 1. Dep
 tail = re.sub(r"var CHN=\{[^}]*\};", "var CHN={'0':'Vision','1':'Part 1. Depth: language','2':'Part 2. Time: music','3':'Part 3. Beyond','4':'Close'};", tail)
 assert "Depth: language" in tail
 
-import sys; sys.path.insert(0,'.'); import vision as VZ
-M = VZ.MUSIC; C = VZ.CL
-allsecs = [cover] + VZ.V + [VZ.P1DIV] + old + [VZ.BR1] + M + [VZ.BR2] + VZ.B + C
+import sys; sys.path.insert(0, HERE); import talk as TK
+OLDS = {}
+for i in (3, 25, 26, 33, 35, 45):
+    OLDS[i] = ch(secs[i], '1')
+for i in (48, 49):
+    OLDS[i] = ch(secs[i], '1').replace('</h2>', '</h2>' + PUB, 1)
+parts = TK.assemble(cover, OLDS)
+allsecs = [x for k in ('vision', 'language', 'music', 'beyond', 'close') for x in parts[k]]
+
+def no_motion(sec):
+    """drop decorative moving balls: a circle animated along a path becomes a static circle at the path start"""
+    def fix(m):
+        attrs, path = m.group(1), m.group(2)
+        x, y = re.match(r'M\s*([-\d.]+)[ ,]([-\d.]+)', path).groups()
+        attrs = re.sub(r'\s(cx|cy)="[^"]*"', '', attrs)
+        return f'<circle{attrs} cx="{x}" cy="{y}"/>'
+    return re.sub(r'<circle([^>]*)><animateMotion[^>]*path="([^"]+)"[^>]*/></circle>', fix, sec)
+
+def cap_fragments(sec, n=4):
+    """at most n reveal steps per slide: number unindexed fragments in order, then pool the steps"""
+    k = [0]
+    def num(m):
+        tag = m.group(0)
+        if 'data-fragment-index' in tag:
+            return tag
+        k[0] += 1
+        return tag.replace('class="', f'data-fragment-index="{100 + k[0]}" class="', 1)
+    sec = re.sub(r'<[a-z]+[^>]*class="[^"]*\bfragment\b[^"]*"[^>]*>', num, sec)
+    idx = sorted({int(v) for v in re.findall(r'data-fragment-index="(\d+)"', sec)})
+    if len(idx) <= n:
+        return sec
+    remap = {v: 1 + (r * n) // len(idx) for r, v in enumerate(idx)}
+    return re.sub(r'data-fragment-index="(\d+)"', lambda m: f'data-fragment-index="{remap[int(m.group(1))]}"', sec)
+
+allsecs = [cap_fragments(no_motion(x)) for x in allsecs]
+for x in allsecs:
+    assert 'animateMotion' not in x, x[:120]
+    vis = re.sub(r'<(script|style)[^>]*>.*?</\1>', '', x, flags=re.S)
+    txt = ' '.join(re.findall(r'>([^<>]+)<', vis))
+    txt = re.sub(r'&#?\w+;', ' ', txt)
+    bad = [c for c in ('\u2014', '\u2013', ';') if c in txt]
+    if bad:
+        print('CONTEXT', [t[max(0, t.find(c) - 60):t.find(c) + 20] for c in bad for t in [txt]])
+    assert not bad, (bad, re.search(r'<h2>(.*?)</h2>', x).group(1) if '<h2>' in x else x[:80])
+
+FE_HOOK = """<script>
+(function(){
+  function frames(s){ return s ? Array.prototype.slice.call(s.querySelectorAll('iframe.fe-frame')) : []; }
+  function play(f){ if(!f.getAttribute('src')){ f.addEventListener('load', function(){ f.contentWindow.postMessage('fe-play','*'); }, {once:true}); f.setAttribute('src', f.dataset.src); } else { f.contentWindow.postMessage('fe-play','*'); } }
+  function stop(f){ if(f.contentWindow) f.contentWindow.postMessage('fe-stop','*'); }
+  Reveal.on('ready', function(e){ frames(e.currentSlide).forEach(play); });
+  Reveal.on('slidechanged', function(e){ frames(e.previousSlide).forEach(stop); frames(e.currentSlide).forEach(play); });
+})();
+</script>
+"""
+tail = tail.replace('</body>', FE_HOOK + '</body>', 1)
+assert 'fe-frame' in tail
 html = head + '\n<div class="reveal"><div class="slides">\n\n' + '\n\n'.join(allsecs) + '\n' + tail
-bad = [c for c in ['—', '–'] if c in ''.join(M + C)]
-assert not bad, bad
 open(NEW + '/index.html', 'w').write(html)
 os.makedirs(NEW + '/figs', exist_ok=True)
 for f in set(re.findall(r'figs/[A-Za-z0-9_]+\.png', html)):
-    shutil.copy(OLD + '/' + f, NEW + '/' + f)
+    if not os.path.exists(NEW + '/' + f):
+        shutil.copy(OLD + '/' + f, NEW + '/' + f)
 shutil.copy(OLD + '/deck.js', NEW + '/deck.js')
-print('slides', len(allsecs), 'old', len(old), 'music', len(M))
+print('slides', len(allsecs), {k: len(v) for k, v in parts.items()})

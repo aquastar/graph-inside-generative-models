@@ -22,9 +22,19 @@ Closing line: "A graph inside a generator is a hypothesis about the model. A lis
 Noguchi, Akama, Nakamura, Minamikawa, Polouliakh 2026 (Sony CSL), arXiv 2603.03190: NMED-T EEG (20 subjects, 10 songs, 128 ch). MusicGen-large output logits on the first codebook give surprisal and entropy, MuQ last layer gives acoustic tokens. These are teacher targets for masked pretraining of an EEG encoder, then 10-way song identification from 3 s EEG (accuracy 0.823 scratch to 0.887 ensemble). No internal layers, no steering, no style. Pepino 2025: 36 audio encoders vs fMRI, not generators. Yang 2026: audio LLMs vs EEG, speech stimuli. Brain2Music (Denk 2023): MusicLM components vs fMRI, no layerwise, no interventions.
 
 ## Files
-- index.html built by src/build.py from the old deck repo aquastar/neural-networks-to-networks plus src/music.py and src/vision.py. Scratch paths inside build.py point to the old session scratchpad, fix paths before rerunning.
-- figs/fe-chain.html: standalone Für Elise animation from aquastar/zhiqian-ai (src/pages/index.astro), plays when the parent posts 'fe-play', click for sound. Not yet embedded in a slide.
+- index.html is built by `python3 src/build.py`. It reads the old deck from ../aquastar/neural-networks-to-networks by default (clone it there, or set OLD_DECK to its path). No scratchpad paths remain.
+- src/talk.py holds the new and reshaped slides and the final order. src/vision.py and src/music.py hold the reused drawings.
+- build.py runs three checks on every slide: no animateMotion (moving balls are turned into static dots), at most 4 fragment steps (extra steps are pooled), and no em dash, en dash or semicolon in visible text.
+- figs/fe-chain.html takes ?act=learn (learning only, loops) or ?act=compose (all arrows drawn, composing only). Slides 22 and 23 embed one act each. A small script in the tail starts the animation when its slide opens and stops it when it closes. Click the animation for sound.
+- thumbs/ is regenerated from headless Chrome screenshots. Reveal.js loads from cdnjs, which the cloud shell cannot reach, so screenshots use a local copy from npm.
 
-## Blocked
-Original paper figures: shell could not reach arxiv.org, openreview.net, archives.ismir.net, elifesciences.org, journals.plos.org in the old session. User added domains in settings, expected to work in a new session. Priority figures: Copet 2023 Fig 1, Wei 2024 layer probing, Di Liberto 2020, Bellier 2023, Denk 2023 Fig 1, Tuckute 2023 layer map, Meng 2022 Fig 1, Hase 2023, plus his own steering and pilot figures.
-Public repo: paywalled figures (Nature, Cell, Neuron, PNAS) may need the repo private before posting.
+## Status (Nov 1 2026)
+Done: 42 slides in the target order (Vision 8, Language 11, Music 17, Beyond 3, Close 3). New slides: same machine two instruments, facts versus styles, three networks, two Für Elise slides, 144 numbers, where the graph becomes a path, music and the brain 1 to 4, pilot, shape beats size and where it stops (merged). Encoding row, judge row, outside judge line, SMITIN and corrected Singh and Facchiano citations, brain column on the next experiment slide, fourth falsifier, audiology and neuroscience in the help slide, closing line.
+
+Original figures added: Denk 2023 Figure 1 and the encoding result (brain 2 and brain 3 slides), taken from the Brain2Music project page repo google-research/seanet.
+
+## Still to do
+- Pilot slide: two dashed placeholders for his probe accuracy by layer and tempo dose response figures.
+- Brain 1 slide: dashed placeholder for the Di Liberto 2020 figure.
+- Paper figures still blocked: the cloud shell proxy answered 403 for arxiv.org, openreview.net, archives.ismir.net, elifesciences.org, journals.plos.org on Nov 1 2026 (also export.arxiv.org, ncbi, europepmc, huggingface, jsdelivr). Public GitHub clones work, which is how Brain2Music came in. Missing: Copet 2023 Fig 1 (anatomy slide), Wei 2024 layer probing (tools slide), Di Liberto 2020, Bellier 2023, Tuckute 2023 layer map, Hase 2023. Meng 2022 Fig 1 is already on the ROME slide. Fastest fix: download these PDFs locally and attach them, or check the domain allowlist again.
+- Paywalled figures (Nature, Cell, Neuron, PNAS) may need the repo private before posting.
