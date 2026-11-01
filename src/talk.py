@@ -194,7 +194,7 @@ FOUR = VZ.MUSIC[0]  # four stages, moving ball removed by the global pass in bui
 
 def fe(act, title, side, take, notes):
     g = adefs('fe' + act[0])
-    g += f'<foreignObject x="20" y="10" width="760" height="420"><div xmlns="http://www.w3.org/1999/xhtml" style="width:760px;height:420px"><iframe class="fe-frame" data-src="figs/fe-chain.html?act={act}" title="Für Elise Markov chain, {act}" style="width:760px;height:420px;border:0;background:#fff" loading="lazy"></iframe></div></foreignObject>'
+    g += f'<foreignObject x="20" y="10" width="760" height="420"><div xmlns="http://www.w3.org/1999/xhtml" style="width:760px;height:420px"><iframe class="fe-frame" data-src="figs/fe-chain.html?act={act}&amp;autoplay=1" title="Für Elise Markov chain, {act}" style="width:760px;height:420px;border:0;background:#fff" loading="lazy"></iframe></div></foreignObject>'
     for i, (a, b) in enumerate(side):
         y = 50 + i * 120
         g += F(i + 1, R(810, y, 350, 100, MUL if i < 2 else ACL, MU if i < 2 else ACC, 1.5, 10) + T(830, y + 32, a, 17, 700, MU if i < 2 else ACC) + wrap(830, y + 58, b, 14, 400, INK, width=42, lh=19))
@@ -447,10 +447,168 @@ TAKE = sec('What to take home', SVG(g), ch='4')
 def assemble(cover, old):
     """old: the reused language slides from the earlier deck, keyed by their old index"""
     lang = [VZ.P1DIV, old[3], old[25], old[26], old[33], old[35], old[45], old[48], old[49], SHAPE, BRIDGE]
-    vision = [cover, VZ.V[0], SAME, FACTS, VZ.V[1], THREE, NETSCI, PROGRAM]
+    vision = TRAILER + [cover.replace('class="title titlehero"', 'class="title titlehero full"', 1), VZ.V[0], SAME, FACTS, VZ.V[1], THREE, NETSCI, PROGRAM]
     mus = [FOUR, FE_LEARN, FE_COMPOSE, CORPUS, PATH, rech(VZ.MUSIC[1], '2'), VZ.MERGE_MS, VZ.ANAT, TOOLS, rech(VZ.MUSIC[6], '2'),
            BRAIN1, BRAIN2, BRAIN3, BRAIN4, rech(VZ.MUSIC[8], '2'), PILOT, NEXT]
     beyond = [VZ.B[0], VZ.B[1], DROP]
     close = [TWO, HELP, TAKE]
     parts = {'vision': vision, 'language': lang, 'music': mus, 'beyond': beyond, 'close': close}
     return parts
+
+
+# ======================= TRAILER =======================
+# Full bleed dark slides before the title. Entrance animations replay every time a
+# slide opens: elements with class "a" rise in after --d, "dr" paths draw, "g" bars
+# grow, "p" marks pop. Numbers with data-count count up (script in build.py).
+TRAILER_CSS = '''
+.reveal section.trailer,.reveal section.trailer *{font-family:"Fira Sans",sans-serif}
+.reveal section.trailer{padding:0 !important;color:#e8edf0}
+.reveal .slides>section.trailer.present{display:block !important}
+.reveal section.trailer .tk{position:absolute;left:64px;top:44px;margin:0;font-size:15px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#F76902;text-align:left}
+.reveal section.trailer .hl{position:absolute;left:64px;top:74px;width:1150px;margin:0;font-size:44px;line-height:1.14;font-weight:600;color:#fff;text-align:left;letter-spacing:-.01em}
+.reveal section.trailer .hl em{font-style:normal;color:#F76902}
+.reveal section.trailer .hl i{font-style:normal;color:#38b2c4}
+.reveal section.trailer .pay{position:absolute;left:64px;bottom:46px;width:1150px;margin:0;font-size:25px;line-height:1.3;color:#c9d2d8;text-align:left}
+.reveal section.trailer .pay b{color:#fff;font-weight:600}
+.reveal section.trailer .src{position:absolute;left:64px;bottom:16px;margin:0;font-size:13px;color:#7d8a93;text-align:left}
+.reveal section.trailer .tag{position:absolute;right:56px;top:40px;font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:6px 11px;border-radius:3px;color:#fff}
+.reveal section.trailer .tag.pub{background:#2f7d4f}.reveal section.trailer .tag.rev{background:#4C5B66}.reveal section.trailer .tag.prog{background:#F76902}
+.reveal section.trailer .stage{position:absolute;left:64px;width:1150px}
+.reveal section.trailer .card{position:absolute;background:#fff;border-radius:14px;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 30px 80px rgba(0,0,0,.55),0 0 120px rgba(247,105,2,.18);overflow:hidden}
+@keyframes tr-rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes tr-fade{from{opacity:0}to{opacity:1}}
+@keyframes tr-pop{0%{opacity:0;transform:scale(.3)}70%{opacity:1;transform:scale(1.18)}100%{opacity:1;transform:scale(1)}}
+@keyframes tr-draw{to{stroke-dashoffset:0}}
+@keyframes tr-grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.reveal section.trailer .a,.reveal section.trailer .p{opacity:0}
+.reveal section.trailer.present .a{animation:tr-rise .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,0s)}
+.reveal section.trailer.present .a.f{animation-name:tr-fade}
+.reveal section.trailer.present .p{animation:tr-pop .45s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,0s);transform-box:fill-box;transform-origin:center}
+.reveal section.trailer .dr{stroke-dasharray:var(--len,1200);stroke-dashoffset:var(--len,1200)}
+.reveal section.trailer.present .dr{animation:tr-draw var(--t,1.2s) ease-in-out both;animation-delay:var(--d,0s)}
+.reveal section.trailer .g{transform-box:fill-box;transform-origin:left center;transform:scaleX(0)}
+.reveal section.trailer.present .g{animation:tr-grow 1s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,0s)}
+@media (prefers-reduced-motion:reduce){.reveal section.trailer .a,.reveal section.trailer .p{opacity:1;animation:none !important}.reveal section.trailer .dr{stroke-dashoffset:0;animation:none !important}.reveal section.trailer .g{transform:none;animation:none !important}}
+'''
+
+DARK_BG = 'data-background-gradient="radial-gradient(ellipse at 70% 40%,#1c2633 0%,#141a22 55%,#0d1117 100%)"'
+WT, DM, TL = '#ffffff', '#8c9aa4', '#38b2c4'
+
+def d(t):
+    return f'style="--d:{t:.2f}s"'
+
+def tsec(inner, notes='', tag=''):
+    tg = {'pub': '<span class="tag pub a f" style="--d:.2s">Published</span>', 'rev': '<span class="tag rev a f" style="--d:.2s">Under review</span>',
+          'prog': '<span class="tag prog a f" style="--d:.2s">In progress</span>'}.get(tag, '')
+    n = f'\n  <aside class="notes">{notes}</aside>' if notes else ''
+    return f'<section class="trailer full" data-ch="0" {DARK_BG}>\n  {tg}{inner}{n}\n</section>'
+
+def tT(x, y, s, size, w=400, fill=WT, a='start', cls='', dd=None, extra=''):
+    st = f' style="--d:{dd:.2f}s"' if dd is not None else ''
+    c = f' class="{cls}"' if cls else ''
+    return f'<text x="{x}" y="{y}" font-size="{size}" font-weight="{w}" fill="{fill}" text-anchor="{a}"{c}{st} {extra}>{s}</text>'
+
+# ---- T0 cold open: the Für Elise graph, learning then composing ----
+TR0 = tsec('''<p class="tk a" style="--d:.1s">Beethoven, Für Elise, opening bars</p>
+  <p class="hl a" style="--d:.3s">This generator is a graph. <i>Watch it learn, then compose.</i></p>
+  <div class="card a" style="--d:.9s;left:170px;top:150px;width:940px;height:370px">
+    <iframe class="fe-frame" data-src="figs/fe-chain.html?autoplay=1" title="Für Elise Markov chain" style="width:940px;height:370px;border:0;background:#fff"></iframe>
+  </div>
+  <p class="pay a" style="--d:2.4s;bottom:38px">Every move draws an arrow. Then the arrows write music Beethoven never wrote.</p>''',
+  notes='Cold open. Say nothing for the first few seconds, let the ball walk the melody. Then: this is a complete generative model, and every decision it makes is a visible edge. Large neural generators have no such picture. The talk asks whether one is hiding inside them. Click the animation for sound.')
+
+# ---- T1 language result: silent edit failures ----
+rows = [('check 20 at random', 11, DM, '#5d6b75'), ('pick by editor and model', 14, DM, '#5d6b75'), ('pick by our delta graph', 17, '#F76902', '#F76902')]
+g = ''
+for r, (lab, k, lc, cc) in enumerate(rows):
+    y = 30 + r * 92; t0 = 1.6 + r * 1.25
+    g += tT(320, y + 30, lab, 22, 700 if r == 2 else 500, '#fff' if r == 2 else '#c9d2d8', 'end', 'a', t0 - .3)
+    for j in range(20):
+        x = 345 + j * 37
+        bad = j < k
+        fill = (cc if r == 2 else '#c0503a') if bad else '#2a3640'
+        g += f'<rect class="p" style="--d:{t0 + j * .045:.2f}s" x="{x}" y="{y}" width="31" height="44" rx="4" fill="{fill}"/>'
+        if bad:
+            g += f'<path class="p" style="--d:{t0 + j * .045 + .05:.2f}s" d="M{x+9},{y+15} L{x+22},{y+29} M{x+22},{y+15} L{x+9},{y+29}" stroke="#fff" stroke-width="3" stroke-linecap="round"/>'
+    g += f'<text x="1100" y="{y + 36}" font-size="40" font-weight="700" fill="{lc if r < 2 else "#F76902"}" text-anchor="middle" class="a f" style="--d:{t0 + .9:.2f}s" data-count="{k}" data-delay="{t0 + .9:.2f}">0</text>'
+g += tT(1146, 300, 'broken edits caught', 15, 600, DM, 'end', 'a f', 5.2)
+TR1 = tsec(f'''<p class="tk a" style="--d:.1s">Language models: editing one fact</p>
+  <p class="hl a" style="--d:.3s">100 edits. Every one passes its own test.<br><em>56 are secretly broken.</em></p>
+  <svg class="stage" style="top:228px;height:320px" viewBox="0 0 1150 320">{g}</svg>
+  <p class="pay a" style="--d:5.4s">Same budget of 20 checks, <b>half again as many broken edits caught</b>, read only from how the inside rewired.</p>
+  <p class="src a f" style="--d:5.6s">Benbrahim et al., SDM 2026. Rates from the paper: 56%, 70%, 86% bad among the 20 checked.</p>''', tag='pub',
+  notes='Result one, language. An edit can pass the benchmark and still break related facts. With the same checking budget, ranking by our delta graph finds about 17 broken edits where random checking finds about 11. The details come in Part 1.')
+
+# ---- T2 music data graph: 144 numbers ----
+fe_counts = {(0, 2): 2, (0, 3): 2, (0, 7): 1, (2, 0): 1, (2, 3): 1, (2, 5): 2, (2, 7): 2, (3, 0): 2, (3, 2): 1, (3, 7): 3, (5, 3): 2, (6, 7): 4, (7, 0): 2, (7, 2): 2, (7, 3): 1, (7, 6): 4, (7, 7): 1, (7, 11): 1, (11, 2): 1}
+rowsum = {i: sum(v for (a, b), v in fe_counts.items() if a == i) for i in range(12)}
+g = ''
+cs, gx, gy = 25, 70, 20
+for i in range(12):
+    for j in range(12):
+        v = fe_counts.get((i, j), 0) / rowsum[i] if rowsum[i] else 0
+        fill = f'rgba(247,105,2,{0.25 + 0.75 * v:.2f})' if v else '#222c35'
+        g += f'<rect class="p" style="--d:{0.9 + (i * 12 + j) * 0.011:.2f}s" x="{gx + j * cs}" y="{gy + i * cs}" width="{cs - 3}" height="{cs - 3}" rx="3" fill="{fill}"/>'
+g += tT(gx + 6 * cs, gy + 12 * cs + 30, 'Für Elise as a 12 by 12 table', 16, 600, DM, 'middle', 'a f', 2.4)
+g += f'<text x="720" y="140" font-size="120" font-weight="700" fill="#F76902" text-anchor="middle" class="a f" style="--d:3.0s" data-count="70.9" data-dec="1" data-suffix="%" data-delay="3.0">0%</text>'
+g += tT(720, 186, 'of unseen pieces placed in the right tradition', 20, 500, '#c9d2d8', 'middle', 'a', 3.4)
+g += tT(470, 250, 'guessing the biggest corpus', 16, 500, DM, 'start', 'a f', 4.0) + f'<rect class="g" style="--d:4.0s" x="470" y="262" width="{500 * .2:.0f}" height="22" rx="3" fill="#4C5B66"/>' + tT(470 + 500 * .2 + 10, 279, '20%', 16, 700, DM, 'start', 'a f', 4.6)
+g += tT(470, 320, '144 numbers, plain logistic regression', 16, 600, WT, 'start', 'a f', 4.4) + f'<rect class="g" style="--d:4.4s" x="470" y="332" width="{500 * .709:.0f}" height="22" rx="3" fill="#F76902"/>' + tT(470 + 500 * .709 + 10, 349, '70.9%', 16, 700, '#F76902', 'start', 'a f', 5.0)
+TR2 = tsec(f'''<p class="tk a" style="--d:.1s">Music: a graph read from the notes</p>
+  <p class="hl a" style="--d:.3s">One melody becomes <em>144 numbers.</em> No music theory.</p>
+  <svg class="stage" style="top:170px;height:380px" viewBox="0 0 1150 380">{g}</svg>
+  <p class="pay a" style="--d:5.4s">A first order graph already carries a style: <b>1,000 pieces, six traditions</b>, Bach to fiddle tunes.</p>
+  <p class="src a f" style="--d:5.6s">Five fold cross validation, majority baseline 20%. zhiqian.ai/music-markov</p>''', tag='prog',
+  notes='Result two. The table is the real one for the Für Elise opening, rows are the current scale degree, columns the next. The same 144 numbers per piece, fed to a plain classifier, name the tradition of a piece it has never seen 70.9% of the time.')
+
+# ---- T3 music model: one way steering ----
+def isl(cx, cy, dd):
+    pth = f'M{cx-150},{cy+20} C{cx-110},{cy-60} {cx-20},{cy-50} {cx+30},{cy-30} C{cx+110},{cy-5} {cx+160},{cy+30} {cx+120},{cy+60} C{cx+60},{cy+95} {cx-120},{cy+85} {cx-150},{cy+20} Z'
+    return f'<path class="a f" style="--d:{dd:.2f}s" d="{pth}" fill="rgba(56,178,196,.16)" stroke="{TL}" stroke-width="3"/>' + tT(cx, cy + 30, 'a style', 18, 700, TL, 'middle', 'a f', dd)
+g = isl(260, 190, 1.0) + isl(860, 190, 1.0)
+g += tT(260, 30, 'remove a style', 24, 700, WT, 'middle', 'a', .9) + tT(860, 30, 'add a style', 24, 700, WT, 'middle', 'a', .9)
+for k, (sx, sy, ex, ey) in enumerate([(230, 195, 110, 75), (265, 185, 280, 55), (300, 195, 440, 90)]):
+    g += f'<path class="dr" style="--d:{1.8 + k * .35:.2f}s;--len:220" d="M{sx},{sy} L{ex},{ey}" stroke="#F76902" stroke-width="4" fill="none" stroke-linecap="round" marker-end="url(#trA)"/>'
+g += ''.join(f'<circle class="p" style="--d:1.6s" cx="{x}" cy="{y}" r="6" fill="#F76902"/>' for x, y in [(230, 195), (265, 185), (300, 195)])
+g += f'<circle class="p" style="--d:3.0s" cx="260" cy="350" r="26" fill="#2f7d4f"/>' + f'<path class="p" style="--d:3.1s" d="M247,350 L257,361 L275,340" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>'
+g += tT(300, 358, 'leaves easily, still music', 19, 600, WT, 'start', 'a', 3.1)
+for k, (sx, sy, ex, ey) in enumerate([(640, 60, 750, 140), (1100, 50, 990, 140), (650, 330, 720, 270)]):
+    g += f'<path class="dr" style="--d:{3.6 + k * .4:.2f}s;--len:200" d="M{sx},{sy} L{ex},{ey}" stroke="#F76902" stroke-width="4" fill="none" stroke-dasharray="10 8" stroke-linecap="round"/>'
+    g += f'<path class="p" style="--d:{4.0 + k * .4:.2f}s" d="M{ex-9},{ey-9} L{ex+9},{ey+9} M{ex+9},{ey-9} L{ex-9},{ey+9}" stroke="#ff7a59" stroke-width="4" stroke-linecap="round"/>'
+g += f'<circle class="p" style="--d:5.0s" cx="860" cy="350" r="26" fill="#c0503a"/>' + f'<path class="p" style="--d:5.1s" d="M850,340 L870,360 M870,340 L850,360" stroke="#fff" stroke-width="5" stroke-linecap="round"/>'
+g += tT(900, 358, 'the push misses', 19, 600, WT, 'start', 'a', 5.1)
+g = '<defs><marker id="trA" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#F76902"/></marker></defs>' + g + f'<line class="a f" style="--d:.9s" x1="560" y1="20" x2="560" y2="370" stroke="#2a3640" stroke-width="2"/>'
+TR3 = tsec(f'''<p class="tk a" style="--d:.1s">Music: steering a neural generator</p>
+  <p class="hl a" style="--d:.3s">Inside MusicGen, steering a style is <em>one way.</em></p>
+  <svg class="stage" style="top:160px;height:380px" viewBox="0 0 1150 380">{g}</svg>
+  <p class="pay a" style="--d:5.6s">Many exits, almost no entrances. <b>That sounds like a fact about a graph.</b></p>
+  <p class="src a f" style="--d:5.8s">Co-authored work under review. MusicGen small and medium.</p>''', tag='rev',
+  notes='Result three. Subtract a style direction and the style fades while the music stays coherent. Add the same direction and the output does not acquire the style. A vector cannot explain that asymmetry. Reachability on a directed graph can.')
+
+# ---- T4 memory: graph or path ----
+g = ''
+pts = [(250 + 120 * math.cos(2 * math.pi * k / 10 - math.pi / 2), 190 + 120 * math.sin(2 * math.pi * k / 10 - math.pi / 2)) for k in range(10)]
+walk1 = [0, 3, 1, 3, 0, 5, 2, 7, 3, 0, 4, 8, 1, 6, 9, 3, 0, 2, 5, 3, 7, 1, 4, 0]
+pd = 'M' + ' L'.join(f'{pts[a][0]:.0f},{pts[a][1]:.0f}' for a in walk1)
+g += f'<path class="dr" style="--d:1.2s;--t:3.2s;--len:6000" d="{pd}" stroke="#38b2c4" stroke-width="2.5" stroke-opacity=".75" fill="none"/>'
+g += ''.join(f'<circle class="p" style="--d:{.8 + k * .05:.2f}s" cx="{x:.0f}" cy="{y:.0f}" r="12" fill="#141a22" stroke="#38b2c4" stroke-width="3"/>' for k, (x, y) in enumerate(pts))
+g += tT(250, 30, 'first order', 24, 700, TL, 'middle', 'a', .9)
+g += f'<text x="250" y="378" font-size="46" font-weight="700" fill="#38b2c4" text-anchor="middle" class="a f" style="--d:3.6s" data-count="89" data-suffix="%" data-delay="3.6">0%</text>'
+g += tT(330, 370, 'of steps revisit a node', 16, 500, DM, 'start', 'a f', 3.8)
+xs = [640 + k * 15 for k in range(32)]
+ys = [190 + 95 * math.sin(k * 1.1) * (0.6 + 0.4 * math.cos(k * .37)) for k in range(32)]
+pd2 = 'M' + ' L'.join(f'{x:.0f},{y:.0f}' for x, y in zip(xs, ys))
+g += f'<path class="dr" style="--d:2.0s;--t:3s;--len:2400" d="{pd2}" stroke="#F76902" stroke-width="3" fill="none"/>'
+g += ''.join(f'<circle class="p" style="--d:{2.0 + k * .09:.2f}s" cx="{x:.0f}" cy="{y:.0f}" r="5" fill="#141a22" stroke="#F76902" stroke-width="2"/>' for k, (x, y) in enumerate(zip(xs, ys)))
+g += tT(870, 30, 'third order', 24, 700, '#F76902', 'middle', 'a', 1.8)
+g += f'<text x="760" y="378" font-size="46" font-weight="700" fill="#F76902" text-anchor="middle" class="a f" style="--d:5.0s" data-count="6" data-suffix="%" data-delay="5.0">0%</text>'
+g += tT(820, 370, 'revisit: the piece memorized', 16, 500, DM, 'start', 'a f', 5.2)
+g += f'<line class="a f" style="--d:.9s" x1="540" y1="20" x2="540" y2="380" stroke="#2a3640" stroke-width="2"/>'
+TR4 = tsec(f'''<p class="tk a" style="--d:.1s">Music: how much memory makes a style</p>
+  <p class="hl a" style="--d:.3s">Too little memory: a graph. Too much: <em>a path.</em></p>
+  <svg class="stage" style="top:160px;height:390px" viewBox="0 0 1150 390">{g}</svg>
+  <p class="pay a" style="--d:5.8s">Same Bach chorale, 10 nodes versus 81. <b>The graph worth finding lives in between.</b></p>
+  <p class="src a f" style="--d:6.0s">An 89 note Bach chorale at first and third order. Drawings are schematic, numbers are measured.</p>''', tag='prog',
+  notes='Result four. At first order the walk keeps returning to the same ten states, so it is a real graph, but an LLM judge can tell its output from Bach almost every time. At third order the piece becomes a path through 81 states and stops generalizing. Second order already recovers key regions. The open question is which contexts earn longer memory.')
+
+TRAILER = [TR0, TR1, TR2, TR3, TR4]

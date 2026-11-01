@@ -25,13 +25,17 @@ Noguchi, Akama, Nakamura, Minamikawa, Polouliakh 2026 (Sony CSL), arXiv 2603.031
 - index.html is built by `python3 src/build.py`. It reads the old deck from ../aquastar/neural-networks-to-networks by default (clone it there, or set OLD_DECK to its path). No scratchpad paths remain.
 - src/talk.py holds the new and reshaped slides and the final order. src/vision.py and src/music.py hold the reused drawings.
 - build.py runs three checks on every slide: no animateMotion (moving balls are turned into static dots), at most 4 fragment steps (extra steps are pooled), and no em dash, en dash or semicolon in visible text.
-- figs/fe-chain.html takes ?act=learn (learning only, loops) or ?act=compose (all arrows drawn, composing only). Slides 22 and 23 embed one act each. A small script in the tail starts the animation when its slide opens and stops it when it closes. Click the animation for sound.
+- figs/fe-chain.html takes ?act=learn (learning only, loops) or ?act=compose (all arrows drawn, composing only). The two Für Elise body slides embed one act each, the cold open embeds the full loop. ?autoplay=1 makes it start when the deck loads it. A small script in the tail starts the animation when its slide opens and stops it when it closes. Click the animation for sound.
 - thumbs/ is regenerated from headless Chrome screenshots. Reveal.js loads from cdnjs, which the cloud shell cannot reach, so screenshots use a local copy from npm.
 
 ## Status (Nov 1 2026)
 Done: 42 slides in the target order (Vision 8, Language 11, Music 17, Beyond 3, Close 3). New slides: same machine two instruments, facts versus styles, three networks, two Für Elise slides, 144 numbers, where the graph becomes a path, music and the brain 1 to 4, pilot, shape beats size and where it stops (merged). Encoding row, judge row, outside judge line, SMITIN and corrected Singh and Facchiano citations, brain column on the next experiment slide, fourth falsifier, audiology and neuroscience in the help slide, closing line.
 
 Original figures added: Denk 2023 Figure 1 and the encoding result (brain 2 and brain 3 slides), taken from the Brain2Music project page repo google-research/seanet.
+
+## Trailer (added Nov 1 2026, after his feedback that the opening was flat)
+He wants the opening to work like a film trailer: grab first with polished results, explain later. Slides 1 to 5 are full bleed dark slides before the title: cold open on the live Für Elise graph, then one result per slide (SDM 2026 delta graph catches 17 vs 11 broken edits, 144 numbers name the tradition 70.9%, one way steering, graph versus path at first and third order). Entrance animations replay on every visit (CSS in talk.TRAILER_CSS, count up numbers via data-count). Deck is now 47 slides, so something in the body should be cut for 45 minutes.
+Presentation craft research (Fable subagent): docs/presentation-craft.md. Apply it to the body slides next: assertion headlines, a forecast of the findings in the first five minutes, setup and payoff, ending on contributions.
 
 ## Still to do
 - Pilot slide: two dashed placeholders for his probe accuracy by layer and tempo dose response figures.

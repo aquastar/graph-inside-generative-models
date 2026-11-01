@@ -69,7 +69,7 @@ svg{width:100%;height:100vh;display:block}
         status.textContent = 'learned from Für Elise';
       } else {
         // Hold still while the figure is off screen or the tab is hidden.
-        let visible = (window.parent === window);
+        let visible = (window.parent === window) || new URLSearchParams(location.search).has('autoplay');
         window.addEventListener('message', (e) => { if (e.data === 'fe-play') { visible = true; run += 1; play(); } if (e.data === 'fe-stop') { visible = false; run += 1; audio?.suspend(); } });
         const waitVisible = () => new Promise((r) => {
           const tk = run;

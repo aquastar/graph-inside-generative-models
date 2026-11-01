@@ -25,6 +25,9 @@ EXTRA_CSS = '''
 .reveal section.titlehero .herofig{position:absolute;right:-30px;top:50px;width:580px;height:560px}
 '''
 head = head.replace('</style>', EXTRA_CSS + '</style>', 1)
+import sys; sys.path.insert(0, HERE)
+import talk as _TK
+head = head.replace('</style>', _TK.TRAILER_CSS + '</style>', 1)
 
 body = s[s.find('<div class="slides">'):]
 secs = re.findall(r'(<section[^>]*>.*?</section>)', body, re.S)
@@ -366,12 +369,26 @@ FE_HOOK = """<script>
   function frames(s){ return s ? Array.prototype.slice.call(s.querySelectorAll('iframe.fe-frame')) : []; }
   function play(f){ if(!f.getAttribute('src')){ f.addEventListener('load', function(){ f.contentWindow.postMessage('fe-play','*'); }, {once:true}); f.setAttribute('src', f.dataset.src); } else { f.contentWindow.postMessage('fe-play','*'); } }
   function stop(f){ if(f.contentWindow) f.contentWindow.postMessage('fe-stop','*'); }
-  Reveal.on('ready', function(e){ frames(e.currentSlide).forEach(play); });
-  Reveal.on('slidechanged', function(e){ frames(e.previousSlide).forEach(stop); frames(e.currentSlide).forEach(play); });
+  var tok = 0;
+  function count(s){
+    if(!s) return; var my = ++tok;
+    Array.prototype.forEach.call(s.querySelectorAll('[data-count]'), function(el){
+      var to = parseFloat(el.dataset.count), dec = parseInt(el.dataset.dec || '0', 10), suf = el.dataset.suffix || '';
+      var delay = parseFloat(el.dataset.delay || '0') * 1000, dur = 1100, t0 = null;
+      el.textContent = (0).toFixed(dec) + suf;
+      function step(ts){ if(my !== tok) return; if(t0 === null) t0 = ts; var k = Math.min(1, (ts - t0) / dur); k = 1 - Math.pow(1 - k, 3); el.textContent = (to * k).toFixed(dec) + suf; if(k < 1) requestAnimationFrame(step); }
+      setTimeout(function(){ if(my === tok) requestAnimationFrame(step); }, delay);
+    });
+  }
+  Reveal.on('ready', function(e){ frames(e.currentSlide).forEach(play); count(e.currentSlide); });
+  Reveal.on('slidechanged', function(e){ frames(e.previousSlide).forEach(stop); frames(e.currentSlide).forEach(play); count(e.currentSlide); });
+  (function boot(){ if (Reveal.isReady && Reveal.isReady()) { var cs = Reveal.getCurrentSlide(); frames(cs).forEach(function(f){ if(!f.getAttribute('src')) play(f); }); count(cs); } else { setTimeout(boot, 150); } })();
 })();
 </script>
 """
 tail = tail.replace('</body>', FE_HOOK + '</body>', 1)
+tail = tail.replace("document.body.classList.toggle('on-title', i===0)", "document.body.classList.toggle('on-title', secs[i].classList.contains('full'))")
+assert "contains('full')" in tail
 assert 'fe-frame' in tail
 html = head + '\n<div class="reveal"><div class="slides">\n\n' + '\n\n'.join(allsecs) + '\n' + tail
 open(NEW + '/index.html', 'w').write(html)
