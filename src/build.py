@@ -22,12 +22,17 @@ EXTRA_CSS = '''
 .reveal .nc li{margin:.35em 0}
 .reveal section.titlehero .th-sub .mu{color:#38b2c4}
 .reveal section.titlehero .th-sub .lm{color:#F76902}
-.reveal section.titlehero .herofig{position:absolute;right:-30px;top:50px;width:580px;height:560px}
+.reveal section.titlehero .herofig{position:absolute;right:-20px;top:40px;width:600px;height:580px}
+.reveal section.titlehero .th-left{top:70px;width:640px}
+.reveal section.titlehero h1{color:#111;font-weight:700;line-height:1}
+.reveal section.titlehero h1 .th-q{display:block;font-size:46px;font-weight:600;color:#111;letter-spacing:-.01em}
+.reveal section.titlehero h1 .th-graph{display:block;font-size:150px;font-weight:800;color:#F76902;letter-spacing:-.03em;line-height:.95;margin:6px 0 4px -6px}
+.reveal section.titlehero .th-sub{color:#4C5B66;font-size:27px}
+.reveal section.titlehero .th-sub .mu{color:#1f8a9a}
+.reveal section.titlehero .th-author{position:static;margin-top:26px;color:#4C5B66;border-top:1px solid rgba(247,105,2,.6)}
+.reveal section.titlehero .th-author b{color:#111}
 '''
 head = head.replace('</style>', EXTRA_CSS + '</style>', 1)
-import sys; sys.path.insert(0, HERE)
-import talk as _TK
-head = head.replace('</style>', _TK.TRAILER_CSS + '</style>', 1)
 
 body = s[s.find('<div class="slides">'):]
 secs = re.findall(r'(<section[^>]*>.*?</section>)', body, re.S)
@@ -50,11 +55,11 @@ for i in (45, 46):
 for i in (48, 49, 50, 51):
     x = ch(secs[i], '1'); x = x.replace('</h2>', '</h2>' + PUB, 1); old.append(x)
 
-hero = open(os.path.join(HERE, 'hero.svg')).read()
-cover = f'''<section class="title titlehero" data-ch="0" data-background-gradient="linear-gradient(120deg,#111111 0%,#161c24 55%,#1c2430 100%)">
+hero = open(os.path.join(HERE, 'hero.svg')).read().replace('fill="#1c2430"', 'fill="#ffffff"').replace('stroke-opacity=".13"', 'stroke-opacity=".28"')
+cover = f'''<section class="title titlehero full" data-ch="0" data-background-gradient="radial-gradient(ellipse at 78% 45%,#fff3ea 0%,#ffffff 55%,#f6f7f8 100%)">
   <div class="th-left">
     <span class="th-kicker">RIT Computer Science Talk</span>
-    <h1>Is There a Graph<br>Inside Generative<br>Models?</h1>
+    <h1><span class="th-q">Is There a</span><span class="th-graph">Graph</span><span class="th-q">Inside Generative Models?</span></h1>
     <div class="th-rule"></div>
     <p class="th-sub">Evidence from <span class="lm">Language</span> and <span class="mu">Music</span></p>
     <div class="th-author"><b>Zhiqian Chen</b><br>Department of Computer Science<br>Rochester Institute of Technology</div>
