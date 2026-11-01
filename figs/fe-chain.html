@@ -1,0 +1,281 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+html,body{margin:0;background:#fff;font-family:"Fira Sans",system-ui,sans-serif;cursor:pointer;overflow:hidden}
+svg{width:100%;height:100vh;display:block}
+.fig-head[data-astro-cid-j7pv25f6]{font-size:9.5px;font-weight:700;letter-spacing:.09em;fill:#64748b;text-anchor:middle}
+.interest-row[data-astro-cid-j7pv25f6] .cell-b2[data-astro-cid-j7pv25f6] .fe-open[data-astro-cid-j7pv25f6]{flex:none;width:280px}
+.interest-row[data-astro-cid-j7pv25f6] .cell-b2[data-astro-cid-j7pv25f6] .fe-open[data-astro-cid-j7pv25f6]{width:100%;max-width:320px;margin:0 auto}
+.fe-edge[data-astro-cid-j7pv25f6]{fill:none;stroke:#cbd5e1;stroke-width:var(--w);opacity:0;transition:opacity .4s ease,stroke .3s ease}
+.fe-edge[data-astro-cid-j7pv25f6].is-on{opacity:1}
+.fe-edge[data-astro-cid-j7pv25f6].is-hot{stroke:#d97706;opacity:1;marker-end:url(#fe-arrow-hot)}
+.fe-ring[data-astro-cid-j7pv25f6]{fill:#fff;stroke-width:1.8;transition:stroke-width .2s ease}
+.fe-node[data-astro-cid-j7pv25f6].is-now .fe-ring[data-astro-cid-j7pv25f6]{stroke-width:3}
+.fe-pie[data-astro-cid-j7pv25f6]{opacity:0;transition:opacity .5s ease}
+.fe-chain[data-astro-cid-j7pv25f6].is-composing .fe-pie[data-astro-cid-j7pv25f6]{opacity:.9}
+.fe-needle[data-astro-cid-j7pv25f6]{stroke:#0f172a;stroke-width:1.3;stroke-linecap:round;transform-box:view-box}
+.fe-label[data-astro-cid-j7pv25f6]{font-size:7.5px;font-weight:700;text-anchor:middle}
+.fe-ball[data-astro-cid-j7pv25f6]{fill:#d97706;stroke:#fff;stroke-width:1}
+.fe-staff[data-astro-cid-j7pv25f6]{stroke:#94a3b8;stroke-width:.6}
+.fe-composer[data-astro-cid-j7pv25f6]{font-size:7.5px;fill:#64748b;font-weight:600}
+.fe-chain[data-astro-cid-j7pv25f6].is-composing .fe-composer[data-astro-cid-j7pv25f6]{fill:#b45309}
+.fe-prob[data-astro-cid-j7pv25f6]{font-size:8px;font-weight:700;fill:#b45309;text-anchor:middle;paint-order:stroke;stroke:#fff;stroke-width:2.5px}
+.fe-open[data-astro-cid-j7pv25f6]{position:relative;display:block;width:100%;padding:0;border:0;background:none;cursor:zoom-in;font:inherit}
+.fe-hint[data-astro-cid-j7pv25f6]{position:absolute;bottom:0;right:0;padding:0 5px;border-radius:8px;background:#f1f5f9;font-size:.56rem;color:#64748b}
+.fe-dialog[data-astro-cid-j7pv25f6] .fe-hint[data-astro-cid-j7pv25f6]{display:none}
+.fe-open[data-astro-cid-j7pv25f6]:hover .fe-hint[data-astro-cid-j7pv25f6]{color:#2563eb}
+.fe-dialog[data-astro-cid-j7pv25f6]{width:min(92vw,840px);max-height:94vh;padding:18px 20px 14px;border:0;border-radius:14px;box-shadow:0 24px 60px #0f172a59}
+.fe-dialog[data-astro-cid-j7pv25f6]::backdrop{background:#0f172a8c}
+.fe-stage[data-astro-cid-j7pv25f6]{position:relative}
+.fe-ann[data-astro-cid-j7pv25f6]{position:absolute;top:9%;width:27%;margin:0;padding:0 0 0 8px;border-left:2px solid #cbd5e1;font-size:.7rem;line-height:1.38;color:#64748b;text-align:left;opacity:.4;transition:opacity .3s ease,border-color .3s ease}
+.fe-ann-learn[data-astro-cid-j7pv25f6]{left:0}
+.fe-ann-gen[data-astro-cid-j7pv25f6]{right:0;width:28%}
+.fe-stage[data-astro-cid-j7pv25f6]:not(:has(.is-composing)) .fe-ann-learn[data-astro-cid-j7pv25f6],.fe-stage[data-astro-cid-j7pv25f6]:has(.is-composing) .fe-ann-gen[data-astro-cid-j7pv25f6]{opacity:1;border-color:#2563eb;color:#334155}
+.fe-ann[data-astro-cid-j7pv25f6]{position:static;width:auto;margin:6px 0 0}
+.fe-dialog[data-astro-cid-j7pv25f6] .fe-stage[data-astro-cid-j7pv25f6] svg[data-astro-cid-j7pv25f6]{width:100%;max-width:none;max-height:78vh}
+.fe-close[data-astro-cid-j7pv25f6]{position:absolute;top:8px;right:10px;border:0;background:none;font-size:1.1rem;color:#475569;cursor:pointer}
+.fe-dialog-note[data-astro-cid-j7pv25f6]{margin:8px 0 0;font-size:.76rem;color:#64748b;text-align:left}
+.fe-status[data-astro-cid-j7pv25f6]{font-size:8.5px;fill:#64748b;text-anchor:middle;font-style:italic}
+.fe-hint{position:fixed;right:8px;bottom:6px;font-size:13px;color:#64748b;background:#f1f5f9;padding:3px 9px;border-radius:10px}
+</style></head><body>
+<svg viewBox="0 0 300 152" role="img" aria-labelledby="fe-title" class="fe-chain" data-melody="[&#34;E5&#34;,&#34;D#5&#34;,&#34;E5&#34;,&#34;D#5&#34;,&#34;E5&#34;,&#34;B4&#34;,&#34;D5&#34;,&#34;C5&#34;,&#34;A4&#34;,&#34;C4&#34;,&#34;E4&#34;,&#34;A4&#34;,&#34;B4&#34;,&#34;E4&#34;,&#34;G#4&#34;,&#34;B4&#34;,&#34;C5&#34;,&#34;E4&#34;,&#34;E5&#34;,&#34;D#5&#34;,&#34;E5&#34;,&#34;D#5&#34;,&#34;E5&#34;,&#34;B4&#34;,&#34;D5&#34;,&#34;C5&#34;,&#34;A4&#34;,&#34;C4&#34;,&#34;E4&#34;,&#34;A4&#34;,&#34;B4&#34;,&#34;E4&#34;,&#34;C5&#34;,&#34;B4&#34;,&#34;A4&#34;]" data-durations="[1,1,1,1,1,1,1,1,3,1,1,1,3,1,1,1,3,1,1,1,1,1,1,1,1,1,3,1,1,1,3,1,1,1,6]" data-wedges="{&#34;D#5&#34;:[[&#34;E5&#34;,0,360,4,4]],&#34;E5&#34;:[[&#34;D#5&#34;,0,240,4,6],[&#34;B4&#34;,240,120,2,6]],&#34;G#4&#34;:[[&#34;B4&#34;,0,360,1,1]],&#34;B4&#34;:[[&#34;D5&#34;,0,120,2,6],[&#34;E4&#34;,120,120,2,6],[&#34;C5&#34;,240,60,1,6],[&#34;A4&#34;,300,60,1,6]],&#34;D5&#34;:[[&#34;C5&#34;,0,360,2,2]],&#34;C5&#34;:[[&#34;A4&#34;,0,180,2,4],[&#34;E4&#34;,180,90,1,4],[&#34;B4&#34;,270,90,1,4]],&#34;A4&#34;:[[&#34;C4&#34;,0,144,2,5],[&#34;B4&#34;,144,144,2,5],[&#34;E5&#34;,288,72,1,5]],&#34;E4&#34;:[[&#34;A4&#34;,0,144,2,5],[&#34;G#4&#34;,144,72,1,5],[&#34;E5&#34;,216,72,1,5],[&#34;C5&#34;,288,72,1,5]],&#34;C4&#34;:[[&#34;E4&#34;,0,360,2,2]]}" data-astro-cid-j7pv25f6> <title id="fe-title">A Markov chain graph learns which note follows which in Für Elise, then composes a new tune by spinning at each node</title> <defs data-astro-cid-j7pv25f6> <marker id="fe-arrow" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto-start-reverse" data-astro-cid-j7pv25f6><path d="M0 0 L6 3 L0 6 Z" fill="#94a3b8" data-astro-cid-j7pv25f6></path></marker> <marker id="fe-arrow-hot" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="5" markerHeight="5" markerUnits="userSpaceOnUse" orient="auto-start-reverse" data-astro-cid-j7pv25f6><path d="M0 0 L6 3 L0 6 Z" fill="#d97706" data-astro-cid-j7pv25f6></path></marker> </defs> <text x="150" y="10" class="fig-head" data-astro-cid-j7pv25f6>MARKOV CHAIN GRAPH · FÜR ELISE</text> <path d="M141.5 26.0 Q122.5 35.9 106.0 26.0" class="fe-edge" data-edge="E5>D#5" style="--w:2" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M103.5 26.0 Q122.5 16.1 139.0 26.0" class="fe-edge" data-edge="D#5>E5" style="--w:2" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M157.4 30.2 Q175.3 30.4 182.4 44.5" class="fe-edge" data-edge="E5>B4" style="--w:1.2999999999999998" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M195.3 57.8 Q203.0 61.8 199.7 67.9" class="fe-edge" data-edge="B4>D5" style="--w:1.2999999999999998" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M195.5 78.2 Q168.3 89.0 143.0 79.7" class="fe-edge" data-edge="D5>C5" style="--w:1.2999999999999998" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M140.5 79.4 Q199.3 65.0 257.0 70.8" class="fe-edge" data-edge="C5>A4" style="--w:1.2999999999999998" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M259.7 71.9 Q222.2 90.7 182.7 89.5" class="fe-edge" data-edge="A4>C4" style="--w:1.2999999999999998" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M163.5 91.2 Q105.1 96.0 51.0 81.0" class="fe-edge" data-edge="C4>E4" style="--w:1.2999999999999998" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M48.5 79.6 Q153.6 65.0 257.0 70.5" class="fe-edge" data-edge="E4>A4" style="--w:1.2999999999999998" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M259.8 67.8 Q227.5 69.7 202.6 52.8" class="fe-edge" data-edge="A4>B4" style="--w:1.2999999999999998" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M183.7 51.6 Q117.9 74.8 50.8 77.9" class="fe-edge" data-edge="B4>E4" style="--w:1.2999999999999998" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M47.9 76.9 Q72.4 56.7 101.7 56.0" class="fe-edge" data-edge="E4>G#4" style="--w:0.95" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M120.5 51.8 Q151.8 41.0 181.0 50.3" class="fe-edge" data-edge="G#4>B4" style="--w:0.95" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M184.4 53.8 Q166.5 73.9 141.8 75.1" class="fe-edge" data-edge="B4>C5" style="--w:0.95" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M123.5 80.0 Q86.0 90.0 51.0 80.0" class="fe-edge" data-edge="C5>E4" style="--w:0.95" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M47.6 76.3 Q90.6 44.0 140.1 30.8" class="fe-edge" data-edge="E4>E5" style="--w:0.95" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M48.5 80.0 Q86.0 70.0 121.0 80.0" class="fe-edge" data-edge="E4>C5" style="--w:0.95" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M139.6 76.2 Q157.5 56.1 182.2 54.9" class="fe-edge" data-edge="C5>B4" style="--w:0.95" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M200.2 52.2 Q232.5 50.3 257.4 67.2" class="fe-edge" data-edge="B4>A4" style="--w:0.95" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path><path d="M260.0 67.0 Q205.5 57.4 160.3 29.8" class="fe-edge" data-edge="A4>E5" style="--w:0.95" marker-end="url(#fe-arrow)" data-astro-cid-j7pv25f6></path> <g class="fe-node" data-note="D#5" data-astro-cid-j7pv25f6> <circle cx="95" cy="26" r="8.5" class="fe-ring" style="stroke:#be185d" data-astro-cid-j7pv25f6></circle> <g class="fe-pie" data-astro-cid-j7pv25f6> <path d="M95 19.1 A6.9 6.9 0 1 1 94.99 19.1 Z" fill="#7c3aed" data-astro-cid-j7pv25f6></path> <line x1="95" y1="26" x2="95" y2="19.5" class="fe-needle" style="transform-origin:95px 26px" data-astro-cid-j7pv25f6></line> </g> <text x="95" y="42.5" class="fe-label" style="fill:#be185d" data-astro-cid-j7pv25f6>D♯5</text> </g><g class="fe-node" data-note="E5" data-astro-cid-j7pv25f6> <circle cx="150" cy="26" r="8.5" class="fe-ring" style="stroke:#7c3aed" data-astro-cid-j7pv25f6></circle> <g class="fe-pie" data-astro-cid-j7pv25f6> <path d="M150 26 L150.00 19.10 A6.9 6.9 0 1 1 144.02 29.45 Z" fill="#be185d" data-astro-cid-j7pv25f6></path><path d="M150 26 L144.02 29.45 A6.9 6.9 0 0 1 150.00 19.10 Z" fill="#ca8a04" data-astro-cid-j7pv25f6></path> <line x1="150" y1="26" x2="150" y2="19.5" class="fe-needle" style="transform-origin:150px 26px" data-astro-cid-j7pv25f6></line> </g> <text x="150" y="42.5" class="fe-label" style="fill:#7c3aed" data-astro-cid-j7pv25f6>E5</text> </g><g class="fe-node" data-note="G#4" data-astro-cid-j7pv25f6> <circle cx="112" cy="52" r="8.5" class="fe-ring" style="stroke:#65a30d" data-astro-cid-j7pv25f6></circle> <g class="fe-pie" data-astro-cid-j7pv25f6> <path d="M112 45.1 A6.9 6.9 0 1 1 111.99 45.1 Z" fill="#ca8a04" data-astro-cid-j7pv25f6></path> <line x1="112" y1="52" x2="112" y2="45.5" class="fe-needle" style="transform-origin:112px 52px" data-astro-cid-j7pv25f6></line> </g> <text x="112" y="68.5" class="fe-label" style="fill:#65a30d" data-astro-cid-j7pv25f6>G♯4</text> </g><g class="fe-node" data-note="B4" data-astro-cid-j7pv25f6> <circle cx="192" cy="50" r="8.5" class="fe-ring" style="stroke:#ca8a04" data-astro-cid-j7pv25f6></circle> <g class="fe-pie" data-astro-cid-j7pv25f6> <path d="M192 50 L192.00 43.10 A6.9 6.9 0 0 1 197.98 53.45 Z" fill="#ea580c" data-astro-cid-j7pv25f6></path><path d="M192 50 L197.98 53.45 A6.9 6.9 0 0 1 186.02 53.45 Z" fill="#0d9488" data-astro-cid-j7pv25f6></path><path d="M192 50 L186.02 53.45 A6.9 6.9 0 0 1 186.02 46.55 Z" fill="#d97706" data-astro-cid-j7pv25f6></path><path d="M192 50 L186.02 46.55 A6.9 6.9 0 0 1 192.00 43.10 Z" fill="#16a34a" data-astro-cid-j7pv25f6></path> <line x1="192" y1="50" x2="192" y2="43.5" class="fe-needle" style="transform-origin:192px 50px" data-astro-cid-j7pv25f6></line> </g> <text x="192" y="66.5" class="fe-label" style="fill:#ca8a04" data-astro-cid-j7pv25f6>B4</text> </g><g class="fe-node" data-note="D5" data-astro-cid-j7pv25f6> <circle cx="204" cy="78" r="8.5" class="fe-ring" style="stroke:#ea580c" data-astro-cid-j7pv25f6></circle> <g class="fe-pie" data-astro-cid-j7pv25f6> <path d="M204 71.1 A6.9 6.9 0 1 1 203.99 71.1 Z" fill="#d97706" data-astro-cid-j7pv25f6></path> <line x1="204" y1="78" x2="204" y2="71.5" class="fe-needle" style="transform-origin:204px 78px" data-astro-cid-j7pv25f6></line> </g> <text x="204" y="94.5" class="fe-label" style="fill:#ea580c" data-astro-cid-j7pv25f6>D5</text> </g><g class="fe-node" data-note="C5" data-astro-cid-j7pv25f6> <circle cx="132" cy="80" r="8.5" class="fe-ring" style="stroke:#d97706" data-astro-cid-j7pv25f6></circle> <g class="fe-pie" data-astro-cid-j7pv25f6> <path d="M132 80 L132.00 73.10 A6.9 6.9 0 0 1 132.00 86.90 Z" fill="#16a34a" data-astro-cid-j7pv25f6></path><path d="M132 80 L132.00 86.90 A6.9 6.9 0 0 1 125.10 80.00 Z" fill="#0d9488" data-astro-cid-j7pv25f6></path><path d="M132 80 L125.10 80.00 A6.9 6.9 0 0 1 132.00 73.10 Z" fill="#ca8a04" data-astro-cid-j7pv25f6></path> <line x1="132" y1="80" x2="132" y2="73.5" class="fe-needle" style="transform-origin:132px 80px" data-astro-cid-j7pv25f6></line> </g> <text x="132" y="96.5" class="fe-label" style="fill:#d97706" data-astro-cid-j7pv25f6>C5</text> </g><g class="fe-node" data-note="A4" data-astro-cid-j7pv25f6> <circle cx="268" cy="70" r="8.5" class="fe-ring" style="stroke:#16a34a" data-astro-cid-j7pv25f6></circle> <g class="fe-pie" data-astro-cid-j7pv25f6> <path d="M268 70 L268.00 63.10 A6.9 6.9 0 0 1 272.06 75.58 Z" fill="#1d4ed8" data-astro-cid-j7pv25f6></path><path d="M268 70 L272.06 75.58 A6.9 6.9 0 0 1 261.44 67.87 Z" fill="#ca8a04" data-astro-cid-j7pv25f6></path><path d="M268 70 L261.44 67.87 A6.9 6.9 0 0 1 268.00 63.10 Z" fill="#7c3aed" data-astro-cid-j7pv25f6></path> <line x1="268" y1="70" x2="268" y2="63.5" class="fe-needle" style="transform-origin:268px 70px" data-astro-cid-j7pv25f6></line> </g> <text x="268" y="86.5" class="fe-label" style="fill:#16a34a" data-astro-cid-j7pv25f6>A4</text> </g><g class="fe-node" data-note="E4" data-astro-cid-j7pv25f6> <circle cx="40" cy="80" r="8.5" class="fe-ring" style="stroke:#0d9488" data-astro-cid-j7pv25f6></circle> <g class="fe-pie" data-astro-cid-j7pv25f6> <path d="M40 80 L40.00 73.10 A6.9 6.9 0 0 1 44.06 85.58 Z" fill="#16a34a" data-astro-cid-j7pv25f6></path><path d="M40 80 L44.06 85.58 A6.9 6.9 0 0 1 35.94 85.58 Z" fill="#65a30d" data-astro-cid-j7pv25f6></path><path d="M40 80 L35.94 85.58 A6.9 6.9 0 0 1 33.44 77.87 Z" fill="#7c3aed" data-astro-cid-j7pv25f6></path><path d="M40 80 L33.44 77.87 A6.9 6.9 0 0 1 40.00 73.10 Z" fill="#d97706" data-astro-cid-j7pv25f6></path> <line x1="40" y1="80" x2="40" y2="73.5" class="fe-needle" style="transform-origin:40px 80px" data-astro-cid-j7pv25f6></line> </g> <text x="40" y="96.5" class="fe-label" style="fill:#0d9488" data-astro-cid-j7pv25f6>E4</text> </g><g class="fe-node" data-note="C4" data-astro-cid-j7pv25f6> <circle cx="172" cy="92" r="8.5" class="fe-ring" style="stroke:#1d4ed8" data-astro-cid-j7pv25f6></circle> <g class="fe-pie" data-astro-cid-j7pv25f6> <path d="M172 85.1 A6.9 6.9 0 1 1 171.99 85.1 Z" fill="#0d9488" data-astro-cid-j7pv25f6></path> <line x1="172" y1="92" x2="172" y2="85.5" class="fe-needle" style="transform-origin:172px 92px" data-astro-cid-j7pv25f6></line> </g> <text x="172" y="108.5" class="fe-label" style="fill:#1d4ed8" data-astro-cid-j7pv25f6>C4</text> </g> <circle r="3" class="fe-ball" cx="-10" cy="-10" data-astro-cid-j7pv25f6></circle> <text x="120" y="0" class="fe-prob" data-astro-cid-j7pv25f6></text> <text x="10" y="111" class="fe-composer" data-astro-cid-j7pv25f6>composer: Beethoven</text> <line x1="10" y1="116" x2="292" y2="116" class="fe-staff" data-astro-cid-j7pv25f6></line><line x1="10" y1="120" x2="292" y2="120" class="fe-staff" data-astro-cid-j7pv25f6></line><line x1="10" y1="124" x2="292" y2="124" class="fe-staff" data-astro-cid-j7pv25f6></line><line x1="10" y1="128" x2="292" y2="128" class="fe-staff" data-astro-cid-j7pv25f6></line><line x1="10" y1="132" x2="292" y2="132" class="fe-staff" data-astro-cid-j7pv25f6></line> <g class="fe-score" data-astro-cid-j7pv25f6></g> <text x="150" y="148" class="fe-status" data-astro-cid-j7pv25f6>learning from Beethoven</text> </svg>
+<span class="fe-hint">click for sound</span>
+<script type="application/json" class="fe-notes">{"D#5":[95,26,"#be185d",15],"E5":[150,26,"#7c3aed",16],"G#4":[112,52,"#65a30d",8],"B4":[192,50,"#ca8a04",11],"D5":[204,78,"#ea580c",14],"C5":[132,80,"#d97706",12],"A4":[268,70,"#16a34a",9],"E4":[40,80,"#0d9488",4],"C4":[172,92,"#1d4ed8",0]}</script>
+<script type="module">  
+    // The Für Elise chain beside interest 3 plays in two acts. First it learns:
+    // the ball walks the melody and every move it makes draws (or thickens) an
+    // arrow. Then it composes: each note shows a spinner whose wedges are its
+    // outgoing probabilities, and the needle picks where the ball goes next.
+    const chain = document.querySelector('.fe-chain');
+    if (chain) {
+      const notes = JSON.parse(document.querySelector('.fe-notes').textContent);
+      const melody = JSON.parse(chain.dataset.melody);
+      const durations = JSON.parse(chain.dataset.durations);
+      const wedges = JSON.parse(chain.dataset.wedges);
+      const heldFor = new Map();
+      melody.forEach((n, i) => heldFor.set(n, [...(heldFor.get(n) ?? []), durations[i]]));
+      const ball = chain.querySelector('.fe-ball');
+      const status = chain.querySelector('.fe-status');
+      const nodeEl = (n) => chain.querySelector(`[data-note="${n}"]`);
+      const edgeEl = (a, b) => chain.querySelector(`[data-edge="${a}>${b}"]`);
+      let run = 0;
+      const sleep = (ms) => {
+        const tk = run;
+        return new Promise((r) => setTimeout(() => { if (tk === run) r(); }, ms));
+      };
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        chain.querySelectorAll('.fe-edge').forEach((e) => e.classList.add('is-on'));
+        chain.classList.add('is-composing');
+        status.textContent = 'learned from Für Elise';
+      } else {
+        // Hold still while the figure is off screen or the tab is hidden.
+        let visible = (window.parent === window);
+        window.addEventListener('message', (e) => { if (e.data === 'fe-play') { visible = true; run += 1; play(); } if (e.data === 'fe-stop') { visible = false; run += 1; audio?.suspend(); } });
+        const waitVisible = () => new Promise((r) => {
+          const tk = run;
+          const check = () => {
+            if (tk !== run) return;
+            if (visible) r(); else setTimeout(check, 300);
+          };
+          check();
+        });
+
+        // Sound only plays inside the dialog, which the viewer opened by clicking.
+        let audio = null;
+        const sound = (n) => {
+          if (!audio) return;
+          const t = audio.currentTime;
+          const osc = audio.createOscillator();
+          const gain = audio.createGain();
+          osc.type = 'triangle';
+          osc.frequency.value = 440 * 2 ** ((60 + notes[n][3] - 69) / 12);
+          gain.gain.setValueAtTime(0.0001, t);
+          gain.gain.exponentialRampToValueAtTime(0.22, t + 0.01);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.45);
+          osc.connect(gain).connect(audio.destination);
+          osc.start(t);
+          osc.stop(t + 0.5);
+        };
+        // The staff keeps the last fifteen notes, the newest on the right. Each
+        // new note arrives by a red arc hopping from the note before it.
+        const score = chain.querySelector('.fe-score');
+        const SVGNS = 'http://www.w3.org/2000/svg';
+        const svgEl = (tag, attrs) => {
+          const el = document.createElementNS(SVGNS, tag);
+          Object.entries(attrs).forEach(([k, v]) => el.setAttribute(k, v));
+          return el;
+        };
+        const SLOT = 18;
+        const staffStep = (n) => (Number(n.at(-1)) - 4) * 7 + 'CDEFGAB'.indexOf(n[0]) - 2;
+        let lastY = null;
+        const write = (n) => {
+          const step = staffStep(n);
+          const y = 132 - step * 2;
+          const color = notes[n][2];
+          const g = svgEl('g', {});
+          const mark = svgEl('g', {});
+          if (step <= -2) mark.append(svgEl('line', { x1: -5, y1: 136, x2: 5, y2: 136, stroke: '#94a3b8', 'stroke-width': .6 }));
+          if (n.includes('#')) {
+            const sharp = svgEl('text', { x: -8, y: y + 2.5, 'font-size': 7, fill: color });
+            sharp.textContent = '♯';
+            mark.append(sharp);
+          }
+          mark.append(svgEl('ellipse', { cx: 0, cy: y, rx: 2.9, ry: 2.1, fill: color, transform: `rotate(-20 0 ${y})` }));
+          mark.append(step >= 4
+            ? svgEl('line', { x1: -2.6, y1: y + 1, x2: -2.6, y2: y + 11, stroke: color, 'stroke-width': .8 })
+            : svgEl('line', { x1: 2.6, y1: y - 1, x2: 2.6, y2: y - 11, stroke: color, 'stroke-width': .8 }));
+          g.append(mark);
+          let arc = null;
+          let dot = null;
+          if (lastY !== null) {
+            arc = svgEl('path', { d: `M${-SLOT} ${lastY - 3} Q${-SLOT / 2} ${Math.min(lastY, y) - 14} 0 ${y - 3}`, fill: 'none', stroke: '#dc2626', 'stroke-width': .8, opacity: .75 });
+            dot = svgEl('circle', { r: 1.9, cx: -SLOT, cy: lastY - 3, fill: '#dc2626' });
+            g.prepend(arc);
+            g.append(dot);
+            mark.style.opacity = 0;
+          }
+          lastY = y;
+          score.append(g);
+          while (score.children.length > 15) score.firstChild.remove();
+          [...score.children].forEach((c, k, all) => c.setAttribute('transform', `translate(${286 - (all.length - 1 - k) * SLOT} 0)`));
+          const len = arc ? arc.getTotalLength() : 0;
+          if (arc) { arc.style.strokeDasharray = len; arc.style.strokeDashoffset = len; }
+          return {
+            move(f) {
+              if (!arc) return;
+              arc.style.strokeDashoffset = len * (1 - f);
+              const pt = arc.getPointAtLength(f * len);
+              dot.setAttribute('cx', pt.x);
+              dot.setAttribute('cy', pt.y);
+            },
+            done() { mark.style.opacity = ''; dot?.remove(); },
+          };
+        };
+        const land = (n) => {
+          ball.setAttribute('cx', notes[n][0]);
+          ball.setAttribute('cy', notes[n][1]);
+          chain.querySelectorAll('.fe-node.is-now').forEach((e) => e.classList.remove('is-now'));
+          nodeEl(n).classList.add('is-now');
+          sound(n);
+        };
+        // Transition probability shown beside the edge in play. While learning
+        // it is the share counted so far, so the fractions settle as it reads.
+        const prob = chain.querySelector('.fe-prob');
+        const seen = new Map();
+        const fraction = (k, total) => (k === total ? '100%' : `${k}/${total}`);
+        const label = (path, text) => {
+          const pt = path.getPointAtLength(path.getTotalLength() / 2);
+          prob.setAttribute('x', pt.x);
+          prob.setAttribute('y', pt.y - 3);
+          prob.textContent = text;
+        };
+        const hop = (a, b, ms, text) => new Promise((done) => {
+          const path = edgeEl(a, b);
+          path.classList.add('is-on', 'is-hot');
+          label(path, text);
+          const staffMark = write(b);
+          const length = path.getTotalLength();
+          const t0 = performance.now();
+          const tk = run;
+          const step = (t) => {
+            if (tk !== run) return;
+            const f = Math.min(1, (t - t0) / ms);
+            const eased = f < 0.5 ? 2 * f * f : 1 - (-2 * f + 2) ** 2 / 2;
+            const pt = path.getPointAtLength(eased * length);
+            ball.setAttribute('cx', pt.x);
+            ball.setAttribute('cy', pt.y);
+            staffMark.move(eased);
+            if (f < 1) { requestAnimationFrame(step); return; }
+            staffMark.done();
+            path.classList.remove('is-hot');
+            prob.textContent = '';
+            land(b);
+            done();
+          };
+          requestAnimationFrame(step);
+        });
+        // A uniform landing angle picks each wedge with its own probability.
+        const spin = async (n, ms = 300) => {
+          const angle = Math.random() * 360;
+          const ws = wedges[n];
+          const pick = ws.find(([, from, span]) => angle >= from && angle < from + span) ?? ws[ws.length - 1];
+          const needle = nodeEl(n).querySelector('.fe-needle');
+          const turned = Number(needle.dataset.turned ?? 0) + 360;
+          needle.dataset.turned = turned;
+          needle.style.transition = `transform ${ms}ms cubic-bezier(.2,.7,.2,1)`;
+          needle.style.transform = `rotate(${turned + angle}deg)`;
+          await sleep(ms + 20);
+          return [pick[0], fraction(pick[3], pick[4])];
+        };
+        const reset = () => {
+          chain.querySelectorAll('.fe-edge').forEach((e) => e.classList.remove('is-on', 'is-hot'));
+          chain.querySelectorAll('.fe-needle').forEach((nd) => {
+            nd.style.transition = 'none';
+            nd.style.transform = '';
+            nd.dataset.turned = 0;
+          });
+          chain.classList.remove('is-composing');
+          score.replaceChildren();
+          lastY = null;
+          seen.clear();
+          prob.textContent = '';
+          chain.querySelector('.fe-composer').textContent = 'composer: Beethoven';
+        };
+
+        // Clicking opens the same live figure in a dialog, with sound, and
+        // restarts it so the listener hears Für Elise from its first note.
+        document.body.addEventListener('click', () => {
+          audio ??= new (window.AudioContext || window.webkitAudioContext)();
+          audio.resume();
+          document.querySelector('.fe-hint').textContent = 'sound on';
+          run += 1;
+          play();
+        });
+
+        const play = async () => {
+          for (;;) {
+            await waitVisible();
+            reset();
+            status.textContent = 'learning: every move draws an arrow';
+            land(melody[0]);
+            write(melody[0]).done();
+            // One sixteenth is 170 ms. A longer note holds, then the ball moves.
+            const U = 130;
+            for (let i = 0; i < melody.length; i += 1) {
+              await waitVisible();
+              const [a, b] = [melody[i], melody[(i + 1) % melody.length]];
+              seen.set(`${a}>${b}`, (seen.get(`${a}>${b}`) ?? 0) + 1);
+              const fromA = [...seen].filter(([k]) => k.startsWith(`${a}>`)).reduce((t, [, c]) => t + c, 0);
+              await sleep((durations[i] - 1) * U);
+              await hop(a, b, U - 20, fraction(seen.get(`${a}>${b}`), fromA));
+              await sleep(20);
+            }
+            await sleep(700);
+            chain.classList.add('is-composing');
+            status.textContent = 'composing: a spinner at every note';
+            chain.querySelector('.fe-composer').textContent = 'composer: the Markov chain';
+            score.replaceChildren();
+            lastY = null;
+            await sleep(700);
+            // Composing keeps the tune moving: a quick spin and hop, then the new
+            // note holds for a length Beethoven gave that same note somewhere.
+            let now = melody[0];
+            write(now).done();
+            for (let i = 0; i < 24; i += 1) {
+              await waitVisible();
+              const [next, text] = await spin(now, 120);
+              await hop(now, next, 100, text);
+              const held = heldFor.get(next) ?? [1];
+              await sleep(Math.max(0, held[Math.floor(Math.random() * held.length)] * 190 - 240));
+              now = next;
+            }
+            status.textContent = 'a tune Beethoven never wrote';
+            await sleep(2600);
+          }
+        };
+        play();
+      }
+    }
+  
+</script>
+</body></html>
