@@ -10,4 +10,3 @@ Add photos here yourself, with a license that allows use in a talk (for example 
 | marvin-minsky.jpg | Marvin Minsky | Music is where emotion can be measured |
 
 Square images work best, at least 200 by 200 pixels.
-| leonard-meyer.jpg | Leonard B. Meyer | Music is where emotion can be measured |

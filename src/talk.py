@@ -1026,7 +1026,7 @@ def photo(cx, cy, r, fname, initials, col):
     return (f'<foreignObject x="{cx-r}" y="{cy-r}" width="{d}" height="{d}"><div xmlns="http://www.w3.org/1999/xhtml" '
             f'style="position:relative;width:{d}px;height:{d}px;border-radius:50%;overflow:hidden;background:#f2f3f4;box-shadow:0 0 0 2.5px {col}">'
             f'<span style="position:absolute;left:0;top:0;width:{d}px;height:{d}px;display:flex;align-items:center;justify-content:center;font-family:Fira Sans,sans-serif;font-weight:700;font-size:{int(r*0.7)}px;line-height:1;color:{col}">{initials}</span>'
-            f'<img src="figs/people/{fname}" alt="" onerror="this.remove()" style="position:absolute;left:0;top:0;width:{d}px;height:{d}px;object-fit:cover"/></div></foreignObject>')
+            f'<img src="figs/people/{fname}" alt="" onerror="this.remove()" style="position:absolute;left:0;top:0;width:{d}px;height:{d}px;max-width:none;max-height:none;margin:0;padding:0;border:0;box-shadow:none;object-fit:cover"/></div></foreignObject>')
 
 def qline(x, y, segs, size, a='start'):
     out = f'<text x="{x}" y="{y}" font-size="{size}" text-anchor="{a}" fill="{INK}" font-style="italic">'
@@ -1040,12 +1040,14 @@ def qcard(x, y, w, h, fname, ini, lines, who, src, col, size=16):
     for k, segs in enumerate(lines):
         out += qline(x + 62, y + 34 + k * (size + 7), segs, size)
     yb = y + h - 22
-    out += photo(x + w - 40, yb - 4, 22, fname, ini, col) + T(x + w - 72, yb - 8, who, 14, 700, INK, 'end') + T(x + w - 72, yb + 10, src, 12, 400, MUT, 'end')
+    px = x + w - 80 if fname else x + w - 20
+    out += (photo(x + w - 44, yb - 10, 28, fname, ini, col) if fname else '') + T(px, yb - 8, who, 14, 700, INK, 'end') + T(px, yb + 10, src, 12, 400, MUT, 'end')
     return out
 
 g = adefs('bt')
 def mlist(x, y, w, who, when, fname, ini, items, hi, col):
-    out = R(x, y, w, 300, '#fff', LINE, 1.5, 12) + photo(x + 44, y + 44, 28, fname, ini, col) + T(x + 86, y + 40, who, 16, 700, INK) + T(x + 86, y + 62, when, 13, 400, MUT)
+    tx = x + 86 if fname else x + 24
+    out = R(x, y, w, 300, '#fff', LINE, 1.5, 12) + (photo(x + 44, y + 44, 28, fname, ini, col) if fname else '') + T(tx, y + 40, who, 16, 700, INK) + T(tx, y + 62, when, 13, 400, MUT)
     for k, (it, h) in enumerate(zip(items, hi)):
         yy = y + 104 + k * 27
         if h:
@@ -1054,7 +1056,7 @@ def mlist(x, y, w, who, when, fname, ini, items, hi, col):
     return out
 g += mlist(30, 30, 270, 'Howard Gardner', 'Frames of Mind, 1983', 'howard-gardner.jpg', 'HG',
            ['linguistic', 'logical mathematical', 'musical', 'spatial', 'bodily kinesthetic', 'interpersonal', 'intrapersonal'], ['L', 'E', 'M', '', '', '', ''], AC2)
-g += F(1, mlist(320, 30, 270, 'Fei-Fei Li', 'interview, 2026', 'fei-fei-li.jpg', 'FL',
+g += F(1, mlist(320, 30, 270, 'Fei-Fei Li', 'interview, 2026', None, 'FL',
            ['language', 'perceptual', 'spatial', 'bodily', 'emotional'], ['L', '', '', '', 'M'], AC2))
 rows = [('Language', 'facts in text: Part 1', ACC, ACL), ('Equations', 'open direction: see the sketch', '#5a4fcf', '#eef0ff'), ('Music and emotion', 'Part 2', MU, MUL)]
 mp = ''
@@ -1068,11 +1070,11 @@ sk += P('M712,296 C760,276 800,276 846,292', '#5a4fcf', 2.2, extra='marker-end="
 sk += P('M712,312 C760,332 800,332 846,316', '#5a4fcf', 2.2, extra='marker-end="url(#bta)"') + T(780, 344, 'last digit: 6 + 9 ends in 5', 12, 600, '#5a4fcf', 'middle')
 sk += R(850, 286, 70, 34, '#eef0ff', '#5a4fcf', 1.5, 17) + T(885, 308, '95', 15, 700, '#5a4fcf', 'middle') + T(1030, 300, 'redrawn after', 12, 400, MUT, 'middle') + T(1030, 316, 'Lindsey et al. 2025', 12, 600, MUT, 'middle')
 g += F(3, sk)
-g += F(4, qcard(30, 352, 1120, 84, 'fei-fei-li.jpg', 'FL', [[('Spatial intelligence represents the ', False), ('frontier beyond language', True), ('.', False)]], 'Fei-Fei Li', 'From Words to Worlds, a16z, 2025', AC2, 19)
+g += F(4, qcard(30, 358, 1120, 84, 'fei-fei-li.jpg', 'FL', [[('Spatial intelligence represents the ', False), ('frontier beyond language', True), ('.', False)]], 'Fei-Fei Li', 'From Words to Worlds, a16z, 2025', AC2, 19)
           + T(590, 462, 'Equations and music are knowledge beyond text. They may need graphs even more than text does.', 18, 700, INK, 'middle'))
 BEYOND = sec('Knowledge is not only text', SVG(g), ch='0',
              ref='Gardner, Frames of Mind, 1983. Fei-Fei Li, Silicon Valley Girl podcast, 2026 (five intelligences, Chinese transcript), and From Words to Worlds, a16z, 2025. Lindsey et al., On the Biology of a Large Language Model, Transformer Circuits 2025',
-             notes='Why language and music, and why not only text. Gardner listed musical intelligence and logical mathematical intelligence as their own kinds of intelligence, separate from language. Fei-Fei Li lists language, perceptual, spatial, bodily and emotional intelligence. This talk covers language and music, equations are the next step: in Claude, addition already runs as a small graph of two parallel paths. Photos: drop licensed images into figs/people with the file names in figs/people/README.md.')
+             notes='Photos: Wikimedia Commons, see each file page for author and license. Why language and music, and why not only text. Gardner listed musical intelligence and logical mathematical intelligence as their own kinds of intelligence, separate from language. Fei-Fei Li lists language, perceptual, spatial, bodily and emotional intelligence. This talk covers language and music, equations are the next step: in Claude, addition already runs as a small graph of two parallel paths. Photos: drop licensed images into figs/people with the file names in figs/people/README.md.')
 
 g = adefs('em')
 g += T(40, 40, 'Machines need emotion', 17, 700, AC2)
@@ -1086,7 +1088,7 @@ for k, (a_, col) in enumerate(chain):
     if k < 3:
         ch_ += P(f'M{x+118},76 L{x+134},76', AC2, 2.5, extra='marker-end="url(#ema)"')
 g += F(1, ch_)
-g += F(2, qcard(600, 110, 550, 150, 'leonard-meyer.jpg', 'LM', [[('affect is aroused when an ', False), ('expectation', True), (',', False)], [('a tendency to respond, activated by the music,', False)], [('is ', False), ('temporarily inhibited or permanently blocked', True)]], 'Leonard Meyer', 'Emotion and Meaning in Music, 1956, p. 31', ACC, 16))
+g += F(2, qcard(600, 110, 550, 150, None, 'LM', [[('affect is aroused when an ', False), ('expectation', True), (',', False)], [('a tendency to respond, activated by the music,', False)], [('is ', False), ('temporarily inhibited or permanently blocked', True)]], 'Leonard Meyer', 'Emotion and Meaning in Music, 1956, p. 31', ACC, 16))
 ev = [('Salimpoor et al. 2011', 'dopamine at peak musical pleasure, and just before'), ('Koelsch 2014', 'engages core emotion areas: amygdala, hippocampus')]
 for k, (a_, b_) in enumerate(ev):
     y = 274 + k * 56
@@ -1095,7 +1097,7 @@ g += F(3, R(30, 340, 540, 92, ACL, ACC, 1.5, 12) + T(50, 368, 'The link to this 
 g += F(4, T(590, 466, 'Music is the most measurable route to emotion, so it is where a brain can judge a model.', 18, 700, INK, 'middle'))
 EMOTION = sec('Music is where emotion can be measured', SVG(g), ch='0',
               ref='Picard quote from the MIT Press description of Affective Computing, 1997. Minsky, The Emotion Machine, 2006. Meyer, Emotion and Meaning in Music, 1956, p. 31, as quoted in Margulis 2005. Huron, Sweet Anticipation, 2006. Salimpoor et al., Nature Neuroscience 2011. Koelsch, Nature Reviews Neuroscience 2014',
-              notes='Why music, beyond being a second domain. Emotion is one of the intelligences beyond language, and music is one of the most reliable ways to evoke it in a lab, with a response we can measure in the brain. The bridge is expectation: music moves us partly by playing with what we expect next, and a transition graph is exactly a model of what comes next. Check exact wording of the five citations before the talk, they were added from memory.')
+              notes='Photos: Wikimedia Commons, see each file page for author and license. Why music, beyond being a second domain. Emotion is one of the intelligences beyond language, and music is one of the most reliable ways to evoke it in a lab, with a response we can measure in the brain. The bridge is expectation: music moves us partly by playing with what we expect next, and a transition graph is exactly a model of what comes next. Check exact wording of the five citations before the talk, they were added from memory.')
 
 # ======================= ROUND 7 (Nov 2 2026): Markov order results =======================
 def hbars(x0, y0, rows, scale, maxv, lw=300, bh=34, gap=14):
