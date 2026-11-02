@@ -578,19 +578,31 @@ LANGRES = sec('Reading the rewiring finds 17 of 20 bad edits', SVG(g), ch='0', s
               notes='Pause after the random row and ask: how would you pick the 20? Then the editor row, then ours. Do not explain the method yet, Part 1 does.')
 
 # ---- 8: music result ----
+RED = '#c0392b'
 g = adefs('mr')
-def island2(cx):
-    return P(f'M{cx-150},300 C{cx-80},200 {cx+20},330 {cx+150},230', MU, 14, extra='stroke-linecap="round" stroke-opacity=".35"') + P(f'M{cx-150},300 C{cx-80},200 {cx+20},330 {cx+150},230', MU, 2.5)
-g += R(40, 40, 520, 360, '#fff', LINE, 1.5, 10) + R(620, 40, 520, 360, '#fff', LINE, 1.5, 10)
-g += T(300, 80, 'Remove a style', 20, 700, INK, 'middle') + T(880, 80, 'Add a style', 20, 700, INK, 'middle')
-g += island2(300) + island2(880) + T(300, 345, 'a style: a thin set of musical paths', 14, 600, MU, 'middle') + T(880, 345, 'a style: a thin set of musical paths', 14, 600, MU, 'middle')
-g += F(1, C(300, 262, 10, INK) + P('M300,256 L300,140', ACC, 3.5, extra='marker-end="url(#mro)"') + T(300, 385, 'leaves easily, still music', 17, 700, MU, 'middle'))
-g += F(2, C(800, 135, 10, INK) + P('M806,142 L930,312', ACC, 3.5, extra='marker-end="url(#mro)" stroke-dasharray="9 6"') + T(880, 385, 'the push misses the thin set', 17, 700, ACC, 'middle'))
-g += F(3, R(380, 412, 420, 44, MUL, MU, 1.5, 22) + T(590, 440, 'and 144 note transitions name a tradition 71% of the time', 14.5, 700, MU, 'middle'))
-g += F(4, T(590, 476, 'Many exits, almost no entrances: that sounds like a fact about a graph.', 17, 700, INK, 'middle'))
+def clip(x, y, label, sub, col, fill):
+    return R(x, y, 210, 70, fill, col, 2, 12) + T(x + 105, y + 31, label, 17, 700, col, 'middle') + T(x + 105, y + 54, sub, 13, 400, INK, 'middle')
+g += T(40, 40, 'Remove a style', 19, 700, INK)
+g += clip(40, 60, 'a jazz clip', 'MusicGen, jazz prompt', MU, MUL)
+g += F(1, P('M254,95 L380,95', ACC, 3.5, extra='marker-end="url(#mro)"') + T(317, 82, 'minus the', 13, 700, ACC, 'middle') + T(317, 120, 'jazz direction', 13, 700, ACC, 'middle')
+          + clip(386, 60, 'not jazz any more', 'and still sounds like music', GRN, '#eaf3ea') + C(626, 95, 18, GRN) + P('M617,95 L624,103 L637,87', '#fff', 3.5))
+g += T(40, 220, 'Add a style', 19, 700, INK)
+g += clip(40, 240, 'a classical clip', 'MusicGen, classical prompt', AC2, SOFT)
+g += F(2, P('M254,275 L380,275', ACC, 3.5, extra='marker-end="url(#mro)"') + T(317, 262, 'plus the same', 13, 700, ACC, 'middle') + T(317, 300, 'jazz direction', 13, 700, ACC, 'middle')
+          + clip(386, 240, 'still not jazz', 'the push barely registers', RED, '#fdecea'))
+g += F(3, P('M600,275 L700,275', ACC, 4.5, extra='marker-end="url(#mro)" stroke-dasharray="8 5"') + T(650, 262, 'push harder', 13, 700, ACC, 'middle')
+          + clip(706, 240, 'noise', 'it breaks before it turns jazz', RED, '#fdecea'))
+isl = R(760, 40, 390, 170, '#fff', LINE, 1.5, 12) + T(955, 70, 'One picture that explains it', 15, 700, AC2, 'middle')
+isl += f'<ellipse cx="955" cy="140" rx="70" ry="38" fill="{MUL}" stroke="{MU}" stroke-width="2.5"/>' + T(955, 146, 'jazz', 15, 700, MU, 'middle')
+for ang in (-0.45, 0.35, 2.8, 3.6):
+    x1, y1 = 955 + 70 * math.cos(ang), 140 + 38 * math.sin(ang)
+    x2, y2 = 955 + 150 * math.cos(ang), 140 + 62 * math.sin(ang)
+    isl += P(f'M{x1:.0f},{y1:.0f} L{x2:.0f},{y2:.0f}', GRN, 2, extra='marker-end="url(#mra)"')
+isl += P('M790,190 C850,175 880,170 893,160', RED, 2, extra='stroke-dasharray="5 4"') + T(955, 200, 'many ways out, few ways in', 13.5, 700, INK, 'middle')
+g += F(4, isl + T(590, 380, 'Leaving a style is easy. Entering one is not.', 22, 700, INK, 'middle') + T(590, 414, 'A vector cannot explain that. Reachability on a graph can.', 18, 700, ACC, 'middle'))
 MUSRES = sec('Steering leaves a style easily but cannot enter one', SVG(g), ch='0', status='rev',
-             ref='Co-authored work under review, MusicGen small and medium. Corpus result: zhiqian.ai/music-markov, in progress',
-             notes='Same vector tool, now in MusicGen. This picture comes back in Part 2 as the payoff. Keep it to two sentences here.')
+             ref='Co-authored work under review, MusicGen small and medium. Jazz and classical are an illustration of the two arms',
+             notes='Same vector tool as the refusal direction, now in a music generator. Removing a style works and keeps the music coherent. Adding the same direction to music without that style does not make it acquire the style, and a bigger push breaks the audio first. Replace this drawing with real clips and numbers from the paper when available.')
 
 # ---- map slides ----
 def mapx(title, depth, time, line, ch, take, n=''):
@@ -640,20 +652,22 @@ CLAIMS = [('Language: a graph of how a model rewires after an edit catches failu
 
 # ---- every surgery is stored as a vector (concrete) ----
 g = adefs('vc')
-cols3 = [('Steer', 'h  ←  h + α r', 'add a direction to the activations', 'refusal direction, Arditi et al. 2024'),
-         ('Edit', 'W  ←  W + u vᵀ', 'add a rank one matrix to one layer', 'ROME, Meng et al. 2022'),
-         ('Fine tune', 'θ  ←  θ + τ', 'add a task vector to all weights', 'task arithmetic, Ilharco et al. 2023')]
-for k, (a, eq, d1, cite) in enumerate(cols3):
-    x = 40 + k * 380
-    blk = R(x, 30, 350, 230, '#fff', LINE, 1.5, 12) + T(x + 175, 72, a, 24, 700, AC2, 'middle')
-    blk += R(x + 30, 95, 290, 64, ACL, ACC, 1.5, 10) + T(x + 175, 137, eq, 28, 700, ACC, 'middle', extra='font-family="Fira Mono,monospace"')
-    blk += T(x + 175, 196, d1, 15, 600, INK, 'middle') + T(x + 175, 232, cite, 13, 400, MUT, 'middle')
+cols4 = [('Steer', 'h ← h + α r', 'add a direction to the', 'activations at run time', 'refusal direction, Arditi et al. 2024'),
+         ('Edit', 'W ← W + u vᵀ', 'add a rank one matrix', 'to one layer', 'ROME, Meng et al. 2022'),
+         ('LoRA', 'W ← W + B A', 'add a low rank matrix', 'to many layers', 'LoRA, Hu et al. 2022'),
+         ('Fine tune', 'θ ← θ + τ', 'add a task vector', 'to all weights', 'task arithmetic, Ilharco et al. 2023')]
+for k, (a, eq, d1, d2, cite) in enumerate(cols4):
+    x = 30 + k * 283
+    blk = R(x, 30, 265, 230, '#fff', LINE, 1.5, 12) + T(x + 132, 70, a, 22, 700, AC2, 'middle')
+    blk += R(x + 20, 92, 225, 58, ACL, ACC, 1.5, 10) + T(x + 132, 130, eq, 23, 700, ACC, 'middle', extra='font-family="Fira Mono,monospace"')
+    blk += T(x + 132, 182, d1, 14.5, 600, INK, 'middle') + T(x + 132, 202, d2, 14.5, 600, INK, 'middle') + T(x + 132, 238, cite, 12.5, 400, MUT, 'middle')
     g += F(k, blk) if k else blk
-g += F(3, R(40, 290, 1110, 110, SOFT, LINE, 1, 12) + T(595, 330, 'Each one tells you exactly what was added.', 22, 700, INK, 'middle') + T(595, 372, 'None tells you which other facts, behaviors or styles moved with it.', 22, 700, ACC, 'middle'))
-g += F(4, T(595, 455, 'Beyond vectors: read how the parts connect, and follow the change.', 19, 700, INK, 'middle'))
+g += F(4, R(30, 285, 1120, 100, SOFT, LINE, 1, 12) + T(590, 323, 'Each one tells you exactly what was added.', 22, 700, INK, 'middle') + T(590, 362, 'None tells you which other facts, behaviors or styles moved with it.', 22, 700, ACC, 'middle')
+          + T(590, 418, 'Xu et al., ACL 2026: editing, LoRA and steering are one update at three persistence levels.', 14, 600, MUT, 'middle')
+          + T(590, 458, 'Beyond vectors: read how the parts connect, and follow the change.', 19, 700, INK, 'middle'))
 VECTOR = sec('Every surgery is stored as a vector', SVG(g), ch='0',
-             ref='Arditi et al., NeurIPS 2024. Meng et al., NeurIPS 2022. Ilharco et al., ICLR 2023',
-             notes='Three surgeries, three one line formulas a CS audience can read. The point is not the math, it is that each operation is a single added object, and that object carries no information about its side effects.')
+             ref='Arditi et al., NeurIPS 2024. Meng et al., NeurIPS 2022. Hu et al., LoRA, ICLR 2022. Ilharco et al., ICLR 2023. Xu et al., ACL 2026',
+             notes='Four surgeries, four one line formulas a CS audience can read. ROME is a rank one LoRA on one layer, which links knowledge editing to something most of the room has used. The point is not the math, it is that each operation is a single added object, and that object carries no information about its side effects.')
 
 # ---- demo: a tiny graph is enough to represent a piece ----
 g = adefs('dm2')
@@ -668,13 +682,21 @@ DEMO2 = sec('A tiny graph is enough to represent a piece of music', SVG(g), ch='
 
 # ---- forecast, two claims ----
 g = adefs('fc2')
-g += T(590, 70, THROUGH_A, 34, 700, INK, 'middle') + T(590, 118, THROUGH_B, 34, 700, ACC, 'middle')
+g += T(590, 60, THROUGH_A, 32, 700, INK, 'middle') + T(590, 104, THROUGH_B, 32, 700, ACC, 'middle')
 for k, (a, st, kk, col) in enumerate(CLAIMS):
-    y = 180 + k * 120
-    g += F(k + 1, C(80, y + 32, 26, col) + T(80, y + 41, str(k + 1), 22, 700, '#fff', 'middle') + wrap(125, y + 26, a, 21, 600, INK, width=72, lh=29) + tag(125, y + 70, st, kk))
-g += F(3, T(590, 460, 'Two settings, one question: where did the change go?', 19, 700, MUT, 'middle'))
+    y = 140 + k * 100
+    g += F(k + 1, C(80, y + 30, 24, col) + T(80, y + 38, str(k + 1), 20, 700, '#fff', 'middle') + wrap(122, y + 24, a, 19, 600, INK, width=80, lh=26) + tag(122, y + 64, st, kk))
+mods = [('Text', 'today, Part 1', ACC, ACL, True), ('Music', 'today, Part 2', MU, MUL, True), ('Equations', 'proofs, physics', '#5a4fcf', '#fff', False),
+        ('Images', 'vision', AC2, '#fff', False), ('Space', '3D, maps', AC2, '#fff', False), ('Motion', 'bodies, robots', AC2, '#fff', False),
+        ('Molecules', 'proteins, DNA', AC2, '#fff', False), ('Code', 'programs', AC2, '#fff', False)]
+strip = T(30, 360, 'Kinds of knowledge a generative model holds', 14, 700, MUT)
+for k, (a, b, col, fill, solid) in enumerate(mods):
+    x = 30 + k * 141
+    strip += R(x, 372, 130, 62, fill, col, 2 if solid else 1.5, 12, '' if solid else 'stroke-dasharray="6 5" opacity=".75"')
+    strip += T(x + 65, 399, a, 16, 700, col, 'middle', '' if solid else 'opacity=".8"') + T(x + 65, 420, b, 12, 400, INK if solid else MUT, 'middle')
+g += F(3, strip + T(590, 462, 'Two kinds today. Many more, and none is a substitute for another.', 17, 700, INK, 'middle'))
 FORECAST2 = sec('Two claims for the next forty minutes', SVG(g), ch='0',
-                notes='Language is published and the result is solid. Music is in progress: the data side has numbers, the generator side is being tested, and the brain is the judge.')
+                notes='The dashed tiles are the point of the vision: knowledge comes in many forms, and text is only one of them. Today covers text and music. Language is published and the result is solid. Music is in progress: the data side has numbers, the generator side is being tested, and the brain is the judge.')
 
 # ---- part dividers, plain ----
 def divider(title, line, ch):
