@@ -1114,7 +1114,7 @@ for k, (a_, col) in enumerate([('surprise from IDyOM, a graph from scores', AC2)
 g += F(3, cmp_)
 g += F(4, T(590, 416, 'If the graph inside the generator explains the listener as well as the generator itself,', 17, 700, INK, 'middle') + T(590, 446, 'the graph is real. If not, it is our drawing, not the model\'s.', 17, 700, ACC, 'middle'))
 PLAN = secx('Our plan: a graph from inside MusicGen, judged by the brain', SVG(g), ch='2', status='plan',
-            notes='One question replaces the earlier four outcome matrix. Three sources of surprise for the same clips, one yardstick. The scores graph (IDyOM) is the baseline from music cognition, MusicGen output surprisal is what Noguchi used, and the graph from inside MusicGen is ours. The steering asymmetry from the overview is the follow up: once the graph is validated, ask whether steering can reach a style on it.')
+            notes='One question replaces the earlier four outcome matrix. Three sources of surprise for the same clips, one yardstick. The scores graph (IDyOM) is the baseline from music cognition, MusicGen output surprisal is what Noguchi used, and the graph from inside MusicGen is ours. The steering asymmetry shown after the probing slide is the follow up: once the graph is validated, ask whether steering can reach a style on it.')
 
 # ======================= ROUND 6 (Nov 2 2026): knowledge beyond text, emotion =======================
 def photo(cx, cy, r, fname, initials, col):
@@ -1242,7 +1242,7 @@ g += F(3, T(590, 420, 'With no copy longer than 6 notes, 2 notes of memory still
           + T(590, 452, 'The useful graph remembers a little and copies nothing long.', 18, 700, ACC, 'middle'))
 COPY = sec('More memory sounds more like the style, because it copies', SVG(g), ch='2', status='prog',
            ref='Our experiments, Nov 2026. Clips: order 2 and the other settings sampled with a 6 note copy limit, one sample each, fixed seed, no cherry picking. Real Bach melody: BWV 329 soprano, held out',
-           notes='Generation tells the other half. Plain sampling with more memory is recognized as its style more often, 57 to 65, but the variable order model copies 12 note stretches verbatim and 99 percent of its 4 note patterns already exist in training. A 6 note copy limit keeps most of the gain. Honest caveat: these automatic judges rate generated melodies above real held out ones (52 percent), so they measure typicality, not musical conviction. A listening test is the next step. The LLM judge numbers on the previous slide come from the website, not from this run.')
+           notes='Generation tells the other half. Plain sampling with more memory is recognized as its style more often, 57 to 65, but the variable order model copies 12 note stretches verbatim and 99 percent of its 4 note patterns already exist in training. A 6 note copy limit keeps most of the gain. Honest caveat: these automatic judges rate generated melodies above real held out ones (52 percent), so they measure typicality, not musical conviction. A listening test is the next step. The LLM judge numbers on the memory order slide come from the website, not from this run.')
 
 # ======================= ROUND 8 (Nov 2 2026): slides 9 and 10 on one template =======================
 PURP = '#5a4fcf'
@@ -1346,13 +1346,16 @@ def assemble(cover, old):
     story = old[43]
     receipts = old[45]
     delta_paper = retitle(old[47], 'Our delta graph: rank edits by how the inside rewired').replace('class="divider" ', '', 1)
-    vision = [cover, surg, story, SILENT, RIPPLE, receipts, VECTOR, delta_paper, BEYOND2, EMOTION2, DEMO2, MUSRES, FORECAST2]
+    toch = lambda sec_, c: re.sub(r'data-ch="[^"]*"', f'data-ch="{c}"', sec_, count=1)
+    vector = retitle(VECTOR, 'Every change to a model is stored as a vector')
+    # trailer: the problem, the thesis, one best result per domain, the two claims
+    vision = [cover, SILENT, vector, delta_paper, DEMO2, FORECAST2]
     rome = old[33]
     a = rome.find('<div class="note"'); e = rome.find('  <div class="ref">')
     rome = rome[:a] + '<div class="note" style="font-size:.62em"><div class="key">The finding</div><p class="one" style="font-size:1.25em">A fact sits in two places. Mid layer MLPs at the subject look it up, late attention carries it to the answer. Editing a fact means changing the first place.</p></div>\n  </div>\n' + rome[e:]
     rome = retitle(rome, 'A fact lives in mid layer MLPs and moves out by attention')
     d46 = old[46].replace('running example from slide 45: the Space Needle edit', 'running example: the Space Needle edit').replace(' (slide 2).', '.')
-    lang = [DIV1, REFUSAL, CRITIQUE, rome, old[35].replace('Guo 2025, slide 31', 'Guo 2025'), d46, old[48], old[49], old[50], old[51]]
+    lang = [DIV1, toch(surg, '1'), toch(story, '1'), toch(RIPPLE, '1'), toch(receipts, '1'), REFUSAL, CRITIQUE, rome, old[35].replace('Guo 2025, slide 31', 'Guo 2025'), d46, old[48], old[49], old[50], old[51]]
     four = retitle(FOUR, 'Music generation went from a visible graph to a hidden one')
     four = re.sub(r'\s*<p class="q">.*?</p>', '', four, count=1, flags=re.S)
     tools = retitle(TOOLS, 'Every tool inside MusicGen reads one layer at one moment').replace('Three tools, three questions, all at one layer and one moment.', 'Language models moved on to attribution graphs. Music has not.')
@@ -1362,7 +1365,9 @@ def assemble(cover, old):
     b2 = retitle(BRAIN2, 'The brain carries enough of the music to rebuild it').replace('Denk et al., Brain2Music, arXiv 2307.11078, 2023.', 'Denk et al., Text to music generation models capture musical semantic representations in the human brain, Nature Communications 2025 (Brain2Music).')
     corpus = retitle(CORPUS, 'Occam\'s razor: the simplest graph already names the tradition')
     path = retitle(PATH, 'Too little memory gives a graph without syntax, too much gives a path').replace('An 89 note Bach chorale at first and third order.', 'An 89 note Bach chorale at first and third order. LLM judge result from zhiqian.ai/music-markov')
-    mus = [HIST, FOLD, corpus, path, RICHER, COPY, WHEN, MGEN, PROBE, BRL, BRI, BRR, BRG, PLAN]
+    beyond2 = retitle(toch(BEYOND2, '2'), 'Part 2. Knowledge is not only text')
+    hist = retitle(HIST, 'The oldest music model is a graph')
+    mus = [beyond2, toch(EMOTION2, '2'), hist, FOLD, corpus, path, RICHER, COPY, WHEN, MGEN, PROBE, toch(MUSRES, '2'), BRL, BRI, BRR, BRG, PLAN]
     beyond = []
     close = [TAKEAWAY.replace('</section>', CLIP_JSON + '</section>')]
     parts = {'vision': vision, 'language': lang, 'music': mus, 'beyond': beyond, 'close': close}
