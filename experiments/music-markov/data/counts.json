@@ -1,0 +1,13 @@
+{
+ "cap": 210,
+ "min_notes": 16,
+ "counts": {
+  "bach": 210,
+  "palestrina": 210,
+  "monteverdi": 49,
+  "trecento": 103,
+  "essen": 210,
+  "ryans": 210
+ },
+ "total": 992
+}

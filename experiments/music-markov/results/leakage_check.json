@@ -1,0 +1,32 @@
+{
+ "bach": {
+  "n": 210,
+  "span_ge_16": 75,
+  "near_duplicate_80pct": 9
+ },
+ "palestrina": {
+  "n": 210,
+  "span_ge_16": 4,
+  "near_duplicate_80pct": 4
+ },
+ "monteverdi": {
+  "n": 49,
+  "span_ge_16": 4,
+  "near_duplicate_80pct": 2
+ },
+ "trecento": {
+  "n": 103,
+  "span_ge_16": 11,
+  "near_duplicate_80pct": 4
+ },
+ "essen": {
+  "n": 210,
+  "span_ge_16": 2,
+  "near_duplicate_80pct": 0
+ },
+ "ryans": {
+  "n": 210,
+  "span_ge_16": 15,
+  "near_duplicate_80pct": 2
+ }
+}

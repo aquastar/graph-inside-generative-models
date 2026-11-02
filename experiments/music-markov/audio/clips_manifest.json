@@ -1,0 +1,76 @@
+{
+ "sampler": "max copy L=6",
+ "clips": {
+  "bach_real": {
+   "style": "bach",
+   "kind": "real held out melody",
+   "src": "bach/bwv329.mxl",
+   "n_notes": 21,
+   "seconds": 20.0
+  },
+  "bach_order1": {
+   "style": "bach",
+   "kind": "generated, order 1, sampler max copy L=6",
+   "longest_copy": 6,
+   "n_notes": 21,
+   "seconds": 20.0
+  },
+  "bach_order2": {
+   "style": "bach",
+   "kind": "generated, order 2, sampler max copy L=6",
+   "longest_copy": 6,
+   "n_notes": 21,
+   "seconds": 20.0
+  },
+  "bach_order3": {
+   "style": "bach",
+   "kind": "generated, order 3, sampler max copy L=6",
+   "longest_copy": 6,
+   "n_notes": 21,
+   "seconds": 20.0
+  },
+  "bach_ordervar": {
+   "style": "bach",
+   "kind": "generated, order var, sampler max copy L=6",
+   "longest_copy": 6,
+   "n_notes": 21,
+   "seconds": 20.0
+  },
+  "essen_real": {
+   "style": "essen",
+   "kind": "real held out melody",
+   "src": "essenFolksong/zuccal0.abc#634",
+   "n_notes": 46,
+   "seconds": 19.8
+  },
+  "essen_order1": {
+   "style": "essen",
+   "kind": "generated, order 1, sampler max copy L=6",
+   "longest_copy": 6,
+   "n_notes": 46,
+   "seconds": 19.8
+  },
+  "essen_order2": {
+   "style": "essen",
+   "kind": "generated, order 2, sampler max copy L=6",
+   "longest_copy": 6,
+   "n_notes": 46,
+   "seconds": 19.8
+  },
+  "essen_order3": {
+   "style": "essen",
+   "kind": "generated, order 3, sampler max copy L=6",
+   "longest_copy": 6,
+   "n_notes": 46,
+   "seconds": 19.8
+  },
+  "essen_ordervar": {
+   "style": "essen",
+   "kind": "generated, order var, sampler max copy L=6",
+   "longest_copy": 6,
+   "n_notes": 46,
+   "seconds": 19.8
+  }
+ },
+ "synth": "fluidsynth, FluidR3 GM acoustic grand piano"
+}
