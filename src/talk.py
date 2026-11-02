@@ -230,12 +230,12 @@ for i, s in enumerate(styles):
         fill = ACC if i == j else ('#fbd3b4' if v >= 10 else '#f4f5f6')
         cm += R(mx + j * cs, my + i * cs, cs - 3, cs - 3, fill, 'none', 0, 3) + T(mx + j * cs + 23, my + i * cs + 30, str(v), 14, 700, '#fff' if i == j else INK, 'middle')
 g += F(1, cm)
-g += F(2, R(820, 70, 330, 120, ACL, ACC, 1.5, 10) + T(985, 128, '70.9%', 44, 700, ACC, 'middle') + T(985, 166, 'five fold accuracy, baseline 20%', 14, 600, INK, 'middle'))
+g += F(2, R(820, 70, 330, 120, ACL, ACC, 1.5, 10) + T(985, 128, '70.9%', 44, 700, ACC, 'middle') + T(985, 166, 'five fold accuracy, chance 17%', 14, 600, INK, 'middle'))
 g += F(3, R(820, 210, 330, 150, '#fff', LINE, 1.5, 10) + T(840, 240, 'Confusions make musical sense', 15, 700, AC2) + T(840, 268, 'Bach and Palestrina swap about 20%', 13.5, 400, INK) + T(840, 292, 'folk and fiddle swap 13 to 16%', 13.5, 400, INK) + T(840, 316, 'Monteverdi and fiddle: never', 13.5, 400, INK) + T(840, 344, 'row normalized, percent', 12, 400, MUT))
 g += F(4, T(590, 465, 'A first order graph already carries a style. 144 numbers name the corpus.', 18, 700, INK, 'middle'))
 CORPUS = sec('144 numbers name the corpus', SVG(g), ch='2', status='prog',
              ref='1,000 pieces, six public corpora (Bach chorales, Essen, Monteverdi, Palestrina, Ryan\'s Mammoth Collection, Trecento), parsed with music21. zhiqian.ai/music-markov',
-             notes='Majority class baseline 20%. No tuning, the number is what the script prints on a first run. The script is public on the site.')
+             notes='Chance with six styles is 17%, majority class 21%. Rebuilt from scratch in Nov 2026: 70.2% plus or minus 2.7. No tuning, the number is what the script prints on a first run. The script is public on the site.')
 
 # ---- where the graph becomes a path ----
 g = adefs('gp')
@@ -453,7 +453,7 @@ def chipx(x, y, s, col):
 g = adefs('pm')
 g += f'<foreignObject x="10" y="20" width="640" height="340"><div xmlns="http://www.w3.org/1999/xhtml" style="width:640px;height:340px;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1.5px #d3d7da,0 10px 30px rgba(17,17,17,.10)"><iframe class="fe-frame" data-src="figs/fe-chain.html?autoplay=1" title="Für Elise Markov chain" style="width:640px;height:340px;border:0;background:#fff"></iframe></div></foreignObject>'
 g += T(330, 388, 'Für Elise as a graph: it learns the melody, then composes', 15, 700, MU, 'middle')
-res = [('70.9%', '144 numbers per piece name its tradition', 'six corpora, 1,000 pieces, baseline 20%', ACC, 'in progress', 'part'),
+res = [('70.9%', '144 numbers per piece name its tradition', 'six corpora, about 1,000 pieces, chance 17%', ACC, 'in progress', 'part'),
        ('one way', 'steering MusicGen removes a style, cannot add one', 'a reachability question on a hidden graph', ACC, 'under review', 'part'),
        ('89% to 6%', 'revisits fall as memory grows: a graph becomes a path', 'the useful graph lives in between', ACC, 'in progress', 'part')]
 for i, (big, a, b, col, st, k) in enumerate(res):
@@ -673,7 +673,7 @@ VECTOR = sec('Every surgery is stored as a vector', SVG(g), ch='0',
 g = adefs('dm2')
 g += f'<foreignObject x="20" y="10" width="740" height="410"><div xmlns="http://www.w3.org/1999/xhtml" style="width:740px;height:410px;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1.5px #d3d7da,0 10px 30px rgba(17,17,17,.10)"><iframe class="fe-frame" data-src="figs/fe-chain.html?autoplay=1" title="Für Elise Markov chain" style="width:740px;height:410px;border:0;background:#fff"></iframe></div></foreignObject>'
 g += F(1, R(790, 20, 370, 120, MUL, MU, 1.5, 12) + T(810, 58, 'A whole piece in 144 numbers', 19, 700, MU) + T(810, 88, 'which note follows which,', 15, 400, INK) + T(810, 110, 'a 12 by 12 table, no music theory', 15, 400, INK))
-g += F(2, R(790, 160, 370, 160, ACL, ACC, 1.5, 12) + T(975, 230, '70.9%', 56, 700, ACC, 'middle') + T(975, 262, 'of unseen pieces placed in', 15, 600, INK, 'middle') + T(975, 284, 'the right tradition (chance 20%)', 15, 600, INK, 'middle'))
+g += F(2, R(790, 160, 370, 160, ACL, ACC, 1.5, 12) + T(975, 230, '70.9%', 56, 700, ACC, 'middle') + T(975, 262, 'of unseen pieces placed in', 15, 600, INK, 'middle') + T(975, 284, 'the right tradition (chance 17%)', 15, 600, INK, 'middle'))
 g += F(3, R(790, 340, 370, 80, '#fff', LINE, 1.5, 12) + T(810, 372, '1,000 pieces, six traditions', 15.5, 700, INK) + T(810, 398, 'Bach to Palestrina to fiddle tunes', 14, 400, MUT))
 g += F(4, T(590, 466, 'A tiny graph already captures a style.', 20, 700, INK, 'middle'))
 DEMO2 = sec('A tiny graph is enough to represent a piece of music', SVG(g), ch='0', status='prog',
@@ -804,11 +804,12 @@ RIPPLE = sec('Edit one fact in a knowledge graph, and the facts around it do not
 
 # ======================= ROUND 5 (Nov 2 2026): music part rebuilt from the survey =======================
 import json as _json, os as _os
-CLIPS = _json.load(open(_os.path.join(_os.path.dirname(__file__), 'clips.json')))
+CLIPS = _json.load(open(_os.path.join(_os.path.dirname(__file__), 'clips.json')))  # includes experiments/music-markov clips
 
 def playbtn(x, y, w, clip, label, col):
+    au = f' data-audio="figs/audio/{clip}.mp3"' if _os.path.exists(_os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))), 'figs', 'audio', clip + '.mp3')) else ''
     return (f'<foreignObject x="{x}" y="{y}" width="{w}" height="44"><div xmlns="http://www.w3.org/1999/xhtml">'
-            f'<button class="playclip" data-clip="{clip}" style="width:{w}px;height:40px;border-radius:20px;border:2px solid {col};background:#fff;color:{col};font:700 15px Fira Sans,sans-serif;cursor:pointer">&#9654; {label}</button></div></foreignObject>')
+            f'<button class="playclip" data-clip="{clip}"{au} style="width:{w}px;height:40px;border-radius:20px;border:2px solid {col};background:#fff;color:{col};font:700 15px Fira Sans,sans-serif;cursor:pointer">&#9654; {label}</button></div></foreignObject>')
 
 CLIP_JSON = '<script type="application/json" id="clipdata">' + _json.dumps(CLIPS) + '</script>'
 
@@ -1096,6 +1097,55 @@ EMOTION = sec('Music is where emotion can be measured', SVG(g), ch='0',
               ref='Picard quote from the MIT Press description of Affective Computing, 1997. Minsky, The Emotion Machine, 2006. Meyer, Emotion and Meaning in Music, 1956, p. 31, as quoted in Margulis 2005. Huron, Sweet Anticipation, 2006. Salimpoor et al., Nature Neuroscience 2011. Koelsch, Nature Reviews Neuroscience 2014',
               notes='Why music, beyond being a second domain. Emotion is one of the intelligences beyond language, and music is one of the most reliable ways to evoke it in a lab, with a response we can measure in the brain. The bridge is expectation: music moves us partly by playing with what we expect next, and a transition graph is exactly a model of what comes next. Check exact wording of the five citations before the talk, they were added from memory.')
 
+# ======================= ROUND 7 (Nov 2 2026): Markov order results =======================
+def hbars(x0, y0, rows, scale, maxv, lw=300, bh=34, gap=14):
+    out = ''
+    for k, (lab, v, col, note, bold) in enumerate(rows):
+        y = y0 + k * (bh + gap)
+        out += T(x0 + lw - 12, y + bh / 2 + 6, lab, 15, 700 if bold else 500, ACC if bold else INK, 'end')
+        out += R(x0 + lw, y, v / maxv * scale, bh, col, 'none', 0, 4)
+        out += T(x0 + lw + v / maxv * scale + 10, y + bh / 2 + 6, f'{v:g}%', 16, 700, INK) + T(x0 + lw + v / maxv * scale + 72, y + bh / 2 + 6, note, 14, 700, ACC if bold else MUT)
+    return out
+
+g = adefs('ro')
+g += T(40, 40, 'Which tradition is this melody from? Six traditions, about 1,000 melodies, five fold cross validation', 14, 600, MUT)
+rowsA = [('chance', 16.7, '#d3d7da', '', False), ('graph, 1 note of memory', 70.2, GRY, '', False), ('graph, 2 notes of memory', 78.2, '#f6a46a', '+8 points', False),
+         ('graph, memory as needed', 73.3, '#f6a46a', '+3 points', False)]
+g += hbars(40, 64, rowsA, 640, 100)
+rowsB = [('note plus length, 1 note of memory', 86.8, '#ef7d33', '+17 points', False), ('note plus length, memory as needed', 88.7, ACC, '+19 points', True)]
+g += F(1, L(40, 262, 1150, 262, LINE, 1.5) + hbars(40, 280, rowsB, 640, 100))
+g += F(2, R(160, 392, 860, 48, ACL, ACC, 1.5, 10) + T(590, 423, 'A richer node buys more than a longer memory.', 19, 700, INK, 'middle'))
+g += F(3, T(590, 468, 'For a graph, what a node means matters more than how far back it looks.', 17, 700, ACC, 'middle'))
+RICHER = sec('Richer nodes beat longer memory', SVG(g), ch='2', status='prog',
+             ref='Our experiments, Nov 2026: 992 melodies from six music21 corpora, same five folds for every method. Points are differences from the 1 note graph (70.2%). "Memory as needed" is a variable order model, the IDyOM style',
+             notes='Three lessons. One more note of memory helps, 70 to 78. Letting the graph decide how much memory each context needs is the safest single choice. But giving each node one more attribute, how long the note lasts, jumps to 87 to 89, more than any change of order. Caveats: Bach repeats chorale tunes across harmonizations, which flatters long memory, and Palestrina and Trecento editions use long note values, so part of the duration gain reflects notation.')
+
+g = adefs('gc')
+g += T(40, 40, 'Generate 600 melodies per setting, then ask a style classifier and a copy checker', 14, 600, MUT)
+cols_ = [('1 note', 57, 7.6, GRY), ('2 notes', 64, 8.3, '#f6a46a'), ('memory as needed', 65, 12.1, ACC)]
+g += T(300, 82, 'recognized as its style', 16, 700, INK, 'middle') + T(880, 82, 'longest span copied from training', 16, 700, INK, 'middle')
+for k, (lab, st, cp, col) in enumerate(cols_):
+    x = 110 + k * 130
+    g += R(x, 260 - st * 1.6, 90, st * 1.6, col, 'none', 0, 4) + T(x + 45, 252 - st * 1.6, f'{st}%', 16, 700, INK, 'middle') + T(x + 45, 282, lab, 13.5, 600, INK, 'middle')
+g += L(90, 260, 500, 260, INK, 1.5)
+cp_ = ''
+for k, (lab, st, cp, col) in enumerate(cols_):
+    x = 690 + k * 130
+    cp_ += R(x, 260 - cp * 9, 90, cp * 9, col, 'none', 0, 4) + T(x + 45, 252 - cp * 9, f'{cp} notes', 15, 700, INK, 'middle') + T(x + 45, 282, lab, 13.5, 600, INK, 'middle')
+cp_ += L(670, 260, 1080, 260, INK, 1.5) + L(670, 260 - 10.9 * 9, 1080, 260 - 10.9 * 9, '#c0392b', 1.5, 'stroke-dasharray="6 4"') + T(672, 260 - 10.9 * 9 - 6, 'real melodies: 10.9', 12.5, 700, '#c0392b')
+g += F(1, cp_ + T(880, 306, 'more memory sounds more like the style, because it copies', 14, 700, ACC, 'middle'))
+pb = T(40, 334, 'Listen: same rhythm and key, only the order of pitches changes', 14, 700, MUT)
+for k, (clip_, lab_) in enumerate([('bach_real', 'Bach, real'), ('bach_order1', '1 note'), ('bach_order2', '2 notes'), ('bach_ordervar', 'as needed')]):
+    pb += playbtn(40 + k * 133, 344, 125, clip_, lab_, AC2 if k == 0 else ACC)
+for k, (clip_, lab_) in enumerate([('essen_real', 'Folk, real'), ('essen_order1', '1 note'), ('essen_order2', '2 notes'), ('essen_ordervar', 'as needed')]):
+    pb += playbtn(610 + k * 133, 344, 125, clip_, lab_, AC2 if k == 0 else MU)
+g += F(2, pb)
+g += F(3, T(590, 420, 'With no copy longer than 6 notes, 2 notes of memory still reaches 61%.', 17, 700, INK, 'middle')
+          + T(590, 452, 'The useful graph remembers a little and copies nothing long.', 18, 700, ACC, 'middle'))
+COPY = sec('More memory sounds more like the style, because it copies', SVG(g), ch='2', status='prog',
+           ref='Our experiments, Nov 2026. Clips: order 2 and the other settings sampled with a 6 note copy limit, one sample each, fixed seed, no cherry picking. Real Bach melody: BWV 329 soprano, held out',
+           notes='Generation tells the other half. Plain sampling with more memory is recognized as its style more often, 57 to 65, but the variable order model copies 12 note stretches verbatim and 99 percent of its 4 note patterns already exist in training. A 6 note copy limit keeps most of the gain. Honest caveat: these automatic judges rate generated melodies above real held out ones (52 percent), so they measure typicality, not musical conviction. A listening test is the next step. The LLM judge numbers on the previous slide come from the website, not from this run.')
+
 # ======================= ASSEMBLY =======================
 def assemble(cover, old):
     """old: the reused slides from the earlier deck, keyed by their old index"""
@@ -1118,8 +1168,8 @@ def assemble(cover, old):
                     R(60, 230, 400, 140, ACL, ACC, 1.5, 10) + T(80, 270, 'The listener model is a graph', 17, 700, ACC) + T(80, 300, 'IDyOM counts transitions between notes', 14.5, 400, INK) + T(80, 324, 'with several context lengths, like the', 14.5, 400, INK) + T(80, 348, 'tiny graph from the opening.', 14.5, 400, INK))
     b2 = retitle(BRAIN2, 'The brain carries enough of the music to rebuild it').replace('Denk et al., Brain2Music, arXiv 2307.11078, 2023.', 'Denk et al., Text to music generation models capture musical semantic representations in the human brain, Nature Communications 2025 (Brain2Music).')
     corpus = retitle(CORPUS, 'Occam\'s razor: the simplest graph already names the tradition')
-    path = retitle(PATH, 'Too little memory gives a graph without syntax, too much gives a path').replace('An 89 note Bach chorale at first and third order.', 'An 89 note Bach chorale at first and third order. Classification and generation at higher orders: experiments running.')
-    mus = [HIST, FOLD, corpus, path, WHEN, MGEN, PROBE, BRL, BRI, BRR, BRG, PLAN]
+    path = retitle(PATH, 'Too little memory gives a graph without syntax, too much gives a path').replace('An 89 note Bach chorale at first and third order.', 'An 89 note Bach chorale at first and third order. LLM judge result from zhiqian.ai/music-markov')
+    mus = [HIST, FOLD, corpus, path, RICHER, COPY, WHEN, MGEN, PROBE, BRL, BRI, BRR, BRG, PLAN]
     beyond = []
     close = [TAKEAWAY.replace('</section>', CLIP_JSON + '</section>')]
     parts = {'vision': vision, 'language': lang, 'music': mus, 'beyond': beyond, 'close': close}

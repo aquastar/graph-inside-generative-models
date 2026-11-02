@@ -33,6 +33,9 @@ Done: 42 slides in the target order (Vision 8, Language 11, Music 17, Beyond 3, 
 
 Original figures added: Denk 2023 Figure 1 and the encoding result (brain 2 and brain 3 slides), taken from the Brain2Music project page repo google-research/seanet.
 
+## Round 7 (Nov 2 2026): Markov order results
+Experiments from branch experiments/music-markov added as two music slides after the memory order slide: "Richer nodes beat longer memory" (chance 16.7, order 1 70.2, order 2 78.2, variable 73.3, note plus length 86.8 and 88.7) and "More memory sounds more like the style, because it copies" (style 57, 64, 65 percent, longest copy 7.6, 8.3, 12.1 notes vs real 10.9, eight play buttons with the piano clips in figs/audio). "Baseline 20%" corrected to "chance 17%" everywhere. Figures from the experiment kept in figs/markov for reference. 38 slides.
+
 ## Round 6 (Nov 2 2026)
 Two overview slides before the Für Elise demo: "Knowledge is not only text" (Gardner 1983 and Fei-Fei Li's five intelligences, equations as the open direction with a redrawn sketch of Lindsey et al. 2025 addition paths, her verified quote "Spatial intelligence represents the frontier beyond language") and "Music is where emotion can be measured" (Picard 1997, Minsky 2006, Salimpoor 2011, Koelsch 2014, Juslin and Västfjäll 2008, the last five citations from memory, check wording). Take away adds "Next: equations". People photos: circular slots that show initials until he adds licensed photos to figs/people (file names in figs/people/README.md). Claude does not download photos of real people. 36 slides.
 

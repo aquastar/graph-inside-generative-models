@@ -396,6 +396,7 @@ FE_HOOK = """<script>
   document.addEventListener('click', function(ev){
     var b = ev.target.closest && ev.target.closest('button.playclip'); if(!b) return;
     ev.stopPropagation();
+    if (b.dataset.audio) { document.querySelectorAll('audio.clipaudio').forEach(function(x){ x.pause(); }); var au = document.getElementById('au_' + b.dataset.clip); if (!au) { au = new Audio(b.dataset.audio); au.id = 'au_' + b.dataset.clip; au.className = 'clipaudio'; document.body.appendChild(au); } au.currentTime = 0; au.play(); return; }
     var data = JSON.parse(document.getElementById('clipdata').textContent)[b.dataset.clip];
     actx = actx || new (window.AudioContext || window.webkitAudioContext)(); actx.resume();
     var t = actx.currentTime + 0.05;
