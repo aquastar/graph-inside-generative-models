@@ -1024,9 +1024,9 @@ PLAN = secx('Our plan: a graph from inside MusicGen, judged by the brain', SVG(g
 def photo(cx, cy, r, fname, initials, col):
     d = 2 * r
     return (f'<foreignObject x="{cx-r}" y="{cy-r}" width="{d}" height="{d}"><div xmlns="http://www.w3.org/1999/xhtml" '
-            f'style="position:relative;width:{d}px;height:{d}px;border-radius:50%;overflow:hidden;background:#f2f3f4;box-shadow:0 0 0 2.5px {col}">'
+            f'style="position:relative;width:{d}px;height:{d}px;border-radius:10px;overflow:hidden;background:#f2f3f4">'
             f'<span style="position:absolute;left:0;top:0;width:{d}px;height:{d}px;display:flex;align-items:center;justify-content:center;font-family:Fira Sans,sans-serif;font-weight:700;font-size:{int(r*0.7)}px;line-height:1;color:{col}">{initials}</span>'
-            f'<img src="figs/people/{fname}" alt="" onerror="this.remove()" style="position:absolute;left:0;top:0;width:{d}px;height:{d}px;max-width:none;max-height:none;margin:0;padding:0;border:0;box-shadow:none;object-fit:cover"/></div></foreignObject>')
+            f'<img src="figs/people/{fname}" alt="" onerror="this.remove()" style="position:absolute;left:0;top:0;width:{d}px;height:{d}px;max-width:none;max-height:none;margin:0;padding:0;border:0;box-shadow:none;border-radius:10px;object-fit:cover"/></div></foreignObject>')
 
 def qline(x, y, segs, size, a='start'):
     out = f'<text x="{x}" y="{y}" font-size="{size}" text-anchor="{a}" fill="{INK}" font-style="italic">'
@@ -1226,7 +1226,7 @@ c2 = person(407, 50, w3, 262, 'marvin-minsky.jpg', 'MM', 'Marvin Minsky', ['MIT,
 c2 += quote(439, 172, [[('Each of our major', False)], [('emotional states', True), (' results', False)], [('from turning certain', False)], [('resources on', True), (' while turning', False)], [('certain others off.', False)]], 15.5, 22)
 c2 += T(752, 294, 'The Emotion Machine, 2006', 12, 400, MUT, 'end')
 g += F(1, c2)
-c3 = person(785, 50, w3, 262, None, 'LM', 'Leonard Meyer', ['Music theorist, the classic theory', 'of emotion in music'], MU)
+c3 = person(785, 50, w3, 262, 'leonard-meyer.jpg', 'LM', 'Leonard Meyer', ['Music theorist, University of Chicago', 'and University of Pennsylvania'], MU)
 c3 += quote(817, 172, [[('affect is aroused when an', False)], [('expectation', True), (', a tendency to', False)], [('respond, is ', False), ('temporarily', True)], [('inhibited or permanently', True)], [('blocked', True)]], 15.5, 22)
 c3 += T(1130, 294, 'Emotion and Meaning in Music, 1956, p. 31', 12, 400, MUT, 'end')
 g += F(2, c3)
