@@ -55,7 +55,7 @@ One family for everything: ET Book (his choice, 2026-11-02, after seeing the two
 - Section marker top left in small caps (OVERVIEW, 1 LANGUAGE, 2 MUSIC, CLOSE). No progress bar.
 - Headline at most two lines, about 70 characters, no terminal period, a question only if the slide answers it.
 - Body text at most 25 words outside the headline, at most three bullets, bullets only for parallel items.
-- Citation as one Tufte sidenote: bottom right, ET Book 13.5 px #4A483E, author year venue, no DOI. No logos except cover and close.
+- Citation as one Tufte sidenote: bottom right, ET Book 13.5 px #4A483E, author year venue, no DOI. Several works are separated by a thin vertical rule (1 px, axis gray), inserted at build time where a work ends with its year. No logos except cover and close.
 - Photos of people: plain squares, radius 6 px, at most 160 px, no ring or shadow, on at most two slides. Name in 18 px ink, credential in ink2. Screenshots get a 1 px rule under them, no shadow.
 
 ## 6. Charts
@@ -72,18 +72,21 @@ One family for everything: ET Book (his choice, 2026-11-02, after seeing the two
 2. Secondary: TikZ for a static figure whose layout benefits from TikZ libraries. Route: DVI mode (dvilualatex with fontspec and ET Book, or latex with fbb), pgfsys-dvisvgm driver, dvisvgm --font-format=woff2 --exact-bbox --optimize, then strip embedded fonts and map to the page fonts. pdftocairo or dvisvgm --pdf turn text into outlines, acceptable only as a last resort for one figure.
 3. Build gate: a script checks the tokens and every SVG text fill for contrast (text 4.5, meaningful graphics 3.0), simulates color vision deficiency on each figure, and fails on violations. Keep the existing checks (no em dash, en dash or semicolon in visible text, at most 4 fragment steps).
 
-## 9. Motion
+## 9. Audio
+Every play button toggles: a second click pauses, starting a clip stops any other, and leaving the slide stops and resets all audio on it.
+
+## 10. Motion
 Fade only, 250 ms, at most four steps, each step one meaningful unit. Reveal auto-animate when the same figure returns (add fill, stroke and stroke-width to autoAnimateStyles if colors should morph).
 
-## 10. Do not
+## 11. Do not
 Colored pill boxes for content, rainbow accents, per-section accent colors, centered bold takeaway banners, generic icons (check marks in circles, light bulbs), emoji, drop shadows, gradients, all caps headlines, Fira Sans, a second text family, colored body text, two orange items on one slide.
 
-## 11. Implementation in this deck
+## 12. Implementation in this deck
 - src/style_v2.py holds the tokens, the override CSS and a restyle pass that every slide goes through at build time: old colors map to the tokens, bordered boxes become fills, pills get a 3 px radius, orange text becomes accent-text, bold drops to semibold, centered conclusion lines become ET Book sentences, banners lose their fill.
 - Fonts are self hosted in figs/fonts (ET Book WOFF, Source Sans 3 and Source Code Pro WOFF2, licenses beside them).
 - The Fur Elise animation uses Paul Tol muted colors for its nine notes (categorical, colorblind safe) with RIT orange for the active edge.
 
-## 12. Open
+## 13. Open
 - Test the TikZ DVI route with ET Book end to end before relying on it.
 - Check the warm white and the tints once on the real room projector.
 - A dark venue variant (bg #1A1917, ink #EDEBE6, same roles) only if needed.

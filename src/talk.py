@@ -813,6 +813,61 @@ def playbtn(x, y, w, clip, label, col):
 
 CLIP_JSON = '<script type="application/json" id="clipdata">' + _json.dumps(CLIPS) + '</script>'
 
+
+def _arc(x1, y1, x2, y2, col, bend=14, m='h1a', sw=1.5, extra=''):
+    import math
+    dx, dy = x2 - x1, y2 - y1; d = math.hypot(dx, dy); ux, uy = dx / d, dy / d
+    sx, sy, ex, ey = x1 + ux * 10, y1 + uy * 10, x2 - ux * 11, y2 - uy * 11
+    mx, my = (sx + ex) / 2 - uy * bend, (sy + ey) / 2 + ux * bend
+    return P(f'M{sx:.1f},{sy:.1f} Q{mx:.1f},{my:.1f} {ex:.1f},{ey:.1f}', col, sw, extra=f'marker-end="url(#{m})" ' + extra)
+
+def _nd(x, y, lab, col, fill='#fff', r=9):
+    return C(x, y, r, fill, col, 1.5) + T(x, y + 4, lab, 11, 600, col if fill == '#fff' else '#fff', 'middle')
+
+def icon_chain(x, col):
+    """1957: one chain, the next note depends only on this note"""
+    A, B, Cc = (x - 50, 160), (x, 102), (x + 50, 160)
+    o = _arc(*A, *B, col) + _arc(*B, *Cc, col) + _arc(*Cc, *A, col) + _arc(*B, *A, col) + _arc(*Cc, *B, col)
+    o += P(f'M{x+58},{152} C{x+86},{132} {x+86},{186} {x+59},{167}', col, 1.5, extra='marker-end="url(#h1a)"')
+    o += _nd(*A, 'C', col) + _nd(*B, 'E', col) + _nd(*Cc, 'G', col)
+    return o, 'one chain over notes'
+
+def icon_views(x, col):
+    """1995: several small chains, one per view of the music, vote on the next note"""
+    o = ''
+    for j, lab in enumerate(['pitch', 'rhythm', 'interval']):
+        y = 104 + j * 30
+        o += T(x - 70, y + 4, lab, 11.5, 400, MUT, 'end')
+        for i in range(3):
+            o += C(x - 58 + i * 26, y, 5, '#fff', col, 1.5)
+            if i < 2: o += L(x - 52 + i * 26, y, x - 38 + i * 26, y, col, 1.2)
+        o += P(f'M{x+10},{y} L{x+44},{134}', col, 1.2, extra='stroke-opacity=".7"')
+    o += C(x + 56, 134, 10, col, 'none') + T(x + 56, 138, '?', 12, 600, '#fff', 'middle')
+    return o, 'three chains vote on the next note'
+
+def icon_tree(x, col):
+    """2003: a context tree, deeper branches remember more of the phrase"""
+    root = (x - 62, 140); l1 = [(x - 20, 112), (x - 20, 168)]; l2 = [(x + 22, 96), (x + 22, 128), (x + 22, 158)]; l3 = [(x + 62, 116)]
+    o = ''.join(L(*root, *p_, col, 1.2) for p_ in l1)
+    o += L(*l1[0], *l2[0], col, 1.2) + L(*l1[0], *l2[1], col, 1.2) + L(*l1[1], *l2[2], col, 1.2)
+    o += P(f'M{root[0]},{root[1]} L{l1[0][0]},{l1[0][1]} L{l2[1][0]},{l2[1][1]} L{l3[0][0]},{l3[0][1]}', col, 3, extra='stroke-linecap="round" stroke-linejoin="round"')
+    o += ''.join(C(*p_, 5, '#fff', col, 1.5) for p_ in [root] + l1 + l2) + C(*l3[0], 6, col, 'none')
+    return o, 'longest matching context continues'
+
+def icon_expect(x, col):
+    """2005 on: from this note, each possible next note gets a probability, a rare one is a surprise"""
+    E = (x - 58, 140)
+    o = ''
+    for (y, lab, w, bar) in ((106, 'C', 3.2, 52), (140, 'G', 1.8, 30), (174, 'B', 0.8, 10)):
+        o += _arc(*E, x - 4, y, col, bend=0, m='h1t', sw=w)
+        o += _nd(x + 6, y, lab, col)
+        o += R(x + 22, y - 5, bar, 10, col, 'none', 0, 2, f'fill-opacity="{0.4 + bar / 90:.2f}"')
+    o += _nd(*E, 'E', col, col)
+    o += T(x + 40, 178, 'surprise', 12, 600, ACC, 'start')
+    return o, 'probability of each next note'
+
+HICON = [icon_chain, icon_views, icon_tree, icon_expect]
+
 # ---- M1: the oldest music model is a graph ----
 g = adefs('h1')
 g += L(60, 250, 1120, 250, LINE, 3)
@@ -824,8 +879,8 @@ for k, (yr, who, a, b, col) in enumerate(hist):
     x = 160 + k * 285
     blk = C(x, 250, 11, col) + T(x, 222, yr, 22, 700, col, 'middle') + R(x - 130, 280, 260, 130, '#fff', col, 1.5, 10)
     blk += T(x, 312, who, 16, 700, INK, 'middle') + T(x, 344, a, 14, 400, INK, 'middle') + T(x, 366, b, 14, 400, INK, 'middle')
-    pts = [(x - 40, 140), (x, 105), (x + 40, 140), (x, 175)]
-    blk += ''.join(L(*pts[a_], *pts[b_], col, 2) for a_, b_ in [(0, 1), (1, 2), (2, 3), (3, 0), (0, 2)]) + ''.join(C(px, py, 7, '#fff', col, 2.5) for px, py in pts)
+    ic, cap = HICON[k](x, col)
+    blk += f'<g transform="translate({x},124) scale(1.4) translate({-x},-140)">{ic}</g>' + T(x, 198, cap, 13, 400, MUT, 'middle')
     g += F(k, blk) if k else blk
 g += F(4, T(590, 462, 'In music the graph is not a metaphor. It was the first generator.', 20, 700, INK, 'middle'))
 HIST = sec('Part 2. The oldest music model is a graph', SVG(g), ch='2', cls='divider',
