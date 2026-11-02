@@ -369,7 +369,7 @@ def cap_fragments(sec, n=4):
     return re.sub(r'data-fragment-index="(\d+)"', lambda m: f'data-fragment-index="{remap[int(m.group(1))]}"', sec)
 
 allsecs = [cap_fragments(no_motion(x)) for x in allsecs]
-allsecs = [SV.restyle(x, cover='titlehero' in x[:200]) for x in allsecs]
+allsecs = [SV.fixups(SV.restyle(x, cover='titlehero' in x[:200])) for x in allsecs]
 for x in allsecs:
     assert 'animateMotion' not in x, x[:120]
     vis = re.sub(r'<(script|style)[^>]*>.*?</\1>', '', x, flags=re.S)

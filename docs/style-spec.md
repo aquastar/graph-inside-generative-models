@@ -39,7 +39,7 @@ One family for everything: ET Book (his choice, 2026-11-02, after seeing the two
 - Figure labels, ticks and chart numbers also ET Book, weight 400, ink2, bold (600) only for the one emphasized label. Lining figures in charts.
 - References at the bottom: ET Book 13.5 px, color #4A483E (a little darker than ink2), right aligned sidenote.
 - Code only: Source Code Pro. Source Sans 3 stays self hosted as a fallback if a venue needs a sans.
-- Known cost: ET Book has a small x height, so 11 to 14 px labels read smaller and thinner than in a sans. Raise those labels toward 18 px when a slide is reworked, and check once on the room projector.
+- Size lift for ET Book (it has a small x height): figure text is scaled at build time, up to 12.5 px by 1.2, up to 14.5 px by 1.16, up to 17.5 px by 1.1, up to 22 px by 1.05, larger sizes unchanged. HTML text in reused slides gets font-size-adjust 0.45. Headlines, references and the cover keep their set sizes. When a lift makes two labels collide, fix that slide in style_v2.FIXUPS rather than shrinking everything. Check once on the room projector.
 - Everything left aligned except the cover.
 
 ## 4. Lines, shapes, graphs

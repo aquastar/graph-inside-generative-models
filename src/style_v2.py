@@ -25,6 +25,8 @@ CSS = FONTS + f'''
   --f-editing:{ACC_T};--f-stitch:{LANG_D};--f-merge:#4E6B5C;--f-prune:#8A6D1F;--f-steer:{MUS};--f-unlearn:#A3324F;--f-ft:#5F6B73}}
 html,body,.reveal-viewport{{background:{BG} !important}}
 .reveal{{font-family:{SANS};color:{INK}}}
+.reveal .slides section{{font-size-adjust:.45}}
+.reveal .slides section svg,.reveal .slides section h2,.reveal .slides section .ref,.reveal section.titlehero{{font-size-adjust:none}}
 .reveal svg text:not([font-family]){{font-family:{SANS}}}
 .reveal .progress,.reveal .slide-number{{display:none !important}}
 .reveal .controls{{display:none !important}}
@@ -183,7 +185,14 @@ def _text(m):
     tag = tag.replace('font-family="Georgia,serif"', 'font-family="et-book,Georgia,serif" style="font-size-adjust:none"')
     tag = tag.replace('font-family="Fira Mono,monospace"', 'font-family="Source Code Pro,monospace"')
     tag = tag.replace('font-family="Fira Sans"', '')
+    if _attr(tag, 'font-size') and 'Georgia' not in tag:
+        tag = re.sub(r'(\sfont-size=")[^"]*(")', lambda k: k.group(1) + f'{grow(size0):g}' + k.group(2), tag, count=1)
     return tag
+
+def grow(s):
+    """ET Book has a small x height: lift small labels most, leave display sizes alone"""
+    k = 1.2 if s <= 12.5 else 1.16 if s <= 14.5 else 1.1 if s <= 17.5 else 1.05 if s <= 22 else 1.0
+    return round(s * k * 2) / 2
 
 def _stroke(m):
     tag = m.group(0)
@@ -215,4 +224,15 @@ def restyle(sec, cover=False):
     if not cover:
         sec = re.sub(r'<rect\b[^>]*>', _rect, sec)
         sec = re.sub(r'<(line|path|polyline)\b[^>]*>', _stroke, sec)
+    return sec
+
+
+FIXUPS = [  # slide specific collisions after the ET Book size lift
+    (r'(<text x="645" y="(?:382|398|414|430)" font-size=")15(")', r'\g<1>13.5\2'),
+    (r'(<text x="196\.0" y="4[46][0-9.]*" font-size=")14\.5(")', r'\g<1>12.5\2'),
+]
+
+def fixups(sec):
+    for a, b in FIXUPS:
+        sec = re.sub(a, b, sec)
     return sec
