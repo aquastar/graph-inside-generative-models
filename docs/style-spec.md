@@ -76,7 +76,12 @@ Fade only, 250 ms, at most four steps, each step one meaningful unit. Reveal aut
 ## 10. Do not
 Colored pill boxes for content, rainbow accents, per-section accent colors, centered bold takeaway banners, generic icons (check marks in circles, light bulbs), emoji, drop shadows, gradients, all caps headlines, Fira Sans, colored body text, two orange items on one slide.
 
-## 11. Open
+## 11. Implementation in this deck
+- src/style_v2.py holds the tokens, the override CSS and a restyle pass that every slide goes through at build time: old colors map to the tokens, bordered boxes become fills, pills get a 3 px radius, orange text becomes accent-text, bold drops to semibold, centered conclusion lines become ET Book sentences, banners lose their fill.
+- Fonts are self hosted in figs/fonts (ET Book WOFF, Source Sans 3 and Source Code Pro WOFF2, licenses beside them).
+- The Fur Elise animation uses Paul Tol muted colors for its nine notes (categorical, colorblind safe) with RIT orange for the active edge.
+
+## 12. Open
 - Test the TikZ DVI route with ET Book end to end before relying on it.
 - Check the warm white and the tints once on the real room projector.
 - A dark venue variant (bg #1A1917, ink #EDEBE6, same roles) only if needed.

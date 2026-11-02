@@ -39,7 +39,10 @@ EXTRA_CSS = '''
 .reveal section.titlehero .th-author{position:static;margin-top:26px;color:#4C5B66;border-top:1px solid rgba(247,105,2,.6)}
 .reveal section.titlehero .th-author b{color:#111}
 '''
-head = head.replace('</style>', EXTRA_CSS + '</style>', 1)
+import sys as _sys; _sys.path.insert(0, HERE); import style_v2 as SV
+head = head.replace('</style>', EXTRA_CSS + SV.CSS + '</style>', 1)
+head = re.sub(r'<link rel="stylesheet" href="https://fonts.googleapis.com[^"]*">', '', head)
+assert 'fonts.googleapis' not in head
 
 body = s[s.find('<div class="slides">'):]
 secs = re.findall(r'(<section[^>]*>.*?</section>)', body, re.S)
@@ -63,7 +66,7 @@ for i in (48, 49, 50, 51):
     x = ch(secs[i], '1'); x = x.replace('</h2>', '</h2>' + PUB, 1); old.append(x)
 
 hero = open(os.path.join(HERE, 'hero.svg')).read().replace('fill="#1c2430"', 'fill="#ffffff"').replace('stroke-opacity=".13"', 'stroke-opacity=".28"')
-cover = f'''<section class="title titlehero full" data-ch="0" data-background-gradient="radial-gradient(ellipse at 78% 45%,#fff3ea 0%,#ffffff 55%,#f6f7f8 100%)">
+cover = f'''<section class="title titlehero full" data-ch="0" data-background-color="#FBFAF7">
   <div class="th-left">
     <span class="th-kicker">RIT Computer Science Talk</span>
     <h1><span class="th-q">Is There a</span><span class="th-graph">Graph</span><span class="th-q">Inside Generative Models?</span></h1>
@@ -366,6 +369,7 @@ def cap_fragments(sec, n=4):
     return re.sub(r'data-fragment-index="(\d+)"', lambda m: f'data-fragment-index="{remap[int(m.group(1))]}"', sec)
 
 allsecs = [cap_fragments(no_motion(x)) for x in allsecs]
+allsecs = [SV.restyle(x, cover='titlehero' in x[:200]) for x in allsecs]
 for x in allsecs:
     assert 'animateMotion' not in x, x[:120]
     vis = re.sub(r'<(script|style)[^>]*>.*?</\1>', '', x, flags=re.S)
