@@ -734,15 +734,56 @@ CRITIQUE = sec('The same steering vector fails on many single inputs', SVG(g), c
                ref='Tan et al., Analysing the Generalisation and Reliability of Steering Vectors, NeurIPS 2024, Figure 1 (schematic redraw)',
                notes='Schematic redraw of Tan et al.: each dot is one input. The average effect is positive, but a large share of inputs move against the steering. A vector is reliable on average, not per input.')
 
-# ---- take away only ----
+# ---- last slide: the kinds of knowledge this talk did not cover ----
+def _gi(kind, x, y, col):
+    """tiny graph that each kind of knowledge already carries"""
+    o = ''
+    def n(px, py, r=4.5, f='#fff'): return C(px, py, r, f, col, 1.4)
+    if kind == 'eq':      # proof steps depend on earlier steps
+        P_ = [(x, y - 26), (x - 22, y - 4), (x + 22, y - 4), (x, y + 22)]
+        for a_, b_ in ((0, 1), (0, 2), (1, 3), (2, 3)): o += L(*P_[a_], *P_[b_], col, 1.2)
+        o += ''.join(n(*q) for q in P_[:3]) + n(*P_[3], 5.5, col)
+    elif kind == 'code':  # functions call functions
+        P_ = [(x - 24, y - 20), (x + 24, y - 20), (x, y + 2), (x - 24, y + 24), (x + 24, y + 24)]
+        for a_, b_ in ((0, 2), (1, 2), (2, 3), (2, 4), (0, 3)): o += L(*P_[a_], *P_[b_], col, 1.2)
+        o += ''.join(P(f'M{qx-7},{qy-5} h14 v10 h-14 Z', col, 1.4, '#F1EDE7') for qx, qy in P_)
+    elif kind == 'img':   # objects relate in a scene
+        P_ = [(x - 26, y + 14), (x, y - 20), (x + 26, y + 14)]
+        for a_, b_ in ((0, 1), (1, 2), (0, 2)): o += L(*P_[a_], *P_[b_], col, 1.2)
+        o += P(f'M{P_[1][0]-8},{P_[1][1]-8} h16 v16 h-16 Z', col, 1.4, '#F1EDE7') + n(*P_[0], 6) + P(f'M{P_[2][0]-7},{P_[2][1]+6} L{P_[2][0]},{P_[2][1]-7} L{P_[2][0]+7},{P_[2][1]+6} Z', col, 1.4, '#fff')
+    elif kind == 'space': # places connect into maps
+        for i in range(3):
+            for j in range(3):
+                px, py = x - 24 + i * 24, y - 22 + j * 22
+                if i < 2 and not (i == 1 and j == 0): o += L(px, py, px + 24, py, col, 1.2)
+                if j < 2 and not (i == 2 and j == 1): o += L(px, py, px, py + 22, col, 1.2)
+        o += ''.join(n(x - 24 + i * 24, y - 22 + j * 22, 3.6) for i in range(3) for j in range(3))
+    elif kind == 'motion':  # joints chain into a skeleton
+        J = {'h': (x, y - 28), 'n': (x, y - 14), 'p': (x, y + 8), 'la': (x - 18, y), 'ra': (x + 18, y - 6), 'll': (x - 12, y + 28), 'rl': (x + 14, y + 28)}
+        for a_, b_ in (('h', 'n'), ('n', 'p'), ('n', 'la'), ('n', 'ra'), ('p', 'll'), ('p', 'rl')): o += L(*J[a_], *J[b_], col, 1.2)
+        o += ''.join(n(*q, 3.8) for q in J.values())
+    elif kind == 'mol':   # atoms bond into a molecule
+        import math as _m
+        H = [(x + 20 * _m.cos(_m.pi / 6 + k * _m.pi / 3), y + 20 * _m.sin(_m.pi / 6 + k * _m.pi / 3)) for k in range(6)]
+        for k in range(6): o += L(*H[k], *H[(k + 1) % 6], col, 1.2)
+        o += L(H[0][0] + 1, H[0][1], H[0][0] + 16, H[0][1] + 9, col, 1.2) + n(H[0][0] + 18, H[0][1] + 10, 4)
+        o += ''.join(n(*q, 3.8) for q in H)
+    return o
+
 g = adefs('tk2')
-g += T(590, 60, THROUGH_A, 32, 700, INK, 'middle') + T(590, 104, THROUGH_B, 32, 700, ACC, 'middle')
-for k, (a, st, kk, col) in enumerate(CLAIMS):
-    y = 160 + k * 110
-    g += F(k + 1, C(80, y + 32, 26, col) + T(80, y + 41, str(k + 1), 22, 700, '#fff', 'middle') + wrap(125, y + 26, a, 21, 600, INK, width=72, lh=29) + tag(125, y + 70, st, kk))
-g += F(3, T(590, 384, 'Next: equations, another kind of knowledge beyond text.', 17, 600, '#5a4fcf', 'middle'))
-g += F(4, T(590, 430, 'A graph inside a generator is a hypothesis about the model.', 20, 700, INK, 'middle') + T(590, 462, 'A listener\'s brain is the only judge that did not write the exam.', 20, 700, ACC, 'middle'))
-TAKEAWAY = sec('Take away', SVG(g), ch='4')
+g += T(40, 30, 'Covered today', 15, 600, MUT)
+g += R(40, 44, 360, 52, '#E0F1F5', 'none', 0, 3) + T(58, 76, 'Text', 19, 600, '#007A94') + T(118, 76, 'Part 1: facts inside a language model', 13.5, 400, INK)
+g += R(416, 44, 360, 52, '#EEE8F6', 'none', 0, 3) + T(434, 76, 'Music', 19, 600, MU) + T(512, 76, 'Part 2: style, expectation, the brain', 13.5, 400, INK)
+g += T(40, 140, 'Not covered, and each already carries a graph', 15, 600, MUT)
+KINDS = [('eq', 'Equations', 'each step rests on earlier ones'), ('code', 'Code', 'functions call other functions'),
+         ('img', 'Images', 'objects relate in a scene'), ('space', 'Space', 'places connect into a map'),
+         ('motion', 'Motion', 'joints chain into a skeleton'), ('mol', 'Molecules', 'atoms bond into a molecule')]
+for k, (kind, name, line) in enumerate(KINDS):
+    cx, cy = 40 + (k % 3) * 372, 156 + (k // 3) * 150
+    g += R(cx, cy, 356, 134, SOFT, 'none', 0, 3) + _gi(kind, cx + 62, cy + 67, AC2)
+    g += T(cx + 124, cy + 58, name, 21, 600, INK) + T(cx + 124, cy + 86, line, 14, 400, MUT)
+TAKEAWAY = sec('Language and music are two of many places a graph may hide', SVG(g), ch='4',
+               notes='No conclusion slide, just the map of what is left. Text and music were today. Equations, code, images, space, motion and molecules each already have a natural graph, and each has its own generative models. Every one of these is a place where the same question can be asked, and where someone in this department may already have the data or the expertise.')
 
 # ======================= ROUND 4 (Nov 2 2026): Space Needle anchor =======================
 RED = '#c0392b'
