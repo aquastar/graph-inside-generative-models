@@ -326,7 +326,7 @@ C.append('''<section data-ch="6">
 </section>''')
 
 tail = s[s.rfind('</section>') + len('</section>'):]
-tail = re.sub(r"var CH=\[\[.*?\]\];", "var CH=[['0','Overview'],['1','1 Language'],['2','2 Music'],['3','3 Beyond'],['4','Close']];", tail, flags=re.S)
+tail = re.sub(r"var CH=\[\[.*?\]\];", "var CH=[['0','Overview'],['1','1 Language'],['2','2 Music'],['4','Close']];", tail, flags=re.S)
 tail = re.sub(r"var NAMES=\{[^}]*\};", "var NAMES={'0':'Overview','1':'Part 1. Language','2':'Part 2. Music','3':'Part 3. Beyond','4':'Close'};", tail)
 tail = re.sub(r"var CHN=\{[^}]*\};", "var CHN={'0':'Overview','1':'Part 1. Language','2':'Part 2. Music','3':'Part 3. Beyond','4':'Close'};", tail)
 assert "1 Language" in tail
@@ -392,6 +392,20 @@ FE_HOOK = """<script>
       setTimeout(function(){ if(my === tok) requestAnimationFrame(step); }, delay);
     });
   }
+  var actx = null;
+  document.addEventListener('click', function(ev){
+    var b = ev.target.closest && ev.target.closest('button.playclip'); if(!b) return;
+    ev.stopPropagation();
+    var data = JSON.parse(document.getElementById('clipdata').textContent)[b.dataset.clip];
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)(); actx.resume();
+    var t = actx.currentTime + 0.05;
+    data.forEach(function(n){
+      var o = actx.createOscillator(), g = actx.createGain();
+      o.type = 'triangle'; o.frequency.value = 440 * Math.pow(2, (n[0] - 69) / 12);
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.25, t + 0.015); g.gain.exponentialRampToValueAtTime(0.0001, t + Math.max(n[1], 0.12) * 0.95);
+      o.connect(g); g.connect(actx.destination); o.start(t); o.stop(t + Math.max(n[1], 0.12)); t += n[1];
+    });
+  }, true);
   Reveal.on('ready', function(e){ frames(e.currentSlide).forEach(play); count(e.currentSlide); });
   Reveal.on('slidechanged', function(e){ frames(e.previousSlide).forEach(stop); frames(e.currentSlide).forEach(play); count(e.currentSlide); });
   (function boot(){ if (Reveal.isReady && Reveal.isReady()) { var cs = Reveal.getCurrentSlide(); frames(cs).forEach(function(f){ if(!f.getAttribute('src')) play(f); }); count(cs); } else { setTimeout(boot, 150); } })();

@@ -779,6 +779,223 @@ RIPPLE = sec('Edit one fact in a knowledge graph, and the facts around it do not
              ref='Cohen et al., Evaluating the Ripple Effects of Knowledge Editing in Language Models, TACL 2024. Zhong et al., MQuAKE, EMNLP 2023. Space Needle example is an illustration of the failure type',
              notes='Same Space Needle edit. One edge changes from Seattle to Paris. A question one hop away, which country, should now say France, but the model still walks the old path through Seattle and says United States. This is the knowledge graph view of the problem, and it is exactly what a graph inside the model should be able to see.')
 
+# ======================= ROUND 5 (Nov 2 2026): music part rebuilt from the survey =======================
+import json as _json, os as _os
+CLIPS = _json.load(open(_os.path.join(_os.path.dirname(__file__), 'clips.json')))
+
+def playbtn(x, y, w, clip, label, col):
+    return (f'<foreignObject x="{x}" y="{y}" width="{w}" height="44"><div xmlns="http://www.w3.org/1999/xhtml">'
+            f'<button class="playclip" data-clip="{clip}" style="width:{w}px;height:40px;border-radius:20px;border:2px solid {col};background:#fff;color:{col};font:700 15px Fira Sans,sans-serif;cursor:pointer">&#9654; {label}</button></div></foreignObject>')
+
+CLIP_JSON = '<script type="application/json" id="clipdata">' + _json.dumps(CLIPS) + '</script>'
+
+# ---- M1: the oldest music model is a graph ----
+g = adefs('h1')
+g += L(60, 250, 1120, 250, LINE, 3)
+hist = [('1957', 'Hiller and Isaacson', 'A Markov chain writes a movement', 'of a string quartet, the Illiac Suite.', AC2),
+        ('1995', 'Conklin and Witten', 'Several small chains predict Bach', 'better than one big chain.', AC2),
+        ('2003', 'Pachet, Continuator', 'A variable order chain improvises', 'back in the player\'s own style.', AC2),
+        ('2005 on', 'Pearce, IDyOM', 'The same kind of graph predicts', 'what listeners expect next.', MU)]
+for k, (yr, who, a, b, col) in enumerate(hist):
+    x = 160 + k * 285
+    blk = C(x, 250, 11, col) + T(x, 222, yr, 22, 700, col, 'middle') + R(x - 130, 280, 260, 130, '#fff', col, 1.5, 10)
+    blk += T(x, 312, who, 16, 700, INK, 'middle') + T(x, 344, a, 14, 400, INK, 'middle') + T(x, 366, b, 14, 400, INK, 'middle')
+    pts = [(x - 40, 140), (x, 105), (x + 40, 140), (x, 175)]
+    blk += ''.join(L(*pts[a_], *pts[b_], col, 2) for a_, b_ in [(0, 1), (1, 2), (2, 3), (3, 0), (0, 2)]) + ''.join(C(px, py, 7, '#fff', col, 2.5) for px, py in pts)
+    g += F(k, blk) if k else blk
+g += F(4, T(590, 462, 'In music the graph is not a metaphor. It was the first generator.', 20, 700, INK, 'middle'))
+HIST = sec('Part 2. The oldest music model is a graph', SVG(g), ch='2', cls='divider',
+           ref='Hiller and Isaacson, Experimental Music, 1959. Conklin and Witten, JNMR 1995. Pachet, The Continuator, JNMR 2003. Pearce, IDyOM, 2005 and 2018',
+           notes='Four stops, one sentence each. The point: music had explicit graphs long before neural generators. The last card, IDyOM, comes back in the brain section: the same kind of graph predicts what listeners expect.')
+
+# ---- M2: fold 88 keys into 12 degrees ----
+g = adefs('fd')
+wk = 14
+for k in range(wk):
+    x = 40 + k * 34
+    g += R(x, 60, 32, 120, '#fff', '#9aa6ae', 1.2, 3)
+blk_pos = [0, 1, 3, 4, 5, 7, 8, 10, 11, 12]
+for k in blk_pos:
+    x = 40 + k * 34 + 22
+    g += R(x, 60, 22, 74, INK, 'none', 0, 2)
+g += T(278, 44, 'a piano: 88 keys, the same 12 notes repeating', 15, 700, INK, 'middle')
+g += T(278, 205, 'E4 and E5 are the same note an octave apart', 14, 400, MUT, 'middle')
+cx, cy, r = 278, 345, 95
+names = ['0 tonic', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']
+ring = ''
+for d_ in range(12):
+    a = -math.pi / 2 + d_ * 2 * math.pi / 12
+    x, y = cx + r * math.cos(a), cy + r * math.sin(a)
+    ring += C(round(x), round(y), 15 if d_ else 19, ACC if d_ == 0 else '#fff', ACC, 2.5) + T(round(x), round(y) + 5, str(d_), 13, 700, '#fff' if d_ == 0 else ACC, 'middle')
+ring += P('M278,212 L278,238', ACC, 3, extra='marker-end="url(#fdo)"') + T(420, 250, 'fold every octave together,', 14, 700, ACC) + T(420, 270, 'count from the piece\'s own key', 14, 700, ACC) + T(cx, 470, '12 scale degrees: 0 is the home note', 14, 700, ACC, 'middle')
+g += F(1, ring)
+fe = {(0, 2): 2, (0, 3): 2, (0, 7): 1, (2, 0): 1, (2, 3): 1, (2, 5): 2, (2, 7): 2, (3, 0): 2, (3, 2): 1, (3, 7): 3, (5, 3): 2, (6, 7): 4, (7, 0): 2, (7, 2): 2, (7, 3): 1, (7, 6): 4, (7, 7): 1, (7, 11): 1, (11, 2): 1}
+rs = {i_: sum(v for (a_, b_), v in fe.items() if a_ == i_) for i_ in range(12)}
+tb = T(800, 44, 'Für Elise as a 12 by 12 table', 15, 700, INK, 'middle') + T(800, 64, 'row: this note, column: the next note', 13, 400, MUT, 'middle')
+cs_ = 24
+for a_ in range(12):
+    for b_ in range(12):
+        v = fe.get((a_, b_), 0) / rs[a_] if rs[a_] else 0
+        tb += R(656 + b_ * cs_, 80 + a_ * cs_, cs_ - 2, cs_ - 2, f'rgba(247,105,2,{0.2 + 0.8 * v:.2f})' if v else SOFT, 'none', 0, 2)
+tb += T(800, 386, '12 x 12 = 144 numbers. Rhythm and register are dropped.', 14, 700, ACC, 'middle')
+g += F(2, tb)
+g += F(3, playbtn(640, 410, 230, 'fe_orig', 'Für Elise, the opening', AC2) + playbtn(890, 410, 260, 'fe_graph', 'a tune drawn from the table', ACC))
+FOLD = sec('Fold 88 keys into 12 scale degrees, and a melody becomes 144 numbers', SVG(g), ch='2',
+           ref='Scale degrees are counted from each piece\'s key (its tonic). The overview animation used real pitches, the classifier uses these 12 degrees',
+           notes='For non musicians: the 12 notes repeat across the piano, and a melody in C and the same melody in G should look the same, so we fold octaves and count from the home note of the key. Each row of the table says where the melody goes next from that note. Play the two buttons: the second tune uses only the 144 numbers. It sounds like the right material with the wrong sentences. That is the next slides.')
+
+# ---- M5: when graphs help ----
+g = adefs('gh')
+g += T(300, 40, 'Helps: edges carry what a sequence throws away', 17, 700, GRN, 'middle')
+segs = [('A', 40, 150, ACC), ('B', 150, 270, MU), ('A', 270, 380, ACC), ('B', 380, 500, MU), ('C', 500, 560, AC2)]
+for lab, x1, x2, col in segs:
+    g += R(x1, 200, x2 - x1 - 4, 40, col, 'none', 0, 4, 'opacity=".85"') + T((x1 + x2) / 2, 226, lab, 16, 700, '#fff', 'middle')
+for x1, x2 in [(95, 325), (210, 440), (100, 330)]:
+    g += P(f'M{x1},196 C{x1},110 {x2},110 {x2},196', INK, 2, extra='stroke-dasharray="5 4"')
+g += T(300, 92, 'beats are nodes, repeated passages are linked', 13.5, 600, MUT, 'middle')
+g += T(300, 270, 'verse and chorus fall out of the graph', 14, 700, INK, 'middle') + T(300, 292, 'McFee and Ellis, ISMIR 2014', 12.5, 400, MUT, 'middle')
+right = T(880, 40, 'Does not help by itself', 17, 700, RED, 'middle')
+rows = [('Cadence detection, Bach', 'hand features 0.80, graph net 0.73 to 0.80'), ('Genre from Tonnetz paths', 'graph 0.49 vs plain metadata 0.76'), ('Note networks', 'power laws and small worlds, no task solved')]
+for k, (a_, b_) in enumerate(rows):
+    y = 80 + k * 72
+    right += R(640, y, 500, 60, SOFT, LINE, 1, 8) + T(660, y + 26, a_, 15, 700, INK) + T(660, y + 48, b_, 13.5, 400, INK)
+right += T(880, 312, 'Karystinaios and Widmer 2022. Karystinaios et al. 2020. Liu, Tse, Small 2010', 12.5, 400, MUT, 'middle')
+g += F(1, right)
+g += F(2, R(90, 340, 1000, 80, ACL, ACC, 1.5, 10) + T(590, 372, 'A graph earns its place only when its edges carry', 20, 700, INK, 'middle') + T(590, 402, 'what the sequence or the vector throws away.', 20, 700, ACC, 'middle'))
+WHEN = sec('In music, graphs help only when the edges carry new information', SVG(g), ch='2',
+           ref='McFee and Ellis, Analyzing Song Structure with Spectral Clustering, ISMIR 2014. Karystinaios and Widmer, Cadence Detection using GNNs, ISMIR 2022. Karystinaios et al., Tonnetz trajectories, JIM 2020. Liu, Tse, Small, Physica A 2010',
+           notes='Honest survey. The clear win is song structure: a graph linking beats that sound alike, far apart in time, cuts a song into verse and chorus, something a left to right sequence model does not see. The counterexamples: graph neural nets on scores only tie hand features, Tonnetz trajectories alone classify worse than metadata, and note networks with pretty degree distributions never solved a task.')
+
+# ---- M6: MusicGen in plain words ----
+g = adefs('mg')
+g += R(40, 50, 170, 110, '#fff', AC2, 2, 8) + T(125, 74, 'sound', 16, 700, AC2, 'middle') + T(125, 150, '32,000 samples per sec', 12, 400, MUT, 'middle')
+g += P('M58,110 ' + ' '.join(f'L{58 + k * 6},{110 + (16 if k % 2 else -16) * (0.4 + 0.6 * abs(math.sin(k)))}' for k in range(1, 24)), AC2, 1.5)
+g += P('M212,100 L262,100', AC2, 2.5, extra='marker-end="url(#mga)"') + T(237, 88, 'EnCodec', 12, 700, AC2, 'middle')
+for r_ in range(4):
+    for c_ in range(8):
+        g += R(272 + c_ * 30 + r_ * 30, 60 + r_ * 26, 26, 22, ['#1f8a9a', '#4fa9b6', '#86c6cf', '#bfe1e5'][r_], 'none', 0, 3)
+        if r_ == 0 and c_ < 4:
+            g += T(285 + c_ * 30, 76, ['812', '33', '1907', '5'][c_], 9.5, 700, '#fff', 'middle')
+g += T(470, 50, 'every 20 ms of sound becomes 4 integers', 14, 700, MU, 'middle')
+g += F(1, R(700, 50, 260, 120, ACL, ACC, 2, 10) + T(830, 90, 'one Transformer', 18, 700, ACC, 'middle') + T(830, 116, 'predicts the next tokens,', 14, 400, INK, 'middle') + T(830, 138, 'like GPT predicts the next word', 14, 400, INK, 'middle')
+          + P('M612,110 L696,110', ACC, 2.5, extra='marker-end="url(#mgo)"') + R(990, 80, 160, 60, '#fff', AC2, 1.5, 8) + T(1070, 106, 'text prompt', 14, 700, AC2, 'middle') + T(1070, 126, '"upbeat jazz"', 13, 400, MUT, 'middle') + P('M988,110 L962,110', AC2, 2, extra='marker-end="url(#mga)"'))
+pts3 = [('No music theory is built in.', 'Notes, keys and styles are not in the design.'), ('A key or a style inside it must emerge.', 'If there is a graph inside, training put it there.'), ('Open weights, three sizes.', 'small 300M, medium 1.5B, large 3.3B parameters.')]
+for k, (a_, b_) in enumerate(pts3):
+    y = 220 + k * 70
+    g += F(2 if k < 2 else 3, C(70, y - 6, 9, MU) + T(92, y, a_, 18, 700, INK) + T(92, y + 26, b_, 15, 400, MUT))
+g += F(4, T(590, 464, 'MusicGen is GPT for audio tokens. Any graph inside it would have to emerge.', 19, 700, INK, 'middle'))
+MGEN = sec('MusicGen is a next token predictor for sound', SVG(g), ch='2',
+           ref='Copet et al., Simple and Controllable Music Generation, NeurIPS 2023. Demo: ai.honu.io/papers/musicgen. Live: huggingface.co/spaces/facebook/MusicGen',
+           notes='MusicGen never sees a waveform. EnCodec compresses every 20 ms into four integers from four codebooks of 2,048 entries, 50 steps per second. The four rows are staggered by one step, so all four are predicted together. A single Transformer, conditioned on a text prompt, predicts the next tokens. Consider playing a 10 second sample from the demo page here.')
+
+# ---- M7: probing ----
+g = adefs('pb')
+for k in range(6):
+    g += R(60, 70 + k * 46, 200, 36, SOFT, '#9aa6ae', 1.2, 6) + T(160, 93 + k * 46, f'layer {6 - k}', 13, 600, MUT, 'middle')
+g += P('M262,180 L330,180', ACC, 3, extra='marker-end="url(#pbo)"') + R(334, 160, 120, 40, ACL, ACC, 1.5, 8) + T(394, 186, 'tiny classifier', 13, 700, ACC, 'middle')
+g += T(160, 370, 'freeze the generator, read a layer', 14, 700, INK, 'middle') + T(160, 392, 'ask: is the chord, the scale, the tempo in there?', 13, 400, MUT, 'middle')
+bars = [('Jukebox', 0.984, AC2), ('MusicGen small', 0.950, ACC), ('MusicGen medium', 0.914, '#f6a46a'), ('MusicGen large', 0.929, '#f6a46a'), ('hand chroma features', 0.878, GRY), ('raw audio tokens', 0.701, '#c9d0d5')]
+blk = T(820, 50, 'average probe accuracy on music theory concepts', 14, 700, INK, 'middle')
+for k, (a_, v, col) in enumerate(bars):
+    y = 72 + k * 46
+    blk += T(690, y + 22, a_, 14, 700 if 'small' in a_ else 600, INK, 'end') + R(700, y, (v - 0.6) * 1000, 30, col, 'none', 0, 3) + T(700 + (v - 0.6) * 1000 + 8, y + 21, f'{v:.3f}', 14, 700, INK)
+g += F(1, blk + T(820, 360, 'axis starts at 0.6', 12, 400, MUT, 'middle'))
+g += F(2, R(470, 380, 680, 50, SOFT, LINE, 1, 8) + T(810, 411, 'Bigger is not clearer: the smallest MusicGen reads best.', 16, 700, INK, 'middle'))
+g += F(3, T(590, 466, 'Music theory is in there. A probe finds it, but a probe is still a vector.', 19, 700, ACC, 'middle'))
+PROBE = sec('Music theory can be read from a generator\'s middle layers', SVG(g), ch='2',
+            ref='Wei, Freeman, Donahue, Sun, Do Music Generation Models Encode Music Theory?, ISMIR 2024, Table 2. Castellon, Donahue, Liang, ISMIR 2021',
+            notes='Wei et al. built SynTheory, synthetic clips where one concept changes at a time: tempo, time signature, notes, intervals, scales, chords, chord progressions. They froze the generators and trained tiny classifiers on each layer. Concepts are linearly readable. Plain chroma features tie the models on static notes and lose on progressions. Castellon et al. found Jukebox layers beat tag trained representations by about 30 percent, most on key detection. Bridge: a probe tells us what is stored, not how the states move. That is the graph question.')
+
+# ---- B1: language models already met the brain ----
+g = adefs('lb')
+g += R(60, 60, 220, 300, SOFT, AC2, 1.5, 12) + T(170, 95, 'language model', 16, 700, AC2, 'middle')
+for k in range(5):
+    g += R(90, 115 + k * 46, 160, 34, '#fff', '#9aa6ae', 1.2, 5) + T(170, 137 + k * 46, f'layer {5 - k}', 12.5, 600, MUT, 'middle')
+g += R(400, 60, 220, 300, MUL, MU, 1.5, 12) + T(510, 95, 'listener\'s brain', 16, 700, MU, 'middle')
+for k, lab in enumerate(['higher areas', '', 'language areas', '', 'auditory cortex']):
+    g += R(430, 115 + k * 46, 160, 34, '#fff', MU, 1.2, 5) + T(510, 137 + k * 46, lab, 12.5, 600, MU, 'middle')
+g += F(1, ''.join(P(f'M252,{132 + k * 46} L426,{132 + k * 46}', ACC, 2, extra='stroke-dasharray="6 4" marker-end="url(#lbo)"') for k in (0, 2, 4)) + T(340, 380, 'predict brain activity from model activity', 14, 700, ACC, 'middle'))
+works = [('Schrimpf et al. 2021', 'The better a model predicts the next word, the better it predicts the brain.'),
+         ('Goldstein et al. 2022', 'The brain predicts the next word before it arrives, then measures its surprise.'),
+         ('Kell et al. 2018', 'In audio networks, middle layers match early auditory cortex, deep layers later areas.'),
+         ('Tuckute et al. 2024', 'Sentences chosen by a model can drive or quiet the brain\'s language network.')]
+for k, (a_, b_) in enumerate(works):
+    y = 60 + k * 82
+    g += F(2 if k < 2 else 3, R(670, y, 480, 72, '#fff', LINE, 1.5, 8) + T(688, y + 26, a_, 15, 700, AC2) + wrap(688, y + 50, b_, 13.5, 400, INK, width=62, lh=18))
+g += F(4, T(590, 466, 'Brains and models are both next event predictors, so one can be a yardstick for the other.', 18, 700, INK, 'middle'))
+BRL = sec('Predict the next word well, and you predict the brain', SVG(g), ch='2',
+          ref='Schrimpf et al., PNAS 2021. Caucheteux and King, Communications Biology 2022. Goldstein et al., Nature Neuroscience 2022. Kell et al., Neuron 2018. Tuckute et al., Nature Human Behaviour 2024',
+          notes='The unifying theme of the brain section. A model and a brain can be compared without any theory of language or music: fit a map from model activity to brain activity and test it on new stimuli. In language this works, and models that predict the next word better also predict the brain better. Caucheteux and King found the same with 102 people in fMRI and MEG.')
+
+# ---- B2: a graph predicts the listening brain (IDyOM) ----
+g = adefs('id')
+g += T(260, 44, 'a melody, note by note', 15, 700, AC2, 'middle')
+nts = [(90, 135), (150, 115), (210, 145), (270, 105), (330, 130), (390, 90)]
+g += ''.join(L(60, 80 + k * 14, 430, 80 + k * 14, GRY, 1) for k in range(5)) + ''.join(f'<ellipse cx="{x}" cy="{y}" rx="10" ry="7.5" fill="{INK}"/>' for x, y in nts)
+idy = R(500, 50, 300, 130, ACL, ACC, 2, 10) + T(650, 82, 'IDyOM: a note transition graph', 16, 700, ACC, 'middle') + T(650, 108, 'with several memory lengths,', 14, 400, INK, 'middle') + T(650, 130, 'learned from thousands of melodies', 14, 400, INK, 'middle') + T(650, 160, 'the cousin of our 12 node graph', 13, 700, ACC, 'middle')
+idy += P('M436,115 L496,115', AC2, 2.5, extra='marker-end="url(#ida)"')
+g += F(1, idy)
+hs = [0.3, 0.5, 0.95, 0.35, 0.7, 1.0]
+sur = T(990, 44, 'how surprising is each note?', 15, 700, ACC, 'middle') + ''.join(R(880 + k * 38, 170 - 100 * h, 28, 100 * h, ACC, 'none', 0, 3) for k, h in enumerate(hs)) + L(870, 172, 1110, 172, INK, 1.5) + P('M804,115 L866,115', AC2, 2.5, extra='marker-end="url(#ida)"')
+g += F(2, sur)
+eeg = R(60, 220, 1090, 150, MUL, MU, 2, 10) + T(80, 252, 'EEG while 20 people listen to Bach', 16, 700, MU)
+eeg += P('M80,320 ' + ' '.join(f'L{80 + k * 9},{320 + 22 * math.sin(k * 0.8) * (1.8 if k % 9 == 4 else 0.5)}' for k in range(1, 70)), MU, 2)
+eeg += T(740, 290, 'Surprise explains the brain response', 16, 700, INK) + T(740, 316, 'beyond the sound itself, about 200 ms', 15, 400, INK) + T(740, 340, 'after each note, in 16 of 20 listeners.', 15, 400, INK)
+g += F(3, eeg)
+g += F(4, T(590, 420, 'A graph of note transitions is something the listening brain is measurably tracking.', 19, 700, INK, 'middle') + T(590, 452, 'So the brain can judge a graph.', 18, 700, ACC, 'middle'))
+BRI = sec('A note transition graph predicts the listening brain', SVG(g), ch='2',
+          ref='Pearce, IDyOM, 2005 and 2018. Di Liberto et al., Cortical encoding of melodic expectations in human temporal cortex, eLife 2020',
+          notes='This is where graphs and brains meet. IDyOM is a variable order Markov model, the grown up version of our 12 node graph. It assigns every note a surprise value. Di Liberto and colleagues show that this surprise explains EEG responses beyond acoustic features, peaking around 200 ms, in 16 of 20 participants, with a large effect (d about 1.6). ECoG locates it near auditory cortex.')
+
+# ---- B3: rebuild ----
+g = adefs('rb')
+g += img(40, 40, 700, 112, 'figs/denk2023_fig1.png') + T(390, 172, 'Brain2Music: fMRI to a music embedding to a generator', 13, 600, MUT, 'middle')
+inv = R(40, 200, 340, 190, SOFT, LINE, 1, 10) + T(60, 232, 'Through the skull', 17, 700, AC2) + T(60, 262, '29 patients, 2,668 electrodes', 14, 400, INK) + T(60, 286, 'on auditory cortex, during surgery.', 14, 400, INK) + T(60, 318, 'A Pink Floyd song is rebuilt', 14, 700, INK) + T(60, 342, 'from brain activity alone.', 14, 700, INK) + T(60, 372, 'Bellier et al., PLOS Biology 2023', 12.5, 400, MUT)
+g += F(1, inv)
+non = R(400, 200, 340, 190, MUL, MU, 1.5, 10) + T(420, 232, 'Without surgery', 17, 700, MU) + T(420, 262, 'fMRI of 5 listeners, mapped to', 14, 400, INK) + T(420, 286, 'a music embedding, then to MusicLM.', 14, 400, INK) + T(420, 318, 'Genre, instruments and mood', 14, 700, INK) + T(420, 342, 'of the clip come back.', 14, 700, INK) + T(420, 372, 'Denk et al., Nature Communications 2025', 12.5, 400, MUT)
+g += F(2, non)
+g += F(3, R(780, 40, 370, 350, '#fff', LINE, 1.5, 12) + T(965, 80, 'Listen', 20, 700, ACC, 'middle') + T(965, 112, 'original and rebuilt clips:', 14, 400, INK, 'middle')
+          + T(965, 160, 'Brain2Music samples', 15, 700, MU, 'middle') + T(965, 184, 'google-research.github.io/seanet/brain2music', 11.5, 400, MUT, 'middle')
+          + T(965, 240, 'Pink Floyd reconstruction', 15, 700, AC2, 'middle') + T(965, 264, 'supporting audio S1 to S3 of', 12.5, 400, MUT, 'middle') + T(965, 284, 'doi.org/10.1371/journal.pbio.3002176', 11.5, 400, MUT, 'middle'))
+g += F(4, T(590, 440, 'The brain keeps enough of the music to rebuild it, so it is a rich enough instrument to judge a style.', 17, 700, INK, 'middle'))
+BRR = sec('The brain keeps enough of the music to rebuild it', SVG(g), ch='2',
+          ref='Bellier et al., Music can be reconstructed from human auditory cortex activity using nonlinear decoding models, PLOS Biology 2023. Denk et al., Nature Communications 2025 (Brain2Music)',
+          notes='Two experiments, one message. Bellier: epilepsy patients with electrodes on the brain listened to Another Brick in the Wall, and a nonlinear decoder rebuilt a recognizable song (r squared 0.43 versus 0.33 for a linear one). Denk: no surgery, fMRI mapped into the embedding space of a music model, then MusicLM generates music that matches genre, instruments and mood. Play one rebuilt clip if the room has sound. Open EEG music datasets for our own work: OpenMIIR, NMED-T, NMED-H, MUSIN-G.')
+
+# ---- B4: music generators meet the brain only from the outside ----
+g = adefs('mo')
+cards = [('Audio models in general', 'Pepino et al. 2025', '36 audio models: the better a model is at its tasks, the more brain like it is.'),
+         ('A music generator\'s output', 'Noguchi et al. 2026', 'MusicGen\'s next token surprise helps identify which song a person hears from EEG: 0.823 to 0.887.'),
+         ('A music model\'s layers', 'Denk et al. 2025', 'Layers map onto auditory cortex, but the low to high hierarchy is weaker than in vision.')]
+for k, (a_, who, b_) in enumerate(cards):
+    y = 40 + k * 108
+    g += F(k, R(40, y, 700, 94, '#fff', LINE, 1.5, 10) + T(60, y + 30, a_, 17, 700, AC2) + T(720, y + 30, who, 13, 600, MUT, 'end') + wrap(60, y + 58, b_, 14.5, 400, INK, width=88, lh=20)) if k else R(40, y, 700, 94, '#fff', LINE, 1.5, 10) + T(60, y + 30, a_, 17, 700, AC2) + T(720, y + 30, who, 13, 600, MUT, 'end') + wrap(60, y + 58, b_, 14.5, 400, INK, width=88, lh=20)
+g += F(3, R(780, 40, 370, 310, ACL, ACC, 2, 12) + T(965, 84, 'Missing', 22, 700, ACC, 'middle') + T(965, 126, 'Nobody has read a graph', 16, 700, INK, 'middle') + T(965, 150, 'from inside a music generator', 16, 700, INK, 'middle') + T(965, 174, 'and asked the brain', 16, 700, INK, 'middle') + T(965, 198, 'whether it is real.', 16, 700, INK, 'middle')
+          + T(965, 250, 'The outside: outputs, embeddings.', 14, 400, MUT, 'middle') + T(965, 274, 'The inside: how states connect.', 14, 700, ACC, 'middle'))
+g += F(4, T(590, 420, 'Music generators meet the brain only from the outside so far.', 20, 700, INK, 'middle'))
+BRG = sec('Music generators meet the brain only from the outside so far', SVG(g), ch='2',
+          ref='Pepino et al., arXiv 2511.16849, 2025. Noguchi et al., arXiv 2603.03190, 2026. Denk et al., Nature Communications 2025',
+          notes='Same yardstick as language, applied to audio and music. Three lines of work, all looking at what comes out of a model or at whole embeddings. Noguchi is the closest: it uses MusicGen large output probabilities, not internal layers, no steering and no style. The gap is the inside.')
+
+# ---- plan ----
+g = adefs('pn')
+steps = [('1', 'Generate', 'clips of each style with MusicGen, keep the middle layer state at every step', AC2),
+         ('2', 'Read a graph', 'cluster the states, count transitions: a graph from inside the model', ACC),
+         ('3', 'Play to listeners', 'record EEG while people listen to the same clips', MU)]
+for k, (n_, a_, b_, col) in enumerate(steps):
+    x = 40 + k * 380
+    blk = R(x, 50, 350, 150, '#fff', col, 2, 12) + C(x + 36, 92, 20, col) + T(x + 36, 99, n_, 18, 700, '#fff', 'middle') + T(x + 68, 99, a_, 19, 700, col) + wrap(x + 24, 140, b_, 14.5, 400, INK, width=40, lh=20)
+    if k < 2:
+        blk += P(f'M{x+352},125 L{x+376},125', AC2, 3, extra='marker-end="url(#pna)"')
+    g += F(k, blk) if k else blk
+cmp_ = R(40, 230, 1110, 140, SOFT, LINE, 1, 12) + T(590, 264, 'Which explains the brain best?', 19, 700, INK, 'middle')
+for k, (a_, col) in enumerate([('surprise from IDyOM, a graph from scores', AC2), ('surprise from the graph read inside MusicGen', ACC), ('surprise from MusicGen\'s own output', MU)]):
+    cmp_ += R(70 + k * 360, 290, 340, 56, '#fff', col, 1.8, 28) + T(240 + k * 360, 324, a_, 14, 700, col, 'middle')
+g += F(3, cmp_)
+g += F(4, T(590, 416, 'If the graph inside the generator explains the listener as well as the generator itself,', 17, 700, INK, 'middle') + T(590, 446, 'the graph is real. If not, it is our drawing, not the model\'s.', 17, 700, ACC, 'middle'))
+PLAN = secx('Our plan: a graph from inside MusicGen, judged by the brain', SVG(g), ch='2', status='plan',
+            notes='One question replaces the earlier four outcome matrix. Three sources of surprise for the same clips, one yardstick. The scores graph (IDyOM) is the baseline from music cognition, MusicGen output surprisal is what Noguchi used, and the graph from inside MusicGen is ours. The steering asymmetry from the overview is the follow up: once the graph is validated, ask whether steering can reach a style on it.')
+
 # ======================= ASSEMBLY =======================
 def assemble(cover, old):
     """old: the reused slides from the earlier deck, keyed by their old index"""
@@ -800,13 +1017,10 @@ def assemble(cover, old):
     b1 = b1.replace(ph(60, 230, 400, 140, 'Original figure: Di Liberto et al. 2020', 'eLife, to add when the site is reachable'),
                     R(60, 230, 400, 140, ACL, ACC, 1.5, 10) + T(80, 270, 'The listener model is a graph', 17, 700, ACC) + T(80, 300, 'IDyOM counts transitions between notes', 14.5, 400, INK) + T(80, 324, 'with several context lengths, like the', 14.5, 400, INK) + T(80, 348, 'tiny graph from the opening.', 14.5, 400, INK))
     b2 = retitle(BRAIN2, 'The brain carries enough of the music to rebuild it').replace('Denk et al., Brain2Music, arXiv 2307.11078, 2023.', 'Denk et al., Text to music generation models capture musical semantic representations in the human brain, Nature Communications 2025 (Brain2Music).')
-    mus = [retitle(CORPUS, 'Occam\'s razor: the simplest graph already names the tradition').replace('data-ch="2"', 'data-ch="2" class="divider"', 1),
-           retitle(PATH, 'Too little memory gives a graph without syntax, too much gives a path'),
-           four, retitle(VZ.ANAT, 'MusicGen emits tokens step by step: a graph almost for free'), tools, b1, b2,
-           retitle(BRAIN3, 'Layers predict the brain for language, not yet for music'),
-           retitle(BRAIN4, 'A steered style must land in the listener\'s brain, or it did not land'),
-           retitle(NEXT, 'Four outcomes, and the listener decides which one')]
-    beyond = [VZ.B[0].replace('Not yet shown.', ''), DROP]
-    close = [TAKEAWAY]
+    corpus = retitle(CORPUS, 'Occam\'s razor: the simplest graph already names the tradition')
+    path = retitle(PATH, 'Too little memory gives a graph without syntax, too much gives a path').replace('An 89 note Bach chorale at first and third order.', 'An 89 note Bach chorale at first and third order. Classification and generation at higher orders: experiments running.')
+    mus = [HIST, FOLD, corpus, path, WHEN, MGEN, PROBE, BRL, BRI, BRR, BRG, PLAN]
+    beyond = []
+    close = [TAKEAWAY.replace('</section>', CLIP_JSON + '</section>')]
     parts = {'vision': vision, 'language': lang, 'music': mus, 'beyond': beyond, 'close': close}
     return parts

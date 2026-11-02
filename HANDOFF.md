@@ -33,6 +33,10 @@ Done: 42 slides in the target order (Vision 8, Language 11, Music 17, Beyond 3, 
 
 Original figures added: Denk 2023 Figure 1 and the encoding result (brain 2 and brain 3 slides), taken from the Brain2Music project page repo google-research/seanet.
 
+## Round 5 (Nov 2 2026)
+Music part rebuilt from a verified Fable survey (docs/music-graphs-survey-2026-11-02.md). 12 slides: oldest music model is a graph (Hiller, Conklin and Witten, Continuator, IDyOM), fold 88 keys into 12 scale degrees with two play buttons (Für Elise opening, a tune drawn from its table, WebAudio, clips in src/clips.json), Occam's razor classification, memory order, when graphs help (McFee and Ellis structure graph vs cadence GNN, Tonnetz, note networks), MusicGen in plain words, probing (Wei et al. ISMIR 2024 Table 2), brain story under one theme (brains and models are both next event predictors): language met the brain, IDyOM predicts EEG (Di Liberto 2020), the brain keeps enough to rebuild music (Bellier 2023, Denk 2025), music generators only from the outside (Pepino, Noguchi, Denk), our plan (three sources of surprise, one yardstick). Beyond section and the four outcome matrix removed. 34 slides.
+Experiments for higher order classification and generation were handed to another conversation, results expected on branch experiments/music-markov (prompt in chat Nov 2 2026). Add their audio clips to the memory order slide when they arrive.
+
 ## Round 4 (Nov 2 2026)
 Space Needle (Seattle to Paris) is the running example for the whole language part. Overview is now 11 slides, language first then music, to stop jumping between domains: cover, seven surgeries (Edited card uses Space Needle), whole field story, silent failure (edit is a shortcut, old fact still inside, Xie et al. ACL 2025, Zhang et al. ICLR 2025), knowledge graph ripple (which country is the Space Needle in, RippleEdits TACL 2024, MQuAKE EMNLP 2023), four receipts, every surgery is a vector, delta graph screen, Für Elise demo, one way steering, two claims forecast. 34 slides total.
 
