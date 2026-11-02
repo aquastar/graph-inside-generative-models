@@ -33,9 +33,13 @@ Done: 42 slides in the target order (Vision 8, Language 11, Music 17, Beyond 3, 
 
 Original figures added: Denk 2023 Figure 1 and the encoding result (brain 2 and brain 3 slides), taken from the Brain2Music project page repo google-research/seanet.
 
-## Opening (revised Nov 1 2026)
-He did not want a trailer. "Trailer" was an analogy: say the exciting results early. Structure now: light cover with a large orange "Graph", then two preview slides, music first (live Für Elise graph plus three of our results) and language second (delta graph drawing, 11 vs 14 vs 17, one card on attribution graphs as other work), then the vision slides and Part 1. All slides use light backgrounds. 44 slides.
-Presentation craft research: docs/presentation-craft.md. Apply next: assertion headlines, a findings forecast in the first five minutes, setup and payoff, end on contributions instead of "Thank you".
+## Structure after the audit (Nov 1 2026, evening)
+A Fable audit against the presentation-craft skill (docs/audit-2026-11-01.md) found the opening gave answers before the question. The deck is now 37 slides:
+- Opening 9: cover, every model is operated on, the exam said pass and a side effect hid, a vector says what changed not where it went, the Für Elise demo (the one live demo), throughline plus three findings forecast, language result (random row first), music result (setup for the one way payoff), the depth by time map.
+- Throughline: "Vectors say what we changed. Only a graph can say where it went." It returns on the Part 1 and Part 3 map slides and on the final take home.
+- Part 1 language 9, Part 2 music 13 (opens with facts versus styles, ends with the one way picture returning and the four outcome matrix), Part 3 beyond 4, close 2 (three findings, then the ask with the cover graph returning, no "Thank you").
+- Cut: network science table, program grid, Part 1 four steps, 2017 genre fusion, Brain2Music decoding slide, pilot placeholders, Für Elise compose body slide, stitched and unlearned surgery cards.
+Not done from the audit: splitting the method slide, redrawing the refusal and steering critique figures, swapping the Bach chorale for Für Elise on the path slide (needs third order Für Elise numbers).
 
 ## Still to do
 - Pilot slide: two dashed placeholders for his probe accuracy by layer and tempo dose response figures.

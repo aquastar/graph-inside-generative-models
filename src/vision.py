@@ -65,8 +65,7 @@ for i, (d, s, col) in enumerate(rows):
     y = 135 + i * 82
     ex += R(660, y, 90, 26, '#fff', col, 1.5, 13) + T(705, y + 18, d, 13, 700, col, 'middle') + T(765, y + 18, s, 14.5, 600, INK)
     ex += T(765, y + 42, ['SDM 2026, Hu 2025, Yang 2025', 'Tan 2024, Wollschläger 2025', 'our MusicGen study, under review'][i], 12.5, 400, MUT)
-g += F(4, ex)
-g += F(5, T(640, 450, 'Every control tool is a vector. Every side effect is a path.', 19, 700, ACC))
+g += F(4, T(640, 200, 'Every control tool is a vector.', 26, 700, INK) + T(640, 240, 'Every side effect is a path.', 26, 700, ACC) + T(640, 290, 'A vector records the push.', 17, 400, MUT) + T(640, 316, 'The path is what breaks things.', 17, 400, MUT))
 V.append(sec('A vector says what we changed, not where it went', SVG(g), ch='0',
              notes='Opening argument. Interventions are local, consequences are not. The question of the talk is whether a graph describes where the consequence goes better than the vector does.'))
 
@@ -339,14 +338,13 @@ for r in range(4):
         g += R(600 + c * 28 + r * 28, 140 + r * 30, 24, 24, ['#1f8a9a', '#4fa9b6', '#86c6cf', '#bfe1e5'][r], 'none', 0, 3)
 g += T(740, 120, 'tokens: 4 codebooks, 50 per second', 14, 700, MU, 'middle')
 g += P('M540,215 L590,215', AC2, 2.5, extra='marker-end="url(#ana)"') + P('M760,330 C700,400 420,400 390,345', MU, 2.5, extra='marker-end="url(#ant)"') + T(580, 405, 'each step feeds the next', 13, 600, MU, 'middle')
-facts = [('discrete tokens', 'a token graph for free'), ('coarse to fine codebooks', 'layered graph: style at which level?'), ('one step feeds the next', 'a trajectory is a path'),
-         ('text enters every step', 'conditioning reweights all edges'), ('guidance: cond minus uncond', 'two graphs and a knob between them')]
+facts = [('discrete tokens', 'a token graph for free'), ('one step feeds the next', 'a trajectory is a path'), ('guidance: cond minus uncond', 'two graphs and a knob between them')]
 fx = 880
 for i, (a, b) in enumerate(facts):
-    y = 70 + i * 74
-    blk = R(fx, y, 285, 62, MUL if i != 4 else ACL, MU if i != 4 else ACC, 1.3, 8) + T(fx + 12, y + 24, a, 14, 700, INK) + T(fx + 12, y + 46, '→ ' + b, 13, 400, MU if i != 4 else ACC)
+    y = 110 + i * 100
+    blk = R(fx, y, 285, 62, MUL if i != 2 else ACL, MU if i != 2 else ACC, 1.3, 8) + T(fx + 12, y + 24, a, 14, 700, INK) + T(fx + 12, y + 46, '→ ' + b, 13, 400, MU if i != 2 else ACC)
     g += F(i + 1, blk)
-g += F(6, T(450, 460, 'Five facts, five graphs you can build and test.', 18, 700, ACC, 'middle'))
+g += F(4, T(450, 460, 'Three facts, three graphs you can build and test.', 18, 700, ACC, 'middle'))
 ANAT = sec('MusicGen anatomy: what invites a graph', SVG(g), ch='2',
            ref='Copet et al., Simple and Controllable Music Generation, NeurIPS 2023. Défossez et al., EnCodec, 2022',
            notes='Facts: 32 kHz audio, 50 Hz frames, 4 residual codebooks of 2048 entries with a delay interleaving pattern, T5 text conditioning through cross attention, classifier free guidance at inference. Delay interleaving means hidden states at one step mix four time offsets, so states must be aligned to the first codebook. At 50 Hz self transitions dominate, so the graph needs a lag sweep.')
