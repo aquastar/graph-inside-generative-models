@@ -1148,6 +1148,101 @@ COPY = sec('More memory sounds more like the style, because it copies', SVG(g), 
            ref='Our experiments, Nov 2026. Clips: order 2 and the other settings sampled with a 6 note copy limit, one sample each, fixed seed, no cherry picking. Real Bach melody: BWV 329 soprano, held out',
            notes='Generation tells the other half. Plain sampling with more memory is recognized as its style more often, 57 to 65, but the variable order model copies 12 note stretches verbatim and 99 percent of its 4 note patterns already exist in training. A 6 note copy limit keeps most of the gain. Honest caveat: these automatic judges rate generated melodies above real held out ones (52 percent), so they measure typicality, not musical conviction. A listening test is the next step. The LLM judge numbers on the previous slide come from the website, not from this run.')
 
+# ======================= ROUND 8 (Nov 2 2026): slides 9 and 10 on one template =======================
+PURP = '#5a4fcf'
+
+def steps(active):
+    out = ''
+    for k, lab in enumerate(['Knowledge beyond text', 'Why music: emotion']):
+        x = 30 + k * 300
+        on = (k == active)
+        out += R(x, 6, 280, 30, ACC if on else '#fff', ACC if on else LINE, 1.5, 15) + C(x + 18, 21, 10, '#fff' if on else SOFT) + T(x + 18, 25.5, str(k + 1), 12, 700, ACC if on else MUT, 'middle')
+        out += T(x + 36, 26, lab, 14, 700, '#fff' if on else MUT)
+        if k == 0:
+            out += P('M314,21 L326,21', LINE, 2, extra='marker-end="url(#pea)"')
+    return out
+
+def person(x, y, w, h, fname, ini, name, title_lines, col):
+    out = R(x, y, w, h, '#fff', LINE, 1.5, 14)
+    if fname:
+        out += photo(x + 52, y + 52, 34, fname, ini, col)
+    else:
+        out += C(x + 52, y + 52, 34, MUL, MU, 2.5) + T(x + 52, y + 66, '♫', 38, 700, MU, 'middle')
+    out += T(x + 100, y + 44, name, 18, 700, INK)
+    for k, tl in enumerate(title_lines):
+        out += T(x + 100, y + 66 + k * 18, tl, 13, 600, AC2)
+    return out
+
+def chips(x, y, items, maxw):
+    out = ''; cx = x; cy = y
+    for it, hl in items:
+        w = len(it) * 7.3 + 22
+        if cx + w > x + maxw:
+            cx = x; cy += 30
+        col = {'L': ACC, 'E': PURP, 'M': MU}.get(hl, '#9aa6ae'); fill = {'L': ACL, 'E': '#eef0ff', 'M': MUL}.get(hl, '#fff')
+        out += R(cx, cy, w, 24, fill, col, 1.5, 12) + T(cx + w / 2, cy + 16.5, it, 12.5, 700 if hl else 500, col if hl else MUT, 'middle')
+        cx += w + 8
+    return out
+
+def quote(x, y, lines, size=15.5, lh=22):
+    out = T(x - 4, y + 18, '“', 44, 700, ACC, 'end', 'opacity=".45" font-family="Georgia,serif"')
+    for k, segs in enumerate(lines):
+        out += qline(x + 8, y + k * lh, segs, size)
+    return out
+
+# ---- slide 9 ----
+g = adefs('pe')
+g += steps(0)
+c1 = person(30, 50, 545, 262, 'howard-gardner.jpg', 'HG', 'Howard Gardner', ['Harvard psychologist, theory of multiple intelligences'], AC2)
+c1 += chips(60, 132, [('linguistic', 'L'), ('logical mathematical', 'E'), ('musical', 'M'), ('spatial', ''), ('bodily', ''), ('interpersonal', ''), ('intrapersonal', '')], 490)
+c1 += T(60, 222, 'Intelligence is plural. Each kind has its own', 15.5, 600, INK) + T(60, 244, 'brain systems and its own symbols, so one', 15.5, 600, INK) + T(60, 266, 'kind cannot stand in for another.', 15.5, 600, INK)
+c1 += T(555, 294, 'Frames of Mind, 1983', 12.5, 400, MUT, 'end')
+g += c1
+c2 = person(605, 50, 545, 262, 'fei-fei-li.jpg', 'FL', 'Fei-Fei Li', ['Stanford professor, creator of ImageNet,', 'cofounder of World Labs'], AC2)
+c2 += chips(635, 140, [('language', 'L'), ('perceptual', ''), ('spatial', ''), ('bodily', ''), ('emotional', 'M')], 490)
+c2 += quote(645, 206, [[('Spatial intelligence represents the', False)], [('frontier beyond language', True), ('.', False)]], 18, 26)
+c2 += T(1130, 294, 'From Words to Worlds, a16z, 2025. Five intelligences: interview, 2026', 12.5, 400, MUT, 'end')
+g += F(1, c2)
+band = T(30, 340, 'What this talk covers', 14, 700, MUT)
+tiles = [('Text', 'Part 1: facts inside a language model', ACC, ACL, ''), ('Equations', 'next: 36 + 59 runs as two paths inside a model', PURP, '#fff', 'stroke-dasharray="7 5"'), ('Music and emotion', 'Part 2: style, expectation, the brain', MU, MUL, '')]
+for k, (a_, b_, col, fill, dash) in enumerate(tiles):
+    x = 30 + k * 377
+    band += R(x, 352, 360, 64, fill, col, 2, 14, dash) + T(x + 18, 378, a_, 17, 700, col) + T(x + 18, 402, b_, 13, 400, INK)
+g += F(2, band)
+g += F(3, T(590, 462, 'Equations and music are knowledge beyond text. They may need graphs even more than text does.', 17, 700, INK, 'middle'))
+BEYOND2 = sec('Knowledge is not only text', SVG(g), ch='0',
+              ref='Gardner, Frames of Mind, 1983. Fei-Fei Li, From Words to Worlds, a16z, 2025, and Silicon Valley Girl podcast, 2026. Lindsey et al., On the Biology of a Large Language Model, 2025. Photos: Wikimedia Commons',
+              notes='Step 1 of 2. A psychologist and an AI leader say the same thing from two sides: intelligence and knowledge come in several kinds, and language is only one. Gardner counts musical and logical mathematical intelligence as their own kinds. Fei-Fei Li lists five intelligences and calls space the frontier beyond language. This talk covers text and music. Equations are next: inside Claude, 36 + 59 runs as two parallel paths, one for the rough size and one for the last digit (Lindsey et al. 2025).')
+
+# ---- slide 10 ----
+g = adefs('pe')
+g += steps(1)
+w3 = 365
+c1 = person(30, 50, w3, 262, 'rosalind-picard.jpg', 'RP', 'Rosalind Picard', ['MIT Media Lab, founder of', 'affective computing'], AC2)
+c1 += quote(62, 172, [[('we must give computers the', False)], [('ability to ', False), ('recognize,', True)], [('understand, even to have', True)], [('and express emotions', True)]], 15.5, 23)
+c1 += T(375, 294, 'Affective Computing, MIT Press, 1997', 12, 400, MUT, 'end')
+g += c1
+c2 = person(407, 50, w3, 262, 'marvin-minsky.jpg', 'MM', 'Marvin Minsky', ['MIT, cofounder of the AI Lab,', 'Turing Award 1969'], AC2)
+c2 += quote(439, 172, [[('Each of our major', False)], [('emotional states', True), (' results', False)], [('from turning certain', False)], [('resources on', True), (' while turning', False)], [('certain others off.', False)]], 15.5, 22)
+c2 += T(752, 294, 'The Emotion Machine, 2006', 12, 400, MUT, 'end')
+g += F(1, c2)
+c3 = person(785, 50, w3, 262, None, 'LM', 'Leonard Meyer', ['Music theorist, the classic theory', 'of emotion in music'], MU)
+c3 += quote(817, 172, [[('affect is aroused when an', False)], [('expectation', True), (', a tendency to', False)], [('respond, is ', False), ('temporarily', True)], [('inhibited or permanently', True)], [('blocked', True)]], 15.5, 22)
+c3 += T(1130, 294, 'Emotion and Meaning in Music, 1956, p. 31', 12, 400, MUT, 'end')
+g += F(2, c3)
+band = T(30, 340, 'Why this matters for a graph', 14, 700, MUT)
+chain = [('music', 'a melody unfolds', MU, MUL), ('expectation', 'what comes next? a transition graph', ACC, ACL), ('emotion', 'dopamine at the peak, Salimpoor 2011', PURP, '#eef0ff'), ('brain response', 'measured in EEG, Di Liberto 2020', MU, MUL)]
+for k, (a_, b_, col, fill) in enumerate(chain):
+    x = 30 + k * 283
+    band += R(x, 352, 262, 64, fill, col, 2, 14) + T(x + 16, 378, a_, 16.5, 700, col) + T(x + 16, 401, b_, 12.5, 400, INK)
+    if k < 3:
+        band += P(f'M{x+264},384 L{x+281},384', AC2, 2.5, extra='marker-end="url(#pea)"')
+g += F(3, band)
+g += F(4, T(590, 462, 'Music is the most measurable route to emotion, so it is where a brain can judge a model.', 17, 700, INK, 'middle'))
+EMOTION2 = sec('Music is where emotion can be measured', SVG(g), ch='0',
+               ref='Picard quote from the MIT Press description of Affective Computing, 1997. Minsky, The Emotion Machine, 2006. Meyer, Emotion and Meaning in Music, 1956, p. 31, via Margulis 2005. Huron, Sweet Anticipation, 2006. Salimpoor et al., Nature Neuroscience 2011. Koelsch, Nature Reviews Neuroscience 2014. Photos: Wikimedia Commons',
+               notes='Step 2 of 2. Two AI pioneers say machines need emotion. A music theorist explains where musical emotion comes from: expectation that is held back or broken. Expectation is exactly what a note transition graph computes, and its effect is measurable in the brain. That is why music is the place where a brain can judge whether a model has a graph inside. Check the Picard and Minsky wording against the books before the talk.')
+
 # ======================= ASSEMBLY =======================
 def assemble(cover, old):
     """old: the reused slides from the earlier deck, keyed by their old index"""
@@ -1155,7 +1250,7 @@ def assemble(cover, old):
     story = old[43]
     receipts = old[45]
     delta_paper = retitle(old[47], 'Our delta graph: rank edits by how the inside rewired').replace('class="divider" ', '', 1)
-    vision = [cover, surg, story, SILENT, RIPPLE, receipts, VECTOR, delta_paper, BEYOND, EMOTION, DEMO2, MUSRES, FORECAST2]
+    vision = [cover, surg, story, SILENT, RIPPLE, receipts, VECTOR, delta_paper, BEYOND2, EMOTION2, DEMO2, MUSRES, FORECAST2]
     rome = old[33]
     a = rome.find('<div class="note"'); e = rome.find('  <div class="ref">')
     rome = rome[:a] + '<div class="note" style="font-size:.62em"><div class="key">The finding</div><p class="one" style="font-size:1.25em">A fact sits in two places. Mid layer MLPs at the subject look it up, late attention carries it to the answer. Editing a fact means changing the first place.</p></div>\n  </div>\n' + rome[e:]
