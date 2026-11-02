@@ -56,7 +56,7 @@ One family for everything: ET Book (his choice, 2026-11-02, after seeing the two
 - Headline at most two lines, about 70 characters, no terminal period, a question only if the slide answers it.
 - Body text at most 25 words outside the headline, at most three bullets, bullets only for parallel items.
 - Citation as one Tufte sidenote: bottom right, ET Book 13.5 px #4A483E, author year venue, no DOI. No logos except cover and close.
-- Photos of people: plain squares, radius 6 px, at most 160 px, no ring or shadow, on at most two slides. Name in Source Sans 18 px ink, credential in ink2. Screenshots get a 1 px rule under them, no shadow.
+- Photos of people: plain squares, radius 6 px, at most 160 px, no ring or shadow, on at most two slides. Name in 18 px ink, credential in ink2. Screenshots get a 1 px rule under them, no shadow.
 
 ## 6. Charts
 - Horizontal bars when labels are long. Value at the bar end, difference as +8 in ink2 beside it.
