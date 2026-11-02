@@ -33,18 +33,20 @@ Contrast ratios on bg #FBFAF7.
 Rules: no green (it is invisible against orange for deuteranopes, success is the unmarked state). No gradients, no shadows. Tints are 25%, lighter tints vanish on projectors. Exception: the cover title word may be orange at display size (100 px and up). If a colored word is unavoidable elsewhere, use accent-text #C45200 (4.4, off brand, slides only).
 
 ## 3. Typography
-Three families only.
-- ET Book (Tufte's face, MIT license, self hosted). Two CSS families as in tufte-css: "et-book" (roman with lining figures, bold, display italic) and "et-book-osf" (roman with oldstyle figures, running text only). The free ET Book has no OpenType features and no small caps, so switch by family, never by font-feature-settings.
-  Use: headline 40 px roman (not bold), body sentences 30 to 32 px, quotes, the one big number 40 px. Never below 24 px, never in ink2 below 24 px, italic only at 24 px and up.
-- Source Sans 3 (SIL OFL): every label, tick, number in a chart, sidenote, section marker, status tag. 18 to 20 px, weight 400, ink2. Bold only for the one emphasized label. Lining tabular figures by default. Section markers and status tags in real small caps (font-variant-caps: all-small-caps), letter spacing 0.06em.
-- Source Code Pro: code only, 20 px.
-- Size ratio largest to smallest about 2.2 (Wilke: keep it near 2). Everything left aligned except the cover.
+One family for everything: ET Book (his choice, 2026-11-02, after seeing the two family version). Sizes stay as each element had them.
+- Two CSS families as in tufte-css: "et-book" (roman with lining figures, bold, display italic) and "et-book-osf" (oldstyle figures, running text only). The free ET Book has no OpenType features and no small caps, so switch by family, and set labels that would be small caps as spaced capitals instead (uppercase, 13 to 14 px, letter spacing 0.14em).
+- Headline 40 px roman, not bold. Body sentences 27 to 32 px. Quotes and the one big number in the same face.
+- Figure labels, ticks and chart numbers also ET Book, weight 400, ink2, bold (600) only for the one emphasized label. Lining figures in charts.
+- References at the bottom: ET Book 13.5 px, color #4A483E (a little darker than ink2), right aligned sidenote.
+- Code only: Source Code Pro. Source Sans 3 stays self hosted as a fallback if a venue needs a sans.
+- Known cost: ET Book has a small x height, so 11 to 14 px labels read smaller and thinner than in a sans. Raise those labels toward 18 px when a slide is reworked, and check once on the room projector.
+- Everything left aligned except the cover.
 
 ## 4. Lines, shapes, graphs
 - Gridlines 1 px rule. Axes 1 px axis. Meaningful structure 1.5 px line or ink2. Emphasized path 2.5 px accent.
 - Arrowheads: small filled triangles about 7 px long (TikZ stealth). Round joins.
 - Boxes: no border. Group by whitespace first, group fill second, radius 3 px. No pills anywhere. Status (Published, Under review, In progress, Open question) is a small caps label in ink2 with a 2 px underline in a status color.
-- Graph encoding, fixed for the talk: nodes 7 px radius, full domain color, no stroke (tints are too pale for nodes on a projector). The edited or active node is orange at 8 px. A wrong answer is a hollow node with a 2 px red ring, its label in ink and the expected answer below in ink2. Language nodes are circles, music nodes are rounded squares. Edge width by magnitude (sqrt scale, 0.5 to 3 px). Sign or failure by dashed vs solid. Direction by stealth head. Context edges at 5% ink. Layers as horizontal bands labeled at left in Source Sans (the Transformer Circuits layout).
+- Graph encoding, fixed for the talk: nodes 7 px radius, full domain color, no stroke (tints are too pale for nodes on a projector). The edited or active node is orange at 8 px. A wrong answer is a hollow node with a 2 px red ring, its label in ink and the expected answer below in ink2. Language nodes are circles, music nodes are rounded squares. Edge width by magnitude (sqrt scale, 0.5 to 3 px). Sign or failure by dashed vs solid. Direction by stealth head. Context edges at 5% ink. Layers as horizontal bands labeled at left (the Transformer Circuits layout).
 - Ours: solid 2.5 px orange stroke or filled orange node plus the method name in small caps. Baselines gray, dashed when they are comparison methods.
 
 ## 5. Layout
@@ -53,13 +55,13 @@ Three families only.
 - Section marker top left in small caps (OVERVIEW, 1 LANGUAGE, 2 MUSIC, CLOSE). No progress bar.
 - Headline at most two lines, about 70 characters, no terminal period, a question only if the slide answers it.
 - Body text at most 25 words outside the headline, at most three bullets, bullets only for parallel items.
-- Citation as one Tufte sidenote: bottom right, Source Sans 18 px ink2, author year venue, no DOI. No logos except cover and close.
+- Citation as one Tufte sidenote: bottom right, ET Book 13.5 px #4A483E, author year venue, no DOI. No logos except cover and close.
 - Photos of people: plain squares, radius 6 px, at most 160 px, no ring or shadow, on at most two slides. Name in Source Sans 18 px ink, credential in ink2. Screenshots get a 1 px rule under them, no shadow.
 
 ## 6. Charts
-- Horizontal bars when labels are long. Value at the bar end in Source Sans, difference as +8 in ink2 beside it.
+- Horizontal bars when labels are long. Value at the bar end, difference as +8 in ink2 beside it.
 - Baselines in axis gray, ours in accent, partial variants in accent-tint. No frame, no vertical gridlines, at most one reference line.
-- One number to remember: ET Book 40 px ink with a 3 px orange rule under it, plus one line in Source Sans saying what it measures and which direction is better.
+- One number to remember: ET Book 40 px ink with a 3 px orange rule under it, plus one line saying what it measures and which direction is better.
 
 ## 7. Equations and code
 - MathJax 4 with the mathjax-pagella font, pre-rendered to SVG at build time, sized 1 em to the ET Book text. Only the term being discussed gets the accent (as an underline mark).
@@ -74,7 +76,7 @@ Three families only.
 Fade only, 250 ms, at most four steps, each step one meaningful unit. Reveal auto-animate when the same figure returns (add fill, stroke and stroke-width to autoAnimateStyles if colors should morph).
 
 ## 10. Do not
-Colored pill boxes for content, rainbow accents, per-section accent colors, centered bold takeaway banners, generic icons (check marks in circles, light bulbs), emoji, drop shadows, gradients, all caps headlines, Fira Sans, colored body text, two orange items on one slide.
+Colored pill boxes for content, rainbow accents, per-section accent colors, centered bold takeaway banners, generic icons (check marks in circles, light bulbs), emoji, drop shadows, gradients, all caps headlines, Fira Sans, a second text family, colored body text, two orange items on one slide.
 
 ## 11. Implementation in this deck
 - src/style_v2.py holds the tokens, the override CSS and a restyle pass that every slide goes through at build time: old colors map to the tokens, bordered boxes become fills, pills get a 3 px radius, orange text becomes accent-text, bold drops to semibold, centered conclusion lines become ET Book sentences, banners lose their fill.

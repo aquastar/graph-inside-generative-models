@@ -14,15 +14,17 @@ FONTS = '''
 @font-face{font-family:"Source Code Pro";src:url(figs/fonts/SourceCodePro.woff2) format("woff2");font-weight:200 900;font-display:swap}
 '''
 
-SANS = '"Source Sans 3",system-ui,sans-serif'
 SERIF = '"et-book","Palatino Linotype",Palatino,Georgia,serif'
+# one family for everything (his choice, 2026-11-02). Source Sans 3 stays loaded as a fallback option.
+SANS = SERIF
+REF = '#4A483E'
 
 CSS = FONTS + f'''
 /* ===== style v2 overrides ===== */
 :root{{--ink:{INK};--muted:{INK2};--accent:{ACC};--accent2:{INK2};--soft:{GROUP};--line:{RULE};--paper:{BG};
   --f-editing:{ACC_T};--f-stitch:{LANG_D};--f-merge:#4E6B5C;--f-prune:#8A6D1F;--f-steer:{MUS};--f-unlearn:#A3324F;--f-ft:#5F6B73}}
 html,body,.reveal-viewport{{background:{BG} !important}}
-.reveal{{font-family:{SANS};color:{INK};font-size-adjust:.52}}
+.reveal{{font-family:{SANS};color:{INK}}}
 .reveal svg text:not([font-family]){{font-family:{SANS}}}
 .reveal .progress,.reveal .slide-number{{display:none !important}}
 .reveal .controls{{display:none !important}}
@@ -36,24 +38,24 @@ html,body,.reveal-viewport{{background:{BG} !important}}
 /* section marker instead of the tab rail */
 #rail{{height:auto;padding:14px 0 0 68px;gap:0;background:none;font:400 18px/1 {SANS};font-size-adjust:none}}
 #rail span{{display:none !important}}
-#rail span.here{{display:block !important;flex:none;background:none !important;color:{INK2} !important;font-variant-caps:all-small-caps;letter-spacing:.09em;text-transform:none;height:auto}}
+#rail span.here{{display:block !important;flex:none;background:none !important;color:{INK2} !important;text-transform:uppercase;font-size:13px;letter-spacing:.14em;height:auto}}
 #footer{{border-top:0 !important;background:none !important;font:400 14px/1.4em {SANS};color:{AXIS}}}
 #footer{{justify-content:flex-start !important}} #footer #fpart{{display:none}}
 /* status: small caps with an underline mark */
 .reveal .status{{background:none !important;color:{INK2} !important;border:0 !important;border-radius:0 !important;padding:0 0 3px 0 !important;
-  font:400 16px/1 {SANS} !important;font-variant-caps:all-small-caps;text-transform:none !important;letter-spacing:.09em !important;top:40px !important;right:44px !important}}
+  font:400 13px/1 {SANS} !important;text-transform:uppercase !important;letter-spacing:.14em !important;top:40px !important;right:44px !important}}
 .reveal .status.published{{border-bottom:2px solid {LINE} !important}}
 .reveal .status.review{{border-bottom:2px solid {AXIS} !important}}
 .reveal .status.progress{{border-bottom:2px solid {ACC} !important}}
 .reveal .status.open,.reveal .status.plan{{border-bottom:2px dashed {INK2} !important}}
 /* sidenote citation */
-.reveal .ref{{font:400 14.5px/1.3 {SANS} !important;color:{INK2} !important;text-align:right !important;margin-left:auto !important;max-width:66% !important}}
+.reveal .ref{{font:400 13.5px/1.3 {SERIF} !important;color:{REF} !important;text-align:right !important;margin-left:auto !important;max-width:66% !important}}
 /* no banners: takeaway is a quiet serif sentence */
 .reveal .takeaway{{background:none !important;border:0 !important;padding:0 !important;font-family:{SERIF};font-size-adjust:none;font-size:27px;font-weight:400 !important;color:{INK}}}
 .reveal .q,.reveal section>.tl{{font-family:{SERIF};font-size-adjust:none;font-weight:400 !important;color:{INK} !important;background:none !important;border:0 !important;padding:0 !important}}
 .reveal .lead{{font-family:{SERIF};font-size-adjust:none;font-weight:400}}
 .reveal .big{{font-family:{SERIF};font-size-adjust:none;font-weight:400;color:{INK};text-decoration:underline {ACC} 4px;text-underline-offset:10px}}
-.reveal .tag,.reveal .crumb{{color:{INK2} !important;font-weight:400 !important;font-variant-caps:all-small-caps;text-transform:none !important;letter-spacing:.09em}}
+.reveal .tag,.reveal .crumb{{color:{INK2} !important;font-weight:400 !important;text-transform:uppercase !important;font-size:.42em !important;letter-spacing:.14em}}
 .reveal .crumb b{{color:{INK} !important;font-weight:600}}
 /* boxes: fill only, no rules, small radius */
 .reveal .card,.reveal .grid2>div,.reveal .grid3>div,.reveal .icons>div,.reveal .chain>div,.reveal .tiles>div,.reveal .wbsteps>div,
@@ -66,7 +68,7 @@ html,body,.reveal-viewport{{background:{BG} !important}}
 .reveal .pts li::before{{background:{AXIS} !important;transform:none !important;border-radius:50%;width:.4em;height:.4em;top:.5em}}
 .reveal .steps b{{color:{INK} !important}}
 .reveal .annot .lbl{{color:{INK} !important}}
-.reveal .lessontag{{background:none !important;border:0 !important;border-radius:0 !important;color:{INK2} !important;font:400 16px/1 {SANS} !important;font-variant-caps:all-small-caps;letter-spacing:.09em}}
+.reveal .lessontag{{background:none !important;border:0 !important;border-radius:0 !important;color:{INK2} !important;font:400 13px/1 {SANS} !important;text-transform:uppercase;letter-spacing:.14em}}
 .reveal .ph{{border:1px dashed {AXIS};background:none}}
 .reveal img.fig{{border:0 !important;border-bottom:1px solid {RULE} !important;background:none !important;padding:0 !important}}
 .reveal table th{{border-bottom:1.5px solid {INK} !important}}
@@ -85,8 +87,8 @@ html,body,.reveal-viewport{{background:{BG} !important}}
 .reveal section.titlehero h1{{font-family:{SERIF};font-size-adjust:none}}
 .reveal section.titlehero .herofig{{right:-70px !important;width:600px !important}}
 .reveal section.titlehero h1 .th-q{{font-weight:400 !important;color:{INK} !important;font-size:44px !important;letter-spacing:0 !important}}
-.reveal section.titlehero h1 .th-graph{{font-weight:400 !important;font-size:168px !important;letter-spacing:-.01em !important;margin:0 0 0 -8px !important}}
-.reveal section.titlehero .th-kicker{{color:{INK2} !important;font-weight:400 !important;font-variant-caps:all-small-caps;text-transform:none !important;letter-spacing:.12em !important}}
+.reveal section.titlehero h1 .th-graph{{font-weight:400 !important;font-size:168px !important;line-height:1 !important;letter-spacing:-.01em !important;margin:0 0 34px -8px !important}}
+.reveal section.titlehero .th-kicker{{color:{INK2} !important;font-weight:400 !important;text-transform:uppercase !important;font-size:14px !important;letter-spacing:.16em !important}}
 .reveal section.titlehero .th-rule{{height:3px !important;border-radius:0 !important}}
 .reveal section.titlehero .th-sub{{font-family:{SERIF};font-size-adjust:none;color:{INK2} !important;font-size:30px !important}}
 .reveal section.titlehero .th-sub .lm{{color:{LANG_D} !important;font-weight:400}}
@@ -198,7 +200,7 @@ def _circle(m):
 
 def _style_attr(m):
     st = m.group(1)
-    st = st.replace('Fira Sans', 'Source Sans 3').replace('Fira Mono', 'Source Code Pro')
+    st = st.replace('Fira Sans', 'et-book').replace('Fira Mono', 'Source Code Pro')
     st = re.sub(r'font:\s*700', 'font:600', st)
     st = re.sub(r'color:\s*#F76902', 'color:' + ACC_T, st, flags=re.I)
     st = re.sub(r'border-radius:\s*(1[0-9]|[2-9][0-9])px', 'border-radius:3px', st)
