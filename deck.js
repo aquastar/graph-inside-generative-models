@@ -652,9 +652,9 @@ function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
 let PROG=false; function frag(step,inner){return PROG?`<g class="fragment" data-fragment-index="${step}">${inner}</g>`:inner;}
 function edge(x1,y1,x2,y2,cx,cy,label,dashed,arrow,t,step){ t=(t===undefined)?0.5:t;
   const d=(cx===null)?`M${x1},${y1} L${x2},${y2}`:`M${x1},${y1} Q${cx},${cy} ${x2},${y2}`;
-  let s=`<path d="${d}" fill="none" stroke="#8a9bab" stroke-width="1.6" ${dashed?'stroke-dasharray="6 5"':''} ${arrow?'marker-end="url(#arr)"':''}/>`;
+  let s=`<path d="${d}" fill="none" stroke="#ACA39A" stroke-width="1.6" ${dashed?'stroke-dasharray="6 5"':''} ${arrow?'marker-end="url(#arr)"':''}/>`;
   if(label){const u=1-t; const mx=cx===null?x1+(x2-x1)*t:u*u*x1+2*u*t*cx+t*t*x2, my=cy===null?y1+(y2-y1)*t:u*u*y1+2*u*t*cy+t*t*y2; const w=label.length*6.6+10;
-    s+=`<rect x="${mx-w/2}" y="${my-10}" width="${w}" height="20" rx="4" fill="#fbfbfa" stroke="none"/><text x="${mx}" y="${my+4}" text-anchor="middle" font-size="12" fill="#5b6b7c" font-style="italic">${esc(label)}</text>`;}
+    s+=`<rect x="${mx-w/2}" y="${my-10}" width="${w}" height="20" rx="4" fill="#FBFAF7" stroke="none"/><text x="${mx}" y="${my+4}" text-anchor="middle" font-size="12" fill="#5F5D50" font-style="italic">${esc(label)}</text>`;}
   return step===undefined?s:frag(step,s);
 }
 function mapSvg(here, progressive){
@@ -663,7 +663,7 @@ function mapSvg(here, progressive){
   const ORDER2=['tools','stitch','merge','prune','steer','ft','unlearn','editing','diff'];
   const idx=ORDER2.indexOf(here);
   function cls(k){ if(k==='core') return 'core'; if(here==='gaps') return k==='editing'?'here':(['tools','diff'].includes(k)?'':'done'); if(here==='all'||idx<0) return ''; const i=ORDER2.indexOf(k); if(here==='ft'&&k==='unlearn') return 'here'; if(i<idx) return 'done'; if(i===idx) return 'here'; return 'future'; }
-  let s='<svg class="map" viewBox="-20 0 1250 620" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a9bab"/></marker></defs>';
+  let s='<svg class="map" viewBox="-20 0 1250 620" xmlns="http://www.w3.org/2000/svg"><defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#ACA39A"/></marker></defs>';
   const C={}; for(const k of Object.keys(POS)) C[k]=center(k,compact);
   const [tx,ty]=C.tools,[cx0,cy0]=C.core,[dx,dy]=C.diff;
   // plain spokes core to families
@@ -694,7 +694,7 @@ document.querySelectorAll('section[data-map]').forEach(sec=>{const slot=sec.quer
 const ORIGIN={}; for(const k of Object.keys(POS)){const [x,y]=center(k,false); ORIGIN[k]=[x/1200,y/620];}
 
 // ---------- Timeline with animation from the map ----------
-const FAMCOLOR={core:'#1c2430',tools:'#1f6f8b',stitch:'#1f6f8b',merge:'#2f7d4f',prune:'#8a6d1f',steer:'#6b4e9b',ft:'#3f5f7f',unlearn:'#a3324f',editing:'#b8442c',diff:'#5b6b7c'};
+const FAMCOLOR={core:'#1F1E1B',tools:'#007A94',stitch:'#007A94',merge:'#4E6B5C',prune:'#8a6d1f',steer:'#7D55C7',ft:'#5F6B73',unlearn:'#a3324f',editing:'#C45200',diff:'#5F5D50'};
 const LANES=[['core','A model is a graph'],['tools','Tools to compare'],['stitch','Stitching'],['merge','Merging'],['prune','Pruning'],['steer','Steering'],['ft','Fine-tuning'],['unlearn','Unlearning'],['editing','Knowledge editing'],['diff','Model diffing']];
 
 // paper-to-paper relations shown on the timeline: [from, to, type]
@@ -710,7 +710,7 @@ const REL=[
  ['Koutra 2013','Benbrahim 2026','inspires'],['Horta 2021','Benbrahim 2026','inspires'],['Yang 2024','Benbrahim 2026','inspires'],['Baser 2026','Benbrahim 2026','complement'],['Hase 2023','Benbrahim 2026','inspires'],
  ['Lindsey 2024','Shuttleworth 2025','inspires'],['Shuttleworth 2025','Duan 2026','inspires'],['Benbrahim 2026','Duan 2026','same'],['You 2020','Kofinas 2024','inspires'],['Elhage 2021','Joshi 2025','inspires'],
 ];
-const RELSTYLE={inspires:['#9aa7b0','',1.4],critique:['#c0392b','6 4',1.8],fix:['#2e7d32','',1.6],same:['#6b4e9b','2 4',1.6],complement:['#1f6f8b','8 4',1.4]};
+const RELSTYLE={inspires:['#ACA39A','',1.4],critique:['#DA291C','6 4',1.8],fix:['#5F5D50','',1.6],same:['#7D55C7','2 4',1.6],complement:['#007A94','8 4',1.4]};
 const SEEDINFO=`<b>Benbrahim et al., SDM 2026 (accepted, to appear). Knowledge editing family.</b><br><b>TL;DR:</b> a before-versus-after graph of the edited model ranks which benchmark-perfect edits will fail on unseen prompts.<br><b>Builds on:</b> Koutra 2013 (comparing two graphs on the same nodes), Horta 2021 (co-activation graphs), Yang 2024 (perplexity as a post-edit warning), Hase 2023 (measure post-edit structure, do not assume it). <b>Complements:</b> Baser 2026 (before the edit, we screen after). <b>Same concern:</b> Duan 2026 (every update needs revalidation).<br><b>Contribution:</b> a disjoint behavioral label, partial-correlation block graphs before and after, topological plus spectral summaries, AUC 0.703 to 0.797, validated by fact-disjoint transfer and prospective reruns. Still owed: a null model and attribution.`;
 function buildTimeline(){
   const host=document.getElementById('timeline'); if(!host) return;
@@ -718,8 +718,8 @@ function buildTimeline(){
   const span=W-L-R, split=2018.5, f=0.13; const x=y=> y<=split ? L+(y-y0)/(split-y0)*span*f : L+span*f+(y-split)/(y1-split)*span*(1-f);
   const laneH=(H-T-B)/LANES.length; const ly=k=>T+LANES.findIndex(l=>l[0]===k)*laneH+laneH/2;
   let s=`<svg id="tlsvg" viewBox="0 0 ${W} ${H}" width="100%" xmlns="http://www.w3.org/2000/svg">`;
-  LANES.forEach((l,i)=>{const y=T+i*laneH; s+=`<rect x="0" y="${y}" width="${W}" height="${laneH}" fill="${i%2?'#f4f6f8':'#ffffff'}"/><text x="10" y="${y+laneH/2+4}" font-size="12.5" font-weight="600" fill="${FAMCOLOR[l[0]]}">${l[1]}</text>`;});
-  for(let yr=y0;yr<=y1;yr++){  s+=`<line x1="${x(yr)}" y1="${T}" x2="${x(yr)}" y2="${H-B}" stroke="#e3e8ec" stroke-width="1"/><text x="${x(yr)}" y="${H-B+18}" text-anchor="middle" font-size="12" fill="#5b6770">'${String(yr).slice(2)}</text>`;}
+  LANES.forEach((l,i)=>{const y=T+i*laneH; s+=`<rect x="0" y="${y}" width="${W}" height="${laneH}" fill="${i%2?'#F1EDE7':'#ffffff'}"/><text x="10" y="${y+laneH/2+4}" font-size="12.5" font-weight="600" fill="${FAMCOLOR[l[0]]}">${l[1]}</text>`;});
+  for(let yr=y0;yr<=y1;yr++){  s+=`<line x1="${x(yr)}" y1="${T}" x2="${x(yr)}" y2="${H-B}" stroke="#D7D2CB" stroke-width="1"/><text x="${x(yr)}" y="${H-B+18}" text-anchor="middle" font-size="12" fill="#5F5D50">'${String(yr).slice(2)}</text>`;}
   const seen={}; const POSN={}; let dots='';
   // position first, then alternate label rows within each lane by x order so neighbours never share a row
   const placed=PAPERS.map(p=>{const key=p.f+p.y; seen[key]=(seen[key]||0)+1; const k=seen[key]-1; return {p, cx:x(p.y)+k*44, cy:ly(p.f)};});
@@ -727,7 +727,7 @@ function buildTimeline(){
   placed.forEach(({p,cx,cy,row})=>{
     const [ox,oy]=ORIGIN[p.f]; const c=FAMCOLOR[p.f]; POSN[p.l]=[cx,cy];
     const seed=p.l==='Benbrahim 2026'; const ty = row===0 ? -10 : 17;
-    dots+=`<g class="dot" data-l="${p.l}" data-x="${cx}" data-y="${cy}" data-ox="${ox*W}" data-oy="${oy*H}" style="transform:translate(${ox*W}px,${oy*H}px)"><circle r="${seed?8:5.5}" fill="${c}" ${seed?'stroke="#1c2430" stroke-width="2"':''}/><text x="${seed?13:0}" y="${seed?4:ty}" font-size="10.5" text-anchor="${seed?'start':'middle'}" fill="#1c2430" ${seed?'font-weight="700"':''}>${p.l}</text></g>`;
+    dots+=`<g class="dot" data-l="${p.l}" data-x="${cx}" data-y="${cy}" data-ox="${ox*W}" data-oy="${oy*H}" style="transform:translate(${ox*W}px,${oy*H}px)"><circle r="${seed?8:5.5}" fill="${c}" ${seed?'stroke="#1F1E1B" stroke-width="2"':''}/><text x="${seed?13:0}" y="${seed?4:ty}" font-size="10.5" text-anchor="${seed?'start':'middle'}" fill="#1F1E1B" ${seed?'font-weight="700"':''}>${p.l}</text></g>`;
   });
   let edges='<g id="tledges">';
   REL.forEach(([a,b,t])=>{ const A=POSN[a],B=POSN[b]; if(!A||!B) return; const [col,dash,w]=RELSTYLE[t]; const mx=(A[0]+B[0])/2, my=(A[1]+B[1])/2-Math.min(40,Math.abs(B[0]-A[0])*0.12+8);

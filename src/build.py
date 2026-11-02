@@ -2,7 +2,7 @@ import re, shutil, os
 HERE = os.path.dirname(os.path.abspath(__file__))
 NEW = os.path.dirname(HERE)
 OLD = os.environ.get('OLD_DECK', os.path.join(os.path.dirname(NEW), 'aquastar', 'neural-networks-to-networks'))
-s = open(OLD + '/index.html').read()
+s = open(os.environ.get('OLD_HTML', os.path.join(HERE, 'legacy', 'nn2n_index.html'))).read()  # pinned copy of the original old deck
 head = s[:s.find('<body>') + len('<body>')]
 head = head.replace('<title>From Networks to Neural Networks</title>', '<title>Is There a Graph Inside Generative Models?</title>')
 EXTRA_CSS = '''

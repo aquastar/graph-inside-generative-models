@@ -45,7 +45,7 @@ html,body,.reveal-viewport{{background:{BG} !important}}
 #footer{{justify-content:flex-start !important}} #footer #fpart{{display:none}}
 /* status: small caps with an underline mark */
 .reveal .status{{background:none !important;color:{INK2} !important;border:0 !important;border-radius:0 !important;padding:0 0 3px 0 !important;
-  font:400 13px/1 {SANS} !important;text-transform:uppercase !important;letter-spacing:.14em !important;top:40px !important;right:44px !important}}
+  font:400 13px/1 {SANS} !important;text-transform:uppercase !important;letter-spacing:.14em !important;top:14px !important;right:44px !important}}
 .reveal .status.published{{border-bottom:2px solid {LINE} !important}}
 .reveal .status.review{{border-bottom:2px solid {AXIS} !important}}
 .reveal .status.progress{{border-bottom:2px solid {ACC} !important}}
@@ -71,7 +71,7 @@ html,body,.reveal-viewport{{background:{BG} !important}}
 .reveal .pts li::before{{background:{AXIS} !important;transform:none !important;border-radius:50%;width:.4em;height:.4em;top:.5em}}
 .reveal .steps b{{color:{INK} !important}}
 .reveal .annot .lbl{{color:{INK} !important}}
-.reveal .lessontag{{background:none !important;border:0 !important;border-radius:0 !important;color:{INK2} !important;font:400 13px/1 {SANS} !important;text-transform:uppercase;letter-spacing:.14em}}
+.reveal .lessontag{{top:14px !important;right:44px !important;background:none !important;border:0 !important;border-radius:0 !important;color:{INK2} !important;font:400 13px/1 {SANS} !important;text-transform:uppercase;letter-spacing:.14em}}
 .reveal .ph{{border:1px dashed {AXIS};background:none}}
 .reveal img.fig{{border:0 !important;border-bottom:1px solid {RULE} !important;background:none !important;padding:0 !important}}
 .reveal table th{{border-bottom:1.5px solid {INK} !important}}
@@ -144,7 +144,7 @@ def _rect(m):
     sw = _num(_attr(tag, 'stroke-width'), 1.0); rx = _num(_attr(tag, 'rx')); h = _num(_attr(tag, 'height'), 999)
     dashed = 'stroke-dasharray' in tag
     w = _num(_attr(tag, 'width'), 0)
-    if w <= 8 and h <= 60 and fill.upper() == ACC:
+    if w <= 8 and h <= 130 and fill.upper() == ACC:
         return _set(tag, 'fill', 'none')
     if w >= 600 and h <= 80 and not dashed and (fill.upper() in BANNER or stroke.upper() in (ACC, ACC_T)):
         return _set(_set(tag, 'fill', 'none'), 'stroke', 'none')
