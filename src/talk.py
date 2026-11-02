@@ -633,44 +633,122 @@ g += T(590, 40, 'Is there a graph inside generative models?', 22, 700, INK, 'mid
 ASK = sec('Where I would love your help', SVG(g, 478), ch='4',
           notes='End here and stay on this slide for questions. The cover graph is back, now with an answer. Three concrete asks. Do not say thank you as the last line.')
 
+# ======================= ROUND 3 (Nov 1 2026, late) =======================
+# Two claims only (language, music with the brain), matching the subtitle.
+CLAIMS = [('Language: a graph of how a model rewires after an edit catches failures that every benchmark passed.', 'published', 'done', ACC),
+          ('Music: a tiny graph already carries a style, and the listener\'s brain can judge whether a generator has one inside.', 'in progress', 'part', MU)]
+
+# ---- every surgery is stored as a vector (concrete) ----
+g = adefs('vc')
+cols3 = [('Steer', 'h  ←  h + α r', 'add a direction to the activations', 'refusal direction, Arditi et al. 2024'),
+         ('Edit', 'W  ←  W + u vᵀ', 'add a rank one matrix to one layer', 'ROME, Meng et al. 2022'),
+         ('Fine tune', 'θ  ←  θ + τ', 'add a task vector to all weights', 'task arithmetic, Ilharco et al. 2023')]
+for k, (a, eq, d1, cite) in enumerate(cols3):
+    x = 40 + k * 380
+    blk = R(x, 30, 350, 230, '#fff', LINE, 1.5, 12) + T(x + 175, 72, a, 24, 700, AC2, 'middle')
+    blk += R(x + 30, 95, 290, 64, ACL, ACC, 1.5, 10) + T(x + 175, 137, eq, 28, 700, ACC, 'middle', extra='font-family="Fira Mono,monospace"')
+    blk += T(x + 175, 196, d1, 15, 600, INK, 'middle') + T(x + 175, 232, cite, 13, 400, MUT, 'middle')
+    g += F(k, blk) if k else blk
+g += F(3, R(40, 290, 1110, 110, SOFT, LINE, 1, 12) + T(595, 330, 'Each one tells you exactly what was added.', 22, 700, INK, 'middle') + T(595, 372, 'None tells you which other facts, behaviors or styles moved with it.', 22, 700, ACC, 'middle'))
+g += F(4, T(595, 455, 'Beyond vectors: read how the parts connect, and follow the change.', 19, 700, INK, 'middle'))
+VECTOR = sec('Every surgery is stored as a vector', SVG(g), ch='0',
+             ref='Arditi et al., NeurIPS 2024. Meng et al., NeurIPS 2022. Ilharco et al., ICLR 2023',
+             notes='Three surgeries, three one line formulas a CS audience can read. The point is not the math, it is that each operation is a single added object, and that object carries no information about its side effects.')
+
+# ---- demo: a tiny graph is enough to represent a piece ----
+g = adefs('dm2')
+g += f'<foreignObject x="20" y="10" width="740" height="410"><div xmlns="http://www.w3.org/1999/xhtml" style="width:740px;height:410px;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1.5px #d3d7da,0 10px 30px rgba(17,17,17,.10)"><iframe class="fe-frame" data-src="figs/fe-chain.html?autoplay=1" title="Für Elise Markov chain" style="width:740px;height:410px;border:0;background:#fff"></iframe></div></foreignObject>'
+g += F(1, R(790, 20, 370, 120, MUL, MU, 1.5, 12) + T(810, 58, 'A whole piece in 144 numbers', 19, 700, MU) + T(810, 88, 'which note follows which,', 15, 400, INK) + T(810, 110, 'a 12 by 12 table, no music theory', 15, 400, INK))
+g += F(2, R(790, 160, 370, 160, ACL, ACC, 1.5, 12) + T(975, 230, '70.9%', 56, 700, ACC, 'middle') + T(975, 262, 'of unseen pieces placed in', 15, 600, INK, 'middle') + T(975, 284, 'the right tradition (chance 20%)', 15, 600, INK, 'middle'))
+g += F(3, R(790, 340, 370, 80, '#fff', LINE, 1.5, 12) + T(810, 372, '1,000 pieces, six traditions', 15.5, 700, INK) + T(810, 398, 'Bach to Palestrina to fiddle tunes', 14, 400, MUT))
+g += F(4, T(590, 466, 'A tiny graph already captures a style.', 20, 700, INK, 'middle'))
+DEMO2 = sec('A tiny graph is enough to represent a piece of music', SVG(g), ch='0', status='prog',
+            ref='Opening of Beethoven, Für Elise, animation from zhiqian.ai, click for sound. Five fold cross validation, zhiqian.ai/music-markov',
+            notes='Let the ball learn the opening, then compose. Then the point: this little graph is not a toy. The same 144 numbers per piece, fed to a plain classifier, name the tradition of a piece it has never seen 70.9% of the time across 1,000 pieces in six corpora.')
+
+# ---- forecast, two claims ----
+g = adefs('fc2')
+g += T(590, 70, THROUGH_A, 34, 700, INK, 'middle') + T(590, 118, THROUGH_B, 34, 700, ACC, 'middle')
+for k, (a, st, kk, col) in enumerate(CLAIMS):
+    y = 180 + k * 120
+    g += F(k + 1, C(80, y + 32, 26, col) + T(80, y + 41, str(k + 1), 22, 700, '#fff', 'middle') + wrap(125, y + 26, a, 21, 600, INK, width=72, lh=29) + tag(125, y + 70, st, kk))
+g += F(3, T(590, 460, 'Two settings, one question: where did the change go?', 19, 700, MUT, 'middle'))
+FORECAST2 = sec('Two claims for the next forty minutes', SVG(g), ch='0',
+                notes='Language is published and the result is solid. Music is in progress: the data side has numbers, the generator side is being tested, and the brain is the judge.')
+
+# ---- part dividers, plain ----
+def divider(title, line, ch):
+    g = T(590, 170, THROUGH_A, 30, 700, INK, 'middle') + T(590, 215, THROUGH_B, 30, 700, ACC, 'middle') + T(590, 300, line, 22, 600, AC2, 'middle')
+    return sec(title, SVG(g, 420), ch=ch, cls='divider')
+DIV1 = divider('Part 1. Language models', 'Where does an edit go inside a language model?', '1')
+DIV3 = divider('Part 3. Beyond language and music', 'Every model operation, every sequence generator', '3')
+
+# ---- refusal, redrawn ----
+g = adefs('rf')
+g += T(300, 40, 'A chat model asked something harmful', 17, 700, INK, 'middle')
+bars = [('normal model', 0.95, AC2), ('one direction removed', 0.05, ACC)]
+for k, (lab, v, col) in enumerate(bars):
+    y = 90 + k * 110
+    g += T(40, y + 30, lab, 17, 700, col) + R(250, y, 300 * v + 4, 46, col, 'none', 0, 4) + T(250 + 300 * v + 16, y + 31, 'refuses' if k == 0 else 'almost never refuses', 16, 700, col)
+g += T(300, 330, 'schematic, the pattern holds in all 13 chat models tested', 13, 400, MUT, 'middle')
+g += F(1, R(720, 60, 430, 250, SOFT, LINE, 1, 12) + T(745, 100, 'How it is found', 18, 700, AC2) + T(745, 140, 'average the activations on harmful', 15, 400, INK) + T(745, 164, 'requests, minus harmless ones,', 15, 400, INK) + T(745, 188, 'at one layer: one arrow.', 15, 400, INK) + T(745, 236, 'Remove that arrow everywhere:', 15, 700, ACC) + T(745, 260, 'the model stops refusing.', 15, 700, ACC))
+g += F(2, T(590, 420, 'One vector switches a whole behavior off.', 22, 700, INK, 'middle'))
+REFUSAL = sec('One direction switches refusal off across 13 chat models', SVG(g), ch='1',
+              ref='Arditi et al., Refusal in Language Models Is Mediated by a Single Direction, NeurIPS 2024, Figure 1 (redrawn)',
+              notes='Our own drawing of Arditi et al. Figure 1. Their figure shows 13 models, each with refusal near 1 before and near 0 after directional ablation.')
+
+g = adefs('sv')
+import random as _r
+_r.seed(3)
+pts = [_r.gauss(1.2, 1.6) for _ in range(60)]
+g += L(120, 300, 1060, 300, INK, 2) + L(590, 90, 590, 310, '#c0392b', 2, 'stroke-dasharray="6 5"') + T(590, 330, '0: no effect', 13, 700, '#c0392b', 'middle')
+for v in pts:
+    x = 590 + v * 85; y = 230 - _r.uniform(0, 110)
+    g += C(round(x), round(y), 6, ACC if v > 0 else AC2, extra='opacity=".8"')
+g += T(1060, 325, 'moved the intended way', 14, 700, ACC, 'end') + T(120, 325, 'moved the opposite way', 14, 700, AC2)
+g += F(1, P(f'M{590+1.2*85},80 L{590+1.2*85},300', ACC, 4) + T(590 + 1.2 * 85 + 10, 92, 'average: it works', 17, 700, ACC))
+g += F(2, R(130, 360, 920, 60, SOFT, LINE, 1, 10) + T(590, 397, 'Same vector, single inputs: many move the opposite way.', 19, 700, INK, 'middle'))
+CRITIQUE = sec('The same steering vector fails on many single inputs', SVG(g), ch='1',
+               ref='Tan et al., Analysing the Generalisation and Reliability of Steering Vectors, NeurIPS 2024, Figure 1 (schematic redraw)',
+               notes='Schematic redraw of Tan et al.: each dot is one input. The average effect is positive, but a large share of inputs move against the steering. A vector is reliable on average, not per input.')
+
+# ---- take away only ----
+g = adefs('tk2')
+g += T(590, 60, THROUGH_A, 32, 700, INK, 'middle') + T(590, 104, THROUGH_B, 32, 700, ACC, 'middle')
+for k, (a, st, kk, col) in enumerate(CLAIMS):
+    y = 160 + k * 110
+    g += F(k + 1, C(80, y + 32, 26, col) + T(80, y + 41, str(k + 1), 22, 700, '#fff', 'middle') + wrap(125, y + 26, a, 21, 600, INK, width=72, lh=29) + tag(125, y + 70, st, kk))
+g += F(3, T(590, 430, 'A graph inside a generator is a hypothesis about the model.', 20, 700, INK, 'middle') + T(590, 462, 'A listener\'s brain is the only judge that did not write the exam.', 20, 700, ACC, 'middle'))
+TAKEAWAY = sec('Take away', SVG(g), ch='4')
+
 # ======================= ASSEMBLY =======================
 def assemble(cover, old):
-    """old: the reused language slides from the earlier deck, keyed by their old index"""
-    surg = old[3]
-    for lab in ('Stitched', 'Unlearned'):
-        k = surg.find(f'<span class="lab">{lab}</span>')
-        a = surg.rfind('<div class="fragment">', 0, k)
-        e = surg.find('</div>', k) + len('</div>')
-        surg = surg[:a] + surg[e:]
-    surg = surg.replace(' The map next.', '')
-    surg = retitle(surg, 'Every model you use has been operated on after training').replace('data-ch="1"', 'data-ch="0"', 1)
-    vec = retitle(VZ.V[0], 'A vector says what we changed, not where it went')
-    mapv = retitle(VZ.V[1], 'Language asks across depth, music asks along time')
-    vision = [cover, surg, RECEIPTS, vec, DEMO, FORECAST, LANGRES, MUSRES, mapv]
-    lang = [MAP_L,
-            retitle(old[25], 'One direction switches refusal off across 13 chat models'),
-            retitle(old[26], 'The same direction fails on many single inputs'),
-            retitle(old[33], 'A fact lives in mid layer MLPs and moves out by attention'),
-            old[35].replace('Guo 2025, slide 31', 'Guo 2025'),
-            retitle(old[48], 'Record the blocks before and after, then subtract').replace("M before, M' after", "M before, M' after (CEO of Apple: Jobs to Cook)"),
-            retitle(old[49], 'Same 20 checks: 17 bad edits found instead of 11').replace('rates from the paper: 56%, 70%, 86%', 'rounded from the paper: 56%, 70%, 86%'),
-            retitle(SHAPE, 'Rewiring shape predicts failure, size does not'),
-            BREATH]
+    """old: the reused slides from the earlier deck, keyed by their old index"""
+    surg = retitle(old[3].replace(' The map next.', ''), 'A released model is not left alone. Seven kinds of surgery.')
+    story = old[43]
+    receipts = old[45]
+    delta_paper = retitle(old[47], 'Our delta graph: rank edits by how the inside rewired').replace('class="divider" ', '', 1)
+    vision = [cover, surg, story, receipts, VECTOR, DEMO2, FORECAST2, delta_paper, MUSRES]
+    rome = old[33]
+    a = rome.find('<div class="note"'); e = rome.find('  <div class="ref">')
+    rome = rome[:a] + '<div class="note" style="font-size:.62em"><div class="key">The finding</div><p class="one" style="font-size:1.25em">A fact sits in two places. Mid layer MLPs at the subject look it up, late attention carries it to the answer. Editing a fact means changing the first place.</p></div>\n  </div>\n' + rome[e:]
+    rome = retitle(rome, 'A fact lives in mid layer MLPs and moves out by attention')
+    d46 = old[46].replace('running example from slide 45: the Space Needle edit', 'running example: the Space Needle edit').replace(' (slide 2).', '.')
+    lang = [DIV1, REFUSAL, CRITIQUE, rome, old[35].replace('Guo 2025, slide 31', 'Guo 2025'), d46, old[48], old[49], old[50], old[51]]
     four = retitle(FOUR, 'Music generation went from a visible graph to a hidden one')
     four = re.sub(r'\s*<p class="q">.*?</p>', '', four, count=1, flags=re.S)
     tools = retitle(TOOLS, 'Every tool inside MusicGen reads one layer at one moment').replace('Three tools, three questions, all at one layer and one moment.', 'Language models moved on to attribution graphs. Music has not.')
     b1 = retitle(BRAIN1, 'Listeners\' brains track a Markov model\'s surprise, note by note')
     b1 = b1.replace(ph(60, 230, 400, 140, 'Original figure: Di Liberto et al. 2020', 'eLife, to add when the site is reachable'),
-                    R(60, 230, 400, 140, ACL, ACC, 1.5, 10) + T(80, 270, 'The listener model is a graph', 17, 700, ACC) + T(80, 300, 'IDyOM counts transitions between notes', 14.5, 400, INK) + T(80, 324, 'with several context lengths, like the', 14.5, 400, INK) + T(80, 348, 'graphs a few slides back.', 14.5, 400, INK))
-    mus = [P2, four, FE_LEARN, retitle(CORPUS, '144 numbers name the tradition 71% of the time'),
+                    R(60, 230, 400, 140, ACL, ACC, 1.5, 10) + T(80, 270, 'The listener model is a graph', 17, 700, ACC) + T(80, 300, 'IDyOM counts transitions between notes', 14.5, 400, INK) + T(80, 324, 'with several context lengths, like the', 14.5, 400, INK) + T(80, 348, 'tiny graph from the opening.', 14.5, 400, INK))
+    b2 = retitle(BRAIN2, 'The brain carries enough of the music to rebuild it').replace('Denk et al., Brain2Music, arXiv 2307.11078, 2023.', 'Denk et al., Text to music generation models capture musical semantic representations in the human brain, Nature Communications 2025 (Brain2Music).')
+    mus = [retitle(CORPUS, 'Occam\'s razor: the simplest graph already names the tradition').replace('data-ch="2"', 'data-ch="2" class="divider"', 1),
            retitle(PATH, 'Too little memory gives a graph without syntax, too much gives a path'),
-           retitle(VZ.ANAT, 'MusicGen emits tokens step by step: a graph almost for free'), tools, b1,
+           four, retitle(VZ.ANAT, 'MusicGen emits tokens step by step: a graph almost for free'), tools, b1, b2,
            retitle(BRAIN3, 'Layers predict the brain for language, not yet for music'),
-           retitle(THREE, 'The listener is our instrument, not the thing we model').replace('data-ch="0"', 'data-ch="2"', 1),
            retitle(BRAIN4, 'A steered style must land in the listener\'s brain, or it did not land'),
-           retitle(rech(VZ.MUSIC[8], '2'), 'Back to the picture: steering a style is one way'),
            retitle(NEXT, 'Four outcomes, and the listener decides which one')]
-    beyond = [MAP_B, VZ.B[0].replace('Not yet shown.', ''), retitle(VZ.B[1], 'Chronos emits tokens too: the next place to test'), DROP]
-    close = [TAKE2, ASK]
+    beyond = [VZ.B[0].replace('Not yet shown.', ''), DROP]
+    close = [TAKEAWAY]
     parts = {'vision': vision, 'language': lang, 'music': mus, 'beyond': beyond, 'close': close}
     return parts

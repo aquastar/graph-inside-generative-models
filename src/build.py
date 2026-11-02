@@ -22,7 +22,14 @@ EXTRA_CSS = '''
 .reveal .nc li{margin:.35em 0}
 .reveal section.titlehero .th-sub .mu{color:#38b2c4}
 .reveal section.titlehero .th-sub .lm{color:#F76902}
-.reveal section.titlehero .herofig{position:absolute;right:-20px;top:40px;width:600px;height:580px}
+.reveal section.titlehero .herofig{position:absolute;right:-10px;top:40px;width:640px;height:580px}
+.reveal .herofig .hl{stroke-dasharray:var(--len);stroke-dashoffset:var(--len)}
+.reveal section.present .herofig .hl{animation:herodraw 7s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes herodraw{0%{stroke-dashoffset:var(--len);opacity:.95}22%{stroke-dashoffset:0}88%{stroke-dashoffset:0;opacity:.95}100%{stroke-dashoffset:0;opacity:.15}}
+.reveal .herofig .hg{transform-box:fill-box;transform-origin:center}
+.reveal section.present .herofig .hg{animation:heropulse 3.5s ease-in-out infinite;animation-delay:var(--d)}
+@keyframes heropulse{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.4)}}
+@media (prefers-reduced-motion:reduce){.reveal .herofig .hl{stroke-dashoffset:0;animation:none !important}.reveal .herofig .hg{animation:none !important}}
 .reveal section.titlehero .th-left{top:70px;width:640px}
 .reveal section.titlehero h1{color:#111;font-weight:700;line-height:1}
 .reveal section.titlehero h1 .th-q{display:block;font-size:46px;font-weight:600;color:#111;letter-spacing:-.01em}
@@ -319,16 +326,16 @@ C.append('''<section data-ch="6">
 </section>''')
 
 tail = s[s.rfind('</section>') + len('</section>'):]
-tail = re.sub(r"var CH=\[\[.*?\]\];", "var CH=[['0','Vision'],['1','1 Depth: language'],['2','2 Time: music'],['3','3 Beyond'],['4','Close']];", tail, flags=re.S)
-tail = re.sub(r"var NAMES=\{[^}]*\};", "var NAMES={'0':'Vision','1':'Part 1. Depth: language','2':'Part 2. Time: music','3':'Part 3. Beyond','4':'Close'};", tail)
-tail = re.sub(r"var CHN=\{[^}]*\};", "var CHN={'0':'Vision','1':'Part 1. Depth: language','2':'Part 2. Time: music','3':'Part 3. Beyond','4':'Close'};", tail)
-assert "Depth: language" in tail
+tail = re.sub(r"var CH=\[\[.*?\]\];", "var CH=[['0','Overview'],['1','1 Language'],['2','2 Music'],['3','3 Beyond'],['4','Close']];", tail, flags=re.S)
+tail = re.sub(r"var NAMES=\{[^}]*\};", "var NAMES={'0':'Overview','1':'Part 1. Language','2':'Part 2. Music','3':'Part 3. Beyond','4':'Close'};", tail)
+tail = re.sub(r"var CHN=\{[^}]*\};", "var CHN={'0':'Overview','1':'Part 1. Language','2':'Part 2. Music','3':'Part 3. Beyond','4':'Close'};", tail)
+assert "1 Language" in tail
 
 import sys; sys.path.insert(0, HERE); import talk as TK
 OLDS = {}
-for i in (3, 25, 26, 33, 35, 45):
-    OLDS[i] = ch(secs[i], '1')
-for i in (48, 49):
+for i in (3, 33, 35, 43, 45, 47):
+    OLDS[i] = ch(secs[i], '0' if i in (3, 43, 45, 47) else '1')
+for i in (46, 48, 49, 50, 51):
     OLDS[i] = ch(secs[i], '1').replace('</h2>', '</h2>' + PUB, 1)
 parts = TK.assemble(cover, OLDS)
 allsecs = [x for k in ('vision', 'language', 'music', 'beyond', 'close') for x in parts[k]]

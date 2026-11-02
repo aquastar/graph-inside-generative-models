@@ -33,13 +33,13 @@ Done: 42 slides in the target order (Vision 8, Language 11, Music 17, Beyond 3, 
 
 Original figures added: Denk 2023 Figure 1 and the encoding result (brain 2 and brain 3 slides), taken from the Brain2Music project page repo google-research/seanet.
 
-## Structure after the audit (Nov 1 2026, evening)
-A Fable audit against the presentation-craft skill (docs/audit-2026-11-01.md) found the opening gave answers before the question. The deck is now 37 slides:
-- Opening 9: cover, every model is operated on, the exam said pass and a side effect hid, a vector says what changed not where it went, the Für Elise demo (the one live demo), throughline plus three findings forecast, language result (random row first), music result (setup for the one way payoff), the depth by time map.
-- Throughline: "Vectors say what we changed. Only a graph can say where it went." It returns on the Part 1 and Part 3 map slides and on the final take home.
-- Part 1 language 9, Part 2 music 13 (opens with facts versus styles, ends with the one way picture returning and the four outcome matrix), Part 3 beyond 4, close 2 (three findings, then the ask with the cover graph returning, no "Thank you").
-- Cut: network science table, program grid, Part 1 four steps, 2017 genre fusion, Brain2Music decoding slide, pilot placeholders, Für Elise compose body slide, stitched and unlearned surgery cards.
-Not done from the audit: splitting the method slide, redrawing the refusal and steering critique figures, swapping the Bach chorale for Für Elise on the path slide (needs third order Für Elise numbers).
+## Structure, round 3 (Nov 1 2026, late night, after his slide by slide feedback)
+32 slides. His rules from this round: do not cut in the introduction, cut later. Reuse his original slides from aquastar/neural-networks-to-networks where they exist, they are better than redraws. Others' paper figures must be glanceable, otherwise redraw with one conclusion. No duplicate slides. Final slide is the take away only.
+- Overview 9: animated cover, seven surgeries (old 3, all seven), the whole field in one story (old 43), four receipts with original figures (old 45), every surgery is stored as a vector (steer, edit, fine tune formulas), Für Elise demo with the 70.9% result, two claims forecast (language, music with the brain), the delta graph screen (old 47), one way steering (placeholder until he supplies his own data, audio and visuals).
+- Part 1 language 10: divider, refusal and steering critique redrawn as simple diagrams, ROME with one line conclusion, Hase (old 35), then old 46, 48, 49, 50, 51 unchanged.
+- Part 2 music 10: Occam's razor opener (confusion matrix), memory order, four stages, MusicGen anatomy, vector tools, brain 1 to 4 (Brain2Music cited as Nature Communications 2025), four outcomes.
+- Beyond 2, take away 1.
+Abstract and title: see the chat. Title still "Is There a Graph Inside Generative Models?", "Beyond Vectors" prefix proposed, not confirmed.
 
 ## Still to do
 - Pilot slide: two dashed placeholders for his probe accuracy by layer and tempo dose response figures.
