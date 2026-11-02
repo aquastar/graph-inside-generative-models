@@ -1027,6 +1027,21 @@ def photo(cx, cy, r, fname, initials, col):
             f'<span style="position:absolute;left:0;top:0;width:{d}px;height:{d}px;display:flex;align-items:center;justify-content:center;font-family:Fira Sans,sans-serif;font-weight:700;font-size:{int(r*0.7)}px;line-height:1;color:{col}">{initials}</span>'
             f'<img src="figs/people/{fname}" alt="" onerror="this.remove()" style="position:absolute;left:0;top:0;width:{d}px;height:{d}px;object-fit:cover"/></div></foreignObject>')
 
+def qline(x, y, segs, size, a='start'):
+    out = f'<text x="{x}" y="{y}" font-size="{size}" text-anchor="{a}" fill="{INK}" font-style="italic">'
+    for t_, hl in segs:
+        out += f'<tspan font-weight="{700 if hl else 400}" fill="{ACC if hl else INK}" font-style="{"normal" if hl else "italic"}">{t_}</tspan>'
+    return out + '</text>'
+
+def qcard(x, y, w, h, fname, ini, lines, who, src, col, size=16):
+    out = R(x, y, w, h, '#fff', LINE, 1.5, 14) + R(x, y, 6, h, col, 'none', 0, 3)
+    out += T(x + 22, y + 52, '“', 64, 700, col, 'start', 'opacity=".35" font-family="Georgia,serif"')
+    for k, segs in enumerate(lines):
+        out += qline(x + 62, y + 34 + k * (size + 7), segs, size)
+    yb = y + h - 22
+    out += photo(x + w - 40, yb - 4, 22, fname, ini, col) + T(x + w - 72, yb - 8, who, 14, 700, INK, 'end') + T(x + w - 72, yb + 10, src, 12, 400, MUT, 'end')
+    return out
+
 g = adefs('bt')
 def mlist(x, y, w, who, when, fname, ini, items, hi, col):
     out = R(x, y, w, 300, '#fff', LINE, 1.5, 12) + photo(x + 44, y + 44, 28, fname, ini, col) + T(x + 86, y + 40, who, 16, 700, INK) + T(x + 86, y + 62, when, 13, 400, MUT)
@@ -1052,36 +1067,33 @@ sk += P('M712,296 C760,276 800,276 846,292', '#5a4fcf', 2.2, extra='marker-end="
 sk += P('M712,312 C760,332 800,332 846,316', '#5a4fcf', 2.2, extra='marker-end="url(#bta)"') + T(780, 344, 'last digit: 6 + 9 ends in 5', 12, 600, '#5a4fcf', 'middle')
 sk += R(850, 286, 70, 34, '#eef0ff', '#5a4fcf', 1.5, 17) + T(885, 308, '95', 15, 700, '#5a4fcf', 'middle') + T(1030, 300, 'redrawn after', 12, 400, MUT, 'middle') + T(1030, 316, 'Lindsey et al. 2025', 12, 600, MUT, 'middle')
 g += F(3, sk)
-g += F(4, R(30, 362, 1120, 62, SOFT, LINE, 1, 12) + photo(72, 393, 24, 'fei-fei-li.jpg', 'FL', AC2) + T(110, 389, '"Spatial intelligence represents the frontier beyond language."', 17, 600, INK) + T(110, 411, 'Fei-Fei Li, From Words to Worlds, 2025', 13, 400, MUT)
-          + T(590, 458, 'Equations and music are knowledge beyond text. They may need graphs even more than text does.', 18, 700, INK, 'middle'))
+g += F(4, qcard(30, 352, 1120, 84, 'fei-fei-li.jpg', 'FL', [[('Spatial intelligence represents the ', False), ('frontier beyond language', True), ('.', False)]], 'Fei-Fei Li', 'From Words to Worlds, a16z, 2025', AC2, 19)
+          + T(590, 462, 'Equations and music are knowledge beyond text. They may need graphs even more than text does.', 18, 700, INK, 'middle'))
 BEYOND = sec('Knowledge is not only text', SVG(g), ch='0',
              ref='Gardner, Frames of Mind, 1983. Fei-Fei Li, Silicon Valley Girl podcast, 2026 (five intelligences, Chinese transcript), and From Words to Worlds, a16z, 2025. Lindsey et al., On the Biology of a Large Language Model, Transformer Circuits 2025',
              notes='Why language and music, and why not only text. Gardner listed musical intelligence and logical mathematical intelligence as their own kinds of intelligence, separate from language. Fei-Fei Li lists language, perceptual, spatial, bodily and emotional intelligence. This talk covers language and music, equations are the next step: in Claude, addition already runs as a small graph of two parallel paths. Photos: drop licensed images into figs/people with the file names in figs/people/README.md.')
 
 g = adefs('em')
-def pcard(x, y, w, fname, ini, who, what, line2, col):
-    return R(x, y, w, 96, '#fff', LINE, 1.5, 12) + photo(x + 46, y + 48, 30, fname, ini, col) + T(x + 90, y + 34, who, 15.5, 700, INK) + T(x + 90, y + 58, what, 13.5, 400, INK) + T(x + 90, y + 78, line2, 13.5, 400, INK)
 g += T(40, 40, 'Machines need emotion', 17, 700, AC2)
-g += pcard(30, 56, 520, 'rosalind-picard.jpg', 'RP', 'Rosalind Picard, Affective Computing, 1997', 'computers that recognize, express and', 'respond to emotion', AC2)
-g += pcard(30, 164, 520, 'marvin-minsky.jpg', 'MM', 'Marvin Minsky, The Emotion Machine, 2006', 'emotions are ways of thinking,', 'not the opposite of thinking', AC2)
+g += qcard(30, 54, 540, 130, 'rosalind-picard.jpg', 'RP', [[('we must give computers the ability to ', False)], [('recognize, understand, even to have', True)], [('and express emotions', True)]], 'Rosalind Picard', 'Affective Computing, MIT Press 1997', AC2, 16)
+g += qcard(30, 196, 540, 130, 'marvin-minsky.jpg', 'MM', [[('Each of our major ', False), ('emotional states', True)], [('results from turning certain ', False), ('resources on', True)], [('while turning certain others off.', False)]], 'Marvin Minsky', 'The Emotion Machine, 2006', AC2, 16)
 chain = [('music', MU), ('expectation', ACC), ('emotion', '#5a4fcf'), ('brain response', MU)]
-ch_ = T(860, 40, 'Music evokes emotion through expectation', 17, 700, MU, 'middle')
+ch_ = T(870, 40, 'Music moves us through expectation', 17, 700, MU, 'middle')
 for k, (a_, col) in enumerate(chain):
-    x = 610 + k * 140
-    ch_ += R(x, 60, 118, 44, '#fff', col, 2, 22) + T(x + 59, 88, a_, 14, 700, col, 'middle')
+    x = 612 + k * 136
+    ch_ += R(x, 56, 116, 40, '#fff', col, 2, 20) + T(x + 58, 82, a_, 14, 700, col, 'middle')
     if k < 3:
-        ch_ += P(f'M{x+120},82 L{x+138},82', AC2, 2.5, extra='marker-end="url(#ema)"')
+        ch_ += P(f'M{x+118},76 L{x+134},76', AC2, 2.5, extra='marker-end="url(#ema)"')
 g += F(1, ch_)
-ev = [('Salimpoor et al. 2011', 'Dopamine is released at the peak of musical pleasure, and just before it.'),
-      ('Koelsch 2014', 'Music engages core emotion areas such as the amygdala and hippocampus.'),
-      ('Juslin and Västfjäll 2008', 'Expectation is one of the main ways music evokes emotion.')]
+g += F(2, qcard(600, 110, 550, 150, 'leonard-meyer.jpg', 'LM', [[('affect is aroused when an ', False), ('expectation', True), (',', False)], [('a tendency to respond, activated by the music,', False)], [('is ', False), ('temporarily inhibited or permanently blocked', True)]], 'Leonard Meyer', 'Emotion and Meaning in Music, 1956, p. 31', ACC, 16))
+ev = [('Salimpoor et al. 2011', 'dopamine at peak musical pleasure, and just before'), ('Koelsch 2014', 'engages core emotion areas: amygdala, hippocampus')]
 for k, (a_, b_) in enumerate(ev):
-    y = 120 + k * 74
-    g += F(2 if k < 2 else 3, R(610, y, 540, 66, MUL if k < 2 else ACL, MU if k < 2 else ACC, 1.2, 10) + T(628, y + 24, a_, 14.5, 700, INK) + wrap(628, y + 46, b_, 13.5, 400, INK, width=80, lh=18))
-g += F(3, R(30, 290, 520, 140, ACL, ACC, 1.5, 12) + T(50, 322, 'The link to this talk', 16, 700, ACC) + T(50, 350, 'Expectation is what a note transition graph computes:', 14, 400, INK) + T(50, 374, 'how surprising is the next note. The same surprise', 14, 400, INK) + T(50, 398, 'shows up in the listening brain (IDyOM, Part 2).', 14, 400, INK))
-g += F(4, T(590, 462, 'Music is the most measurable route to emotion, so it is where a brain can judge a model.', 18, 700, INK, 'middle'))
+    y = 274 + k * 56
+    g += F(3, R(600, y, 550, 48, MUL, MU, 1.2, 10) + T(618, y + 30, a_, 14, 700, INK) + T(780, y + 30, b_, 13.5, 400, INK))
+g += F(3, R(30, 340, 540, 92, ACL, ACC, 1.5, 12) + T(50, 368, 'The link to this talk', 15.5, 700, ACC) + T(50, 394, 'Expectation is what a note transition graph computes.', 14, 400, INK) + T(50, 416, 'Meyer 1956, Huron 2006, IDyOM: the same idea, made computable.', 14, 400, INK))
+g += F(4, T(590, 466, 'Music is the most measurable route to emotion, so it is where a brain can judge a model.', 18, 700, INK, 'middle'))
 EMOTION = sec('Music is where emotion can be measured', SVG(g), ch='0',
-              ref='Picard, Affective Computing, MIT Press 1997. Minsky, The Emotion Machine, 2006. Salimpoor et al., Nature Neuroscience 2011. Koelsch, Nature Reviews Neuroscience 2014. Juslin and Västfjäll, Behavioral and Brain Sciences 2008',
+              ref='Picard quote from the MIT Press description of Affective Computing, 1997. Minsky, The Emotion Machine, 2006. Meyer, Emotion and Meaning in Music, 1956, p. 31, as quoted in Margulis 2005. Huron, Sweet Anticipation, 2006. Salimpoor et al., Nature Neuroscience 2011. Koelsch, Nature Reviews Neuroscience 2014',
               notes='Why music, beyond being a second domain. Emotion is one of the intelligences beyond language, and music is one of the most reliable ways to evoke it in a lab, with a response we can measure in the brain. The bridge is expectation: music moves us partly by playing with what we expect next, and a transition graph is exactly a model of what comes next. Check exact wording of the five citations before the talk, they were added from memory.')
 
 # ======================= ASSEMBLY =======================
