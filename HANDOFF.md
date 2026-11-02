@@ -33,6 +33,9 @@ Done: 42 slides in the target order (Vision 8, Language 11, Music 17, Beyond 3, 
 
 Original figures added: Denk 2023 Figure 1 and the encoding result (brain 2 and brain 3 slides), taken from the Brain2Music project page repo google-research/seanet.
 
+## Round 4 (Nov 2 2026)
+Space Needle (Seattle to Paris) is the running example for the whole language part. Overview is now 11 slides, language first then music, to stop jumping between domains: cover, seven surgeries (Edited card uses Space Needle), whole field story, silent failure (edit is a shortcut, old fact still inside, Xie et al. ACL 2025, Zhang et al. ICLR 2025), knowledge graph ripple (which country is the Space Needle in, RippleEdits TACL 2024, MQuAKE EMNLP 2023), four receipts, every surgery is a vector, delta graph screen, Für Elise demo, one way steering, two claims forecast. 34 slides total.
+
 ## Structure, round 3 (Nov 1 2026, late night, after his slide by slide feedback)
 32 slides. His rules from this round: do not cut in the introduction, cut later. Reuse his original slides from aquastar/neural-networks-to-networks where they exist, they are better than redraws. Others' paper figures must be glanceable, otherwise redraw with one conclusion. No duplicate slides. Final slide is the take away only.
 - Overview 9: animated cover, seven surgeries (old 3, all seven), the whole field in one story (old 43), four receipts with original figures (old 45), every surgery is stored as a vector (steer, edit, fine tune formulas), Für Elise demo with the 70.9% result, two claims forecast (language, music with the brain), the delta graph screen (old 47), one way steering (placeholder until he supplies his own data, audio and visuals).

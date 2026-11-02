@@ -721,14 +721,72 @@ for k, (a, st, kk, col) in enumerate(CLAIMS):
 g += F(3, T(590, 430, 'A graph inside a generator is a hypothesis about the model.', 20, 700, INK, 'middle') + T(590, 462, 'A listener\'s brain is the only judge that did not write the exam.', 20, 700, ACC, 'middle'))
 TAKEAWAY = sec('Take away', SVG(g), ch='4')
 
+# ======================= ROUND 4 (Nov 2 2026): Space Needle anchor =======================
+RED = '#c0392b'
+
+def redtag(x, y, s_):
+    w = len(s_) * 7.2 + 20
+    return R(x, y, w, 22, '#fdecea', RED, 1.5, 11) + T(x + w / 2, y + 15.5, s_, 12.5, 700, RED, 'middle')
+
+# ---- silent failure: the edit is a shortcut, the old fact is still inside ----
+g = adefs('sf')
+g += R(30, 210, 116, 42, SOFT, INK, 2, 21) + T(88, 237, 'Space Needle', 15, 700, INK, 'middle')
+lay = [(190, 231), (280, 231), (370, 231), (460, 231)]
+g += P(f'M146,231 L{lay[0][0]-9},231', AC2, 4)
+for k in range(3):
+    g += P(f'M{lay[k][0]+9},231 L{lay[k+1][0]-9},231', AC2, 4)
+g += ''.join(C(x, y, 9, '#fff', AC2, 3) + T(x, y - 18, f'layer {k+1}', 12, 600, MUT, 'middle') for k, (x, y) in enumerate(lay))
+g += P('M469,231 L496,231 L536,174', AC2, 4, extra='marker-end="url(#sfa)"') + R(512, 128, 104, 40, '#fff', AC2, 2, 20) + T(564, 154, 'Seattle', 16, 700, AC2, 'middle')
+g += T(320, 110, 'what the model learned in training', 14, 600, MUT, 'middle')
+ed = P('M280,240 C300,330 420,340 506,335', ACC, 4.5, extra='marker-end="url(#sfo)"') + R(506, 315, 96, 40, ACL, ACC, 2, 20) + T(554, 341, 'Paris', 16, 700, ACC, 'middle')
+ed += T(370, 378, 'the edit: a new shortcut', 15, 700, ACC, 'middle')
+c1 = R(640, 40, 510, 100, '#fff', LINE, 1.5, 10) + T(660, 70, 'The test prompt', 13, 700, MUT) + T(660, 98, 'The Space Needle is in ___', 17, 600, INK) + T(660, 126, 'Paris', 17, 700, ACC) + tag(720, 111, 'exam: pass', 'done')
+g += F(1, ed + c1)
+c2 = R(640, 155, 510, 120, '#fff', LINE, 1.5, 10) + T(660, 185, 'A slightly different prompt', 13, 700, MUT) + T(660, 212, 'Is the Space Needle in Seattle?', 16, 400, MUT) + T(660, 238, 'The Space Needle is in ___', 17, 600, INK) + T(660, 264, 'Seattle', 17, 700, RED) + redtag(740, 249, 'old fact returns')
+c2 += T(320, 165, 'old path: still intact', 14, 700, AC2, 'middle')
+g += F(2, c2)
+ev = R(640, 290, 510, 140, SOFT, LINE, 1, 10) + T(660, 316, 'Measured, not hypothetical', 14.5, 700, AC2)
+ev += wrap(660, 340, 'Xie et al., ACL 2025: crafted prompts bring the original answer back, and specific attention heads still carry it.', 13, 400, INK, width=72, lh=18)
+ev += wrap(660, 385, 'Zhang et al., ICLR 2025: after editing Microsoft\'s founder to Steve Jobs, ROME answers "Steve Jobs" to "Which college did the founder of Microsoft attend?" 41% of the time, 0.27% before.', 13, 400, INK, width=72, lh=18)
+g += F(3, ev)
+g += F(4, T(590, 470, 'The old fact was never removed. The edit added a shortcut around it.', 19, 700, INK, 'middle'))
+SILENT = sec('A silent failure: the edit passes, and the old fact is still inside', SVG(g), ch='0',
+             ref='Xie et al., Revealing the Deceptiveness of Knowledge Editing, ACL 2025. Zhang et al., Uncovering Overfitting in Large Language Model Editing, ICLR 2025. Space Needle example is an illustration',
+             notes='Running example for the whole language part: the Space Needle edited from Seattle to Paris. The test prompt passes. A prompt that mentions Seattle first brings the old answer back. Xie et al. show this with real edits (their example: US president) and find attention heads that still carry the original fact. Zhang et al. show the shortcut from the other side: the edit target leaks into unrelated questions.')
+
+# ---- knowledge graph ripple ----
+g = adefs('kg')
+def kn(x, y, label, col, fill='#fff', w=150):
+    return R(x - w / 2, y - 22, w, 44, fill, col, 2, 22) + T(x, y + 6, label, 16, 700, col, 'middle')
+SN, SE, US, PA, FR = (130, 245), (420, 120), (750, 120), (420, 370), (750, 370)
+base = P('M205,232 L345,138', AC2, 3, extra='marker-end="url(#kga)"') + T(306, 210, 'located in', 13, 600, AC2, 'start')
+base += P('M495,120 L673,120', AC2, 3, extra='marker-end="url(#kga)"') + T(585, 108, 'country', 13, 600, AC2, 'middle')
+base += P('M495,370 L673,370', '#9aa6ae', 2.5, extra='marker-end="url(#kgg)" stroke-dasharray="7 5"') + T(585, 358, 'country', 13, 600, '#9aa6ae', 'middle')
+base += kn(*SN, 'Space Needle', INK, SOFT) + kn(*SE, 'Seattle', AC2) + kn(*US, 'United States', AC2, '#fff', 170) + kn(*PA, 'Paris', '#9aa6ae') + kn(*FR, 'France', '#9aa6ae')
+g += T(450, 40, 'What the model knows, drawn as a knowledge graph', 15, 700, INK, 'middle') + base
+f1 = P('M268,177 L290,199 M290,177 L268,199', RED, 4, extra='stroke-linecap="round"')
+f1 += P('M205,258 L345,352', ACC, 4, extra='marker-end="url(#kgo)"') + T(235, 330, 'edited: located in', 13.5, 700, ACC, 'middle') + kn(*PA, 'Paris', ACC, ACL)
+g += F(1, f1)
+q = R(870, 40, 290, 150, '#fff', LINE, 1.5, 12) + T(890, 72, 'Ask one step further', 14, 700, MUT) + T(890, 102, 'Which country is the', 17, 600, INK) + T(890, 126, 'Space Needle in?', 17, 600, INK) + T(890, 162, 'should be: France', 16, 700, ACC)
+q += P('M495,370 L673,370', ACC, 4, extra='marker-end="url(#kgo)" stroke-dasharray="7 5"') + kn(*FR, 'France', ACC, ACL)
+g += F(2, q)
+a = R(870, 205, 290, 70, '#fdecea', RED, 2, 12) + T(890, 235, 'edited model says', 14, 600, RED) + T(890, 262, 'United States', 19, 700, RED)
+a += P('M495,120 L673,120', RED, 6, extra='stroke-opacity=".35" stroke-linecap="round"')
+g += F(3, a)
+ev = R(870, 290, 290, 140, SOFT, LINE, 1, 12) + wrap(888, 316, 'RippleEdits and MQuAKE test exactly this. Editors such as ROME and MEMIT change the edited fact but rarely carry the change to facts that depend on it.', 13, 400, INK, width=38, lh=18)
+g += F(4, ev + T(450, 466, 'Change one edge, and its neighbors do not move.', 20, 700, INK, 'middle'))
+RIPPLE = sec('Edit one fact in a knowledge graph, and the facts around it do not follow', SVG(g), ch='0',
+             ref='Cohen et al., Evaluating the Ripple Effects of Knowledge Editing in Language Models, TACL 2024. Zhong et al., MQuAKE, EMNLP 2023. Space Needle example is an illustration of the failure type',
+             notes='Same Space Needle edit. One edge changes from Seattle to Paris. A question one hop away, which country, should now say France, but the model still walks the old path through Seattle and says United States. This is the knowledge graph view of the problem, and it is exactly what a graph inside the model should be able to see.')
+
 # ======================= ASSEMBLY =======================
 def assemble(cover, old):
     """old: the reused slides from the earlier deck, keyed by their old index"""
-    surg = retitle(old[3].replace(' The map next.', ''), 'A released model is not left alone. Seven kinds of surgery.')
+    surg = retitle(old[3].replace(' The map next.', '').replace('>CEO of Apple is<', '>Space Needle is in<').replace('>Steve Jobs<', '>Seattle<').replace('>Tim Cook<', '>Paris<'), 'A released model is not left alone. Seven kinds of surgery.')
     story = old[43]
     receipts = old[45]
     delta_paper = retitle(old[47], 'Our delta graph: rank edits by how the inside rewired').replace('class="divider" ', '', 1)
-    vision = [cover, surg, story, receipts, VECTOR, DEMO2, FORECAST2, delta_paper, MUSRES]
+    vision = [cover, surg, story, SILENT, RIPPLE, receipts, VECTOR, delta_paper, DEMO2, MUSRES, FORECAST2]
     rome = old[33]
     a = rome.find('<div class="note"'); e = rome.find('  <div class="ref">')
     rome = rome[:a] + '<div class="note" style="font-size:.62em"><div class="key">The finding</div><p class="one" style="font-size:1.25em">A fact sits in two places. Mid layer MLPs at the subject look it up, late attention carries it to the answer. Editing a fact means changing the first place.</p></div>\n  </div>\n' + rome[e:]
