@@ -672,13 +672,67 @@ VECTOR = sec('Every surgery is stored as a vector', SVG(g), ch='0',
 # ---- demo: a tiny graph is enough to represent a piece ----
 g = adefs('dm2')
 g += f'<foreignObject x="20" y="10" width="740" height="410"><div xmlns="http://www.w3.org/1999/xhtml" style="width:740px;height:410px;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1.5px #d3d7da,0 10px 30px rgba(17,17,17,.10)"><iframe class="fe-frame" data-src="figs/fe-chain.html?autoplay=1" title="Für Elise Markov chain" style="width:740px;height:410px;border:0;background:#fff"></iframe></div></foreignObject>'
-g += F(1, R(790, 20, 370, 120, MUL, MU, 1.5, 12) + T(810, 58, 'A whole piece in 144 numbers', 19, 700, MU) + T(810, 88, 'which note follows which,', 15, 400, INK) + T(810, 110, 'a 12 by 12 table, no music theory', 15, 400, INK))
-g += F(2, R(790, 160, 370, 160, ACL, ACC, 1.5, 12) + T(975, 230, '70.9%', 56, 700, ACC, 'middle') + T(975, 262, 'of unseen pieces placed in', 15, 600, INK, 'middle') + T(975, 284, 'the right tradition (chance 17%)', 15, 600, INK, 'middle'))
-g += F(3, R(790, 340, 370, 80, '#fff', LINE, 1.5, 12) + T(810, 372, '1,000 pieces, six traditions', 15.5, 700, INK) + T(810, 398, 'Bach to Palestrina to fiddle tunes', 14, 400, MUT))
-g += F(4, T(590, 466, 'A tiny graph already captures a style.', 20, 700, INK, 'middle'))
+g += T(790, 34, 'Graphs in music, in this talk', 15, 600, MUT)
+MENU = [('1', 'Note to note graph', '144 numbers name the tradition', '70.9%, chance 17%', False),
+        ('2', 'Richer nodes', 'note plus its length', '88.7%', False),
+        ('3', "The listener's graph", 'its surprise tracks the brain', 'IDyOM, EEG', False),
+        ('4', 'A graph inside MusicGen', 'read from the generator itself', 'next step', True)]
+for k, (num, name, line, val, plan) in enumerate(MENU):
+    y = 50 + k * 92
+    row = R(790, y, 370, 80, SOFT, 'none', 0, 3)
+    row += (C(818, y + 40, 13, '#fff', MU, 1.5, 'stroke-dasharray="4 3"') + T(818, y + 45, num, 14, 600, MU, 'middle')) if plan else (C(818, y + 40, 13, MU) + T(818, y + 45, num, 14, 600, '#fff', 'middle'))
+    row += T(846, y + 34, name, 18, 600, INK) + T(846, y + 58, line, 14, 400, MUT) + T(1148, y + 34, val, 15, 600, MU if not plan else MUT, 'end')
+    g += F(k + 1, row) if k else row
+g += T(590, 466, 'A tiny graph already captures a style. Part 2 walks down this list.', 20, 700, INK, 'middle')
 DEMO2 = sec('A tiny graph is enough to represent a piece of music', SVG(g), ch='0', status='prog',
             ref='Opening of Beethoven, Für Elise, animation from zhiqian.ai, click for sound. Five fold cross validation, zhiqian.ai/music-markov',
             notes='Let the ball learn the opening, then compose. Then the point: this little graph is not a toy. The same 144 numbers per piece, fed to a plain classifier, name the tradition of a piece it has never seen 70.9% of the time across 1,000 pieces in six corpora.')
+
+# ---- trailer: the delta graph drawn ----
+def _dg(ox, oy, edges, mode, lab):
+    """4 layers x (attention, MLP). edges: (a, b, w). mode before/after: gray by weight, delta: + orange solid, - dashed"""
+    pos = {}
+    for L_ in range(4):
+        pos[f'{L_+1}a'] = (ox, oy + (3 - L_) * 62)
+        pos[f'{L_+1}m'] = (ox + 86, oy + (3 - L_) * 62)
+    o = ''
+    for a_, b_, w in edges:
+        (x1, y1), (x2, y2) = pos[a_], pos[b_]
+        long_ = abs(int(a_[0]) - int(b_[0])) > 1
+        bend = (-46 if x1 == x2 == ox else 46) if long_ else 0
+        sw = 0.6 + 2.6 * abs(w) ** 0.5
+        if mode == 'delta':
+            col = ACC if w > 0 else AC2
+            dash = '' if w > 0 else 'stroke-dasharray="5 4"'
+        else:
+            col, dash = AC2, f'stroke-opacity="{0.35 + 0.6 * w:.2f}"'
+        mx, my = (x1 + x2) / 2 + bend, (y1 + y2) / 2
+        o += P(f'M{x1},{y1} Q{mx},{my} {x2},{y2}', col, round(sw, 2), extra=dash + ' stroke-linecap="round"')
+    for k_, (x, y) in pos.items():
+        o += C(x, y, 9, '#009CBD' if k_.endswith('a') else '#5F6B73')
+    o += T(ox + 43, oy + 230, lab, 15, 600, INK, 'middle')
+    return o
+
+BEFORE = [('1a', '1m', .8), ('1m', '2a', .6), ('2a', '2m', .7), ('2m', '3a', .55), ('3a', '3m', .7), ('3m', '4a', .5), ('4a', '4m', .6), ('1a', '3a', .3), ('2m', '4m', .3)]
+AFTER = [('1a', '1m', .8), ('1m', '2a', .6), ('2a', '2m', .7), ('2m', '3a', .12), ('3a', '3m', .7), ('3m', '4a', .85), ('4a', '4m', .6), ('1a', '3a', .3), ('2m', '4m', .3), ('1m', '4a', .7)]
+DELTA = [('1m', '4a', .7), ('3m', '4a', .35), ('2m', '3a', -.43)]
+g = adefs('dtg')
+g += T(40, 30, 'The Space Needle edit. Every exam says: passed.', 16, 600, MUT)
+g += _dg(70, 70, BEFORE, 'before', 'before the edit') + T(230, 172, '→', 30, 400, AXIS if False else '#ACA39A', 'middle')
+g += _dg(280, 70, AFTER, 'after', 'after the edit') + T(440, 172, 'minus', 15, 400, MUT, 'middle')
+g += F(1, _dg(490, 70, DELTA, 'delta', 'delta graph: what rewired') + T(620, 120, 'new shortcut', 13, 600, ACC_T if False else '#C45200') + T(620, 200, 'old path weakened', 13, 400, MUT))
+g += T(70, 352, 'attention block', 13, 400, MUT) + C(58, 348, 6, '#009CBD') + T(206, 352, 'MLP block', 13, 400, MUT) + C(194, 348, 6, '#5F6B73')
+g += T(70, 378, 'edges: blocks that move together across 12 prompts', 13, 400, MUT)
+res = T(790, 60, 'Check only 20 of 100 edits. Bad edits found:', 15, 600, MUT)
+for k, (who, n_, col) in enumerate([('at random', 11, '#ACA39A'), ('by editor and model', 14, '#ACA39A'), ('by the delta graph', 17, ACC)]):
+    y = 84 + k * 58
+    res += T(790, y + 16, who, 16, 600 if col == ACC else 400, INK) + R(790, y + 24, n_ * 19, 20, col, 'none', 0, 2) + T(800 + n_ * 19, y + 40, str(n_), 17, 600, INK)
+res += T(790, 290, 'Top 20% by risk: 86% truly fail.', 18, 600, INK) + T(790, 316, 'The other 80%: 49%.', 16, 400, MUT)
+g += F(2, res)
+g += F(3, T(590, 446, 'The exam saw no change. The graph saw the shortcut.', 20, 700, INK, 'middle'))
+DELTA_T = sec('Our delta graph: rank edits by how the inside rewired', SVG(g), ch='0', status='pub',
+              ref='Benbrahim, Goghrod, Rashme, Ji, Fu, Zhang, Chen. Delta-Graph Signatures, SDM 2026. Koutra, Vogelstein, Faloutsos, DeltaCon, SDM 2013. Graph drawing is schematic',
+              notes='Same Space Needle edit as the slide before. Record every block on 12 probe prompts before and after the edit, connect blocks that move together, subtract. The edit that passed every exam shows up as a new shortcut and a weakened old path. Rank edits by that picture: with the same budget of 20 checks, the delta graph finds 17 bad edits, the editor and model alone 14, random 11. Part 1 explains how the graph is built.')
 
 # ---- forecast, two claims ----
 g = adefs('fc2')
@@ -1349,7 +1403,7 @@ def assemble(cover, old):
     toch = lambda sec_, c: re.sub(r'data-ch="[^"]*"', f'data-ch="{c}"', sec_, count=1)
     vector = retitle(VECTOR, 'Every change to a model is stored as a vector')
     # trailer: the problem, the thesis, one best result per domain, the two claims
-    vision = [cover, SILENT, vector, delta_paper, DEMO2, FORECAST2]
+    vision = [cover, SILENT, vector, DELTA_T, DEMO2, FORECAST2]
     rome = old[33]
     a = rome.find('<div class="note"'); e = rome.find('  <div class="ref">')
     rome = rome[:a] + '<div class="note" style="font-size:.62em"><div class="key">The finding</div><p class="one" style="font-size:1.25em">A fact sits in two places. Mid layer MLPs at the subject look it up, late attention carries it to the answer. Editing a fact means changing the first place.</p></div>\n  </div>\n' + rome[e:]
