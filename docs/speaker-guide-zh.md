@@ -110,6 +110,55 @@
 4. 编辑后内部痕迹的几篇（检索代理给出，未核对）：Suppressed, Not Erased（arXiv 2609.18985），The Anatomy of an Edit（arXiv 2603.20795），One Mask to Rule Them All（arXiv 2605.28839）。回答：它们查单个事实或解释机制，delta graph 给所有编辑打分排序，而且形状胜过单个数字。
 5. Whyatt 和 Harrison，arXiv 2608.19061（未核对）：Essen 上音高特征决定分类，节奏贡献很小。被问到第 21 页时：任务不同（二分类，按地域），而且六个语料上音长的增益部分来自记谱方式，备注里已经写了。也可能有人说"这就是 Conklin 的 viewpoints"，承认是同一框架，我们的点是放在图的语言里。
 
+## 六、英文答问稿（第 7 轮模拟提问，12 题）
+
+现场要用英文答，所以答案直接写英文。每题后面标了答案现在在哪，以及哪里需要你确认。标"需要你"的地方，确认前不要说具体数字。
+
+**Q1（统计）** "A partial correlation over 64 blocks from 12 prompts is singular. Isn't the graph mostly the ridge penalty?"
+"You are right that 12 prompts cannot pin down that precision matrix, so we use ridge with one fixed lambda, the same estimator before and after, and we only use the difference. The evidence that the difference carries signal is held out: trained on 200 facts and tested on 500 new ones the AUC stays at 0.840 to 0.862, and rerunning the 50 riskiest edits flips only 2 of 50. A null with random probe prompts is the next control."
+在哪：第 13 页备注，13 下 backup 第 4 步。需要你：SDM 附录里有没有随机 prompt 的对照。
+
+**Q2（理论）** "ROME writes one layer, so the knot is just where the editor wrote. What is your null?"
+"The prior already knows the editor and the model, so the gain from 0.703 to 0.797 is on top of knowing where the edit was written. Features are rank normalized within each model and editor pair, so an edit is only compared with edits by the same tool on the same model. Between two ROME edits, the shape of the change adds 0.093 AUC where the best single number adds 0.047."
+在哪：13 下 backup 第 7 步，第 15 页。需要你：确认 Table F.1 的特征也做了这个归一化。
+
+**Q3（敌意，NLP）** "Reading outputs gets 0.984, you get 0.797, and 7.4 minutes per fact is not cheap. Why use this?"
+"Reading the outputs is the better judge, and we say so on the slide. Ours is triage: the costly generation and scoring then run only on the flagged 20 percent, about 5 times less follow up work. With a handful of edits, read the outputs. The method is for thousands of edits on a model that keeps changing."
+在哪：第 16 页和备注。需要你：7.4 分钟包含哪些步骤，以及读输出这个基线每个编辑要多久。没有这个数字之前，不要说"更便宜"，只说"少做五倍的后续检查"。
+
+**Q4（敌意，知识图谱）** "Only 1.3 percent lack a path, so the graph explains one point of a 60 point cliff."
+"The graph's job is to split the cliff into two causes before any model runs. On MIMIC it says the record is not the problem, 3 of 239, so the remaining 50 to 70 points are the models' reasoning. On CORAL it goes the other way, 8.2 percent have no path and adding 51 edges takes that to zero."
+在哪：第 9 页和备注（已加）。需要你：51 条边是人工加的还是模板自动加的。
+
+**Q5（安全或系统）** "Can an editor game your scorer? Does it transfer from Qwen to Llama?"
+"We have not tested an adversary who knows the scorer, and cross model transfer is also untested, our cross validation is grouped by fact within each model and editor pair. Those are the next two experiments: train on Qwen and test on Llama, and let an editor optimize against the scorer."
+在哪：没有。需要你：探针 prompt 是否公开。
+
+**Q6（看图仔细的 ML）** "A note plus length node has more cells, and your plus 3 points is inside the noise."
+"Fair, so the honest comparison is within one node type. With pitch only, a second note of memory adds 8 points. With pitch plus length it adds nothing, 86.8 to 86.2, and that is the result I stand on. Differences of one to three points are inside the fold spread of about 2.7, so 73.3 against 70.2 is a tie. Counting pitch and length with no order already gives 68.4, so order still adds 18 points."
+在哪：第 21 页备注。需要你：音长分了几类，以及 86.8、86.2、88.7 这几行的标准差。
+
+**Q7（音乐信息学）** "This is Conklin and Witten's viewpoints and IDyOM. What is new?"
+"Nothing on those slides is new as a model, it is viewpoints and IDyOM, and I show it because the rest of the talk needs that baseline: a first order graph that a listening brain measurably tracks. The new question is the plan: whether the same kind of transition graph exists inside a neural generator that was never given a note."
+在哪：18 下 backup，第 25 页。
+
+**Q8（懂音频 steering 的）** "SMITIN already reports negative strength steering and an asymmetry that flips by instrument."
+"Our finding is for genre directions on the styles we tested, and I phrase it that way on purpose. If the asymmetry flips by instrument, that is what a reachability picture would predict: islands differ in how many ways in they have, and the plan is to measure that rather than assume it."
+在哪：只有本备忘第五节。需要你：讲之前读一下 SMITIN 附录 D，确认它到底写了什么。
+
+**Q9（敌意，HCI）** "Slide 24 has no numbers. How many styles, clips, which judge, is the judge biased?"
+"The slide is a drawing of the result, the per clip numbers are in the paper under review." 接着说：需要你给一句可以公开的话（几种风格，每组多少段，用什么评判，一个效果大小，有没有用真实爵士和真实古典做评判器的对照）。这是现在最弱的一处。
+
+**Q10（理论，计划）** "A fine enough clustering reproduces the generator's own surprisal. What is the null?"
+"Matching the generator is a floor, not a proof. The test needs a null graph of the same size, for example shuffled transitions, and the real graph has to explain EEG beyond that null." 这是对计划的修改，要不要这样定由你决定。需要你：打算聚成多少类，为什么用中间层（第 23 页说调性在最深层最清楚）。
+
+**Q11（做 EEG 的音乐老师）** "IDyOM needs notes, MusicGen makes audio at 50 steps a second. How do you align, and who records the EEG?"
+"The first version uses pieces whose score we know, so IDyOM reads the score and the inside graph is read from MusicGen on the same material, with onsets from the score. It can start on public EEG music datasets before we record anything." 需要你：怎么让 MusicGen 演奏已知的谱，以及 EEG 的合作者、实验室和伦理审批。
+
+**Q12（其实是评论，图挖掘）** "A partial correlation matrix is a graph only by courtesy. The title question cannot be false."
+"If graph meant any matrix the title would be empty. The claim in Part 1 is that graph properties of the change carry information its size does not: 0.52 to 0.59 for single numbers against 0.798 with the shape. In Part 2 it is falsifiable: if the graph read from inside the generator explains the listener no better than the generator itself, it was our drawing, not the model's."
+在哪：第 7、15、26 页。
+
 ## 四、时间预算（主线 27 页）
 
 第 4 轮评审在上轮表格上逐页调整（按口头压缩后的讲法），再去掉下放的 4 页，主线约 36 分钟，加上四句过渡约 37 分钟，留 8 分钟左右给提问。排练后按实际改。

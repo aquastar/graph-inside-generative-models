@@ -1338,14 +1338,15 @@ BRR = sec('The brain keeps enough of the music to rebuild it', SVG(g), ch='2',
 # ---- B4: music generators meet the brain only from the outside ----
 g = adefs('mo')
 cards = [('Audio models in general', 'Pepino et al. 2025', '36 audio models: the better a model is at its tasks, the more brain like it is.'),
-         ('A music generator\'s output', 'Noguchi et al. 2026', 'MusicGen\'s next token surprise helps identify which song a person hears from EEG: 0.823 to 0.887.'),
-         ('A music model\'s embeddings', 'Denk et al. 2025', 'Embeddings map onto auditory cortex, but the low to high hierarchy is weaker than in vision.')]
+         ('A music generator\'s output', 'Noguchi et al. 2026', 'MusicGen\'s next token surprise helps EEG tell which song is heard: 0.823 to 0.887.'),
+         ('A music model\'s embeddings', 'Denk et al. 2025', 'Embeddings map onto auditory cortex, but the low to high hierarchy is weaker than in vision.'),
+         ('A music generator\'s layers', 'Mischler et al. 2025', '13 layers of a symbolic music transformer fit to EEG and iEEG, deeper fits better.')]
 for k, (a_, who, b_) in enumerate(cards):
-    y = 40 + k * 108
-    g += F(k, R(40, y, 700, 94, '#fff', LINE, 1.5, 10) + T(60, y + 30, a_, 17, 700, AC2) + T(720, y + 30, who, 13, 600, MUT, 'end') + wrap(60, y + 58, b_, 14.5, 400, INK, width=88, lh=20)) if k else R(40, y, 700, 94, '#fff', LINE, 1.5, 10) + T(60, y + 30, a_, 17, 700, AC2) + T(720, y + 30, who, 13, 600, MUT, 'end') + wrap(60, y + 58, b_, 14.5, 400, INK, width=88, lh=20)
-g += F(3, R(780, 40, 370, 310, ACL, ACC, 2, 12) + T(965, 84, 'Missing', 22, 700, ACC, 'middle') + T(965, 126, 'Nobody has read a graph', 16, 700, INK, 'middle') + T(965, 150, 'from inside a music generator', 16, 700, INK, 'middle') + T(965, 174, 'and asked the brain', 16, 700, INK, 'middle') + T(965, 198, 'whether it is real.', 16, 700, INK, 'middle')
-          + T(965, 250, 'The outside: outputs, embeddings.', 14, 400, MUT, 'middle') + T(965, 274, 'The inside: how states connect.', 14, 700, ACC, 'middle'))
-g += F(4, T(590, 420, 'Music generators meet the brain through outputs, embeddings and layers, never as a graph.', 19, 700, INK, 'middle'))
+    y = 30 + k * 86
+    g += F(k, R(40, y, 700, 78, '#fff', LINE, 1.5, 10) + T(60, y + 26, a_, 17, 700, AC2) + T(720, y + 26, who, 13, 600, MUT, 'end') + wrap(60, y + 52, b_, 14.5, 400, INK, width=92, lh=19)) if k else R(40, y, 700, 78, '#fff', LINE, 1.5, 10) + T(60, y + 26, a_, 17, 700, AC2) + T(720, y + 26, who, 13, 600, MUT, 'end') + wrap(60, y + 52, b_, 14.5, 400, INK, width=92, lh=19)
+g += F(4, R(780, 30, 370, 330, ACL, ACC, 2, 12) + T(965, 84, 'Missing', 22, 700, ACC, 'middle') + T(965, 126, 'Nobody has read a graph', 16, 700, INK, 'middle') + T(965, 150, 'from inside a music generator', 16, 700, INK, 'middle') + T(965, 174, 'and asked the brain', 16, 700, INK, 'middle') + T(965, 198, 'whether it is real.', 16, 700, INK, 'middle')
+          + T(965, 250, 'So far: outputs, embeddings, layers.', 14, 400, MUT, 'middle') + T(965, 274, 'The inside: how states connect.', 14, 700, ACC, 'middle'))
+g += F(5, T(590, 420, 'Music generators meet the brain through outputs, embeddings and layers, never as a graph.', 19, 700, INK, 'middle'))
 BRG = sec('Music generators meet the brain, but never as a graph', SVG(g), ch='2',
           ref='Pepino et al., arXiv 2511.16849, 2025. Noguchi et al., arXiv 2603.03190, 2026. Denk et al., Nature Communications 2025. Mischler et al., Nature Communications 2025',
           notes='Same yardstick as language, applied to audio and music. Three lines of work on the cards look at what comes out of a model or at whole embeddings. A fourth goes inside: Mischler, Mesgarani and colleagues (Nature Communications, Oct 2025) fit the 13 layers of a symbolic music transformer (Musicautobot) to EEG from 10 pianists and 10 non musicians and to intracranial recordings, deeper layers predict better and musicians use longer context. None of them reads a graph of how states follow each other. Noguchi is the closest: it uses MusicGen large output probabilities, not internal layers, no steering and no style. The gap is the inside.')
@@ -1690,6 +1691,7 @@ def assemble(cover, old):
     beyond2 = retitle(toch(BEYOND2, '2'), 'Part 2. Knowledge is not only text')
     hist = retitle(HIST, 'The oldest music model is a graph')
     bri = retitle(BRI, 'A note transition graph predicts the listening brain')
+    lang[1] = lang[1].replace('</aside>', ' If asked why the title says the graph says why when only 1.3 percent lack a path: the graph splits the cliff before any model runs. On MIMIC it clears the record and leaves the reasoning to the model, on CORAL it finds the missing edges and repairs them. If asked about contamination: PhysioNet data sit behind a data use agreement, not in public corpora, which is not an absolute guarantee.</aside>', 1)
     lang[1] = bridge(lang[1], 'That was the graph outside the model, a record we can draw. The harder case is a change made inside the model, where nobody drew the graph.')
     musres_b = bridge(toch(MUSRES, '2'), 'So inside MusicGen, steering is lopsided, and a vector cannot say why. To test any graph we draw inside, we need a judge outside the model. In music that judge exists: a listener\'s brain.')
     emo_b = bridge(toch(EMOTION2, '2'), 'If emotion lives in expectation, the first question is what a listener expects. The oldest answer is a graph: in 1957 a Markov chain already wrote a string quartet, and IDyOM, the listener model we meet later, is its descendant (history under the down arrow).')
