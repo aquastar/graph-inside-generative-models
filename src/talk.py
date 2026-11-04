@@ -214,7 +214,7 @@ FE_COMPOSE = fe('compose', 'The graph composes',
 styles = ['Bach chorale', 'Essen folk song', 'Monteverdi', 'Palestrina', "Ryan's fiddle", 'Trecento']
 conf = [[64, 10, 1, 18, 3, 4], [12, 70, 0, 4, 12, 1], [10, 6, 53, 24, 0, 6], [17, 5, 1, 70, 3, 4], [3, 10, 0, 2, 83, 2], [4, 4, 0, 22, 4, 66]]  # 992 melodies, LR order 1, row normalized
 g = adefs('cm')
-pipe = [('one piece', 'monophonic melody'), ('12 by 12 table', 'scale degree transitions'), ('144 numbers', 'no music theory'), ('logistic regression', 'names the corpus')]
+pipe = [('one piece', 'monophonic melody'), ('12 by 12 table', 'scale degree transitions'), ('144 numbers', 'no theory beyond the key'), ('logistic regression', 'names the corpus')]
 for i, (a, b) in enumerate(pipe):
     y = 40 + i * 92
     g += R(30, y, 230, 64, SOFT, AC2, 1.5, 10) + T(145, y + 28, a, 16, 700, AC2, 'middle') + T(145, y + 50, b, 13, 400, MUT, 'middle')
@@ -663,7 +663,7 @@ for k, (a, eq, d1, d2, cite) in enumerate(cols4):
     blk += T(x + 132, 182, d1, 14.5, 600, INK, 'middle') + T(x + 132, 202, d2, 14.5, 600, INK, 'middle') + T(x + 132, 238, cite, 12.5, 400, MUT, 'middle')
     g += F(k, blk) if k else blk
 g += F(4, R(30, 285, 1120, 100, SOFT, LINE, 1, 12) + T(590, 323, 'Each one tells you exactly what was added.', 22, 700, INK, 'middle') + T(590, 362, 'None tells you which other facts, behaviors or styles moved with it.', 22, 700, ACC, 'middle')
-          + T(590, 420, 'Our own test: the size of the change barely beats chance (AUC 0.52 to 0.59).', 16, 600, MUT, 'middle')
+          + T(590, 420, 'Our own test: single numbers about the change barely beat chance (AUC 0.52 to 0.59).', 16, 600, MUT, 'middle')
           + T(590, 456, 'Its shape, the delta graph, lifts editor and model alone from 0.703 to 0.797.', 19, 700, INK, 'middle'))
 VECTOR = sec('Every surgery is stored as a vector', SVG(g), ch='0',
              ref='Arditi et al., NeurIPS 2024. Meng et al., NeurIPS 2022. Hu et al., LoRA, ICLR 2022. Ilharco et al., ICLR 2023. Benbrahim et al., SDM 2026, Table 5.1 and Table F.1',
@@ -683,7 +683,7 @@ for k, (num, name, line, val, plan) in enumerate(MENU):
     row += (C(818, y + 40, 13, '#fff', MU, 1.5, 'stroke-dasharray="4 3"') + T(818, y + 45, num, 14, 600, MU, 'middle')) if plan else (C(818, y + 40, 13, MU) + T(818, y + 45, num, 14, 600, '#fff', 'middle'))
     row += T(846, y + 34, name, 18, 600, INK) + T(846, y + 58, line, 14, 400, MUT) + T(1148, y + 34, val, 15, 600, MU if not plan else MUT, 'end')
     g += F(k + 1, row) if k else row
-g += T(590, 466, 'A tiny graph already captures a style. Part 2 walks down this list.', 20, 700, INK, 'middle')
+g += T(590, 466, 'A tiny graph already captures a style. Part 2 covers this list.', 20, 700, INK, 'middle')
 DEMO2 = sec('A tiny graph is enough to represent a piece of music', SVG(g), ch='0', status='prog',
             ref='Opening of Beethoven, Für Elise, animation from zhiqian.ai, click for sound. Five fold cross validation, zhiqian.ai/music-markov',
             notes='Let the ball learn the opening, then compose. Then the point: this little graph is not a toy. The same 144 numbers per piece, fed to a plain classifier, name the tradition of a piece it has never seen 70.2% of the time across 992 melodies in six corpora, against 41.9% for note counts without order.')
@@ -875,7 +875,7 @@ g += F(2, rep)
 g += F(3, T(590, 466, 'A graph tells which questions cannot be answered, before any model tries.', 19, 700, INK, 'middle'))
 CGT = sec('Two hops break every model. The graph says why', SVG(g), ch='1', status='acc',
           ref='Ours, Diagnosing Multi-Hop KG Question Answering Failures: A Typed Homomorphism Framework with Clinical Repair, CIKM 2026, Table 4 and Table 6. MIMIC-III, CORAL from PhysioNet',
-          notes='Our CIKM 2026 paper, the knowledge graph from the opening made concrete. On clinical records that no model has seen in training, seven of nine models reach about 76 percent at one hop and fall to 6 to 12 percent at two hops, from 3B up to a 1.6T mixture of experts. Part of that cliff is not the model at all: if the record never stored the edge, no model can answer. The paper turns that into a theorem and a test that runs before retrieval. On CORAL, adding 51 missing edges removes every structural miss, 8.2 percent to zero. What remains is the model reasoning gap. On MIMIC-III, only 3 of 239 two hop questions (1.3 percent) have no path, so almost all of that cliff is the models reasoning, not the record.')
+          notes='Our CIKM 2026 paper, the knowledge graph from the opening made concrete. On clinical records kept behind a data use agreement, seven of nine models reach about 76 percent at one hop and fall to 6 to 12 percent at two hops, from 3B up to a 1.6T mixture of experts. Part of that cliff is not the model at all: if the record never stored the edge, no model can answer. The paper turns that into a theorem and a test that runs before retrieval. On CORAL, adding 51 missing edges removes every structural miss, 8.2 percent to zero. What remains is the model reasoning gap. On MIMIC-III, only 3 of 239 two hop questions (1.3 percent) have no path, so almost all of that cliff is the models reasoning, not the record.')
 
 # ---- backup under the CIKM slide: the four classes ----
 g = T(40, 40, 'The "no path" side of slide 9, checked in this order. Each question gets exactly one label.', 14, 600, MUT)
@@ -1444,7 +1444,7 @@ for k, (a_, b_) in enumerate(ev):
     y = 274 + k * 56
     g += F(3, R(600, y, 550, 48, MUL, MU, 1.2, 10) + T(618, y + 30, a_, 14, 700, INK) + T(780, y + 30, b_, 13.5, 400, INK))
 g += F(3, R(30, 340, 540, 92, ACL, ACC, 1.5, 12) + T(50, 368, 'The link to this talk', 15.5, 700, ACC) + T(50, 394, 'Expectation is what a note transition graph computes.', 14, 400, INK) + T(50, 416, 'Meyer 1956, Huron 2006, IDyOM: the same idea, made computable.', 14, 400, INK))
-g += F(4, T(590, 466, 'Music is the most measurable route to emotion, so it is where a brain can judge a model.', 18, 700, INK, 'middle'))
+g += F(4, T(590, 466, 'Music is one of the most measurable routes to emotion, so it is where a brain can judge a model.', 18, 700, INK, 'middle'))
 EMOTION = sec('Music is where emotion can be measured', SVG(g), ch='0',
               ref='Picard, Affective Computing, MIT Press 1997, introduction. Minsky, The Emotion Machine, 2006. Meyer, Emotion and Meaning in Music, 1956, p. 31, as quoted in Margulis 2005. Huron, Sweet Anticipation, 2006. Salimpoor et al., Nature Neuroscience 2011. Koelsch, Nature Reviews Neuroscience 2014',
               notes='Photos: Wikimedia Commons, see each file page for author and license. Why music, beyond being a second domain. Emotion is one of the intelligences beyond language, and music is one of the most reliable ways to evoke it in a lab, with a response we can measure in the brain. The bridge is expectation: music moves us partly by playing with what we expect next, and a transition graph is exactly a model of what comes next. Check exact wording of the five citations before the talk, they were added from memory.')
@@ -1464,13 +1464,13 @@ g += T(40, 40, 'Which tradition is this melody from? 992 melodies, six tradition
 rowsA = [('chance', 16.7, '#d3d7da', '', False), ('12 note counts, no order', 41.9, '#d3d7da', '', False), ('graph, 1 note of memory', 70.2, GRY, '+28 over counts', False), ('graph, 2 notes of memory', 78.2, '#f6a46a', '+8 points', False),
          ('graph, memory as needed', 73.3, '#f6a46a', '+3 points', False)]
 g += hbars(40, 56, rowsA, 640, 100, bh=28, gap=10)
-rowsB = [('note plus length, 1 note of memory', 86.8, '#ef7d33', '+17 points', False), ('note plus length, memory as needed', 88.7, ACC, '+19 points', True)]
+rowsB = [('note plus length, 1 note of memory', 86.8, '#ef7d33', '+17 points', False), ('note plus length, 2 notes of memory', 86.2, '#ef7d33', 'no gain from memory', False), ('note plus length, memory as needed', 88.7, ACC, '+19 points', True)]
 g += F(1, L(40, 256, 1150, 256, LINE, 1.5) + hbars(40, 268, rowsB, 640, 100, bh=28, gap=10))
-g += F(2, R(160, 352, 860, 48, ACL, ACC, 1.5, 10) + T(590, 383, 'A richer node buys more than a longer memory.', 19, 700, INK, 'middle'))
-g += F(3, T(590, 440, 'For a graph, what a node means matters more than how far back it looks.', 17, 700, ACC, 'middle'))
+g += F(2, R(160, 386, 860, 44, ACL, ACC, 1.5, 10) + T(590, 415, 'A richer node buys more than a longer memory.', 19, 700, INK, 'middle'))
+g += F(3, T(590, 462, 'For a graph, what a node means matters more than how far back it looks.', 17, 700, ACC, 'middle'))
 RICHER = sec('Richer nodes beat longer memory', SVG(g), ch='2', status='prog',
              ref='Our experiments, Nov 2026: 992 melodies from six music21 corpora, same five folds for every method. Points are differences from the 1 note graph (70.2%). "Memory as needed" is a variable order model, the IDyOM style',
-             notes='First the baseline everyone asks for: counting the 12 notes without any order gets 41.9 percent, so the order, the graph, adds 28 points. Three lessons. One more note of memory helps, 70 to 78. Letting the graph decide how much memory each context needs is not better for notes alone (73.3, below 2 notes at 78.2), it wins only with richer nodes (88.7). But giving each node one more attribute, how long the note lasts, jumps to 87 to 89, more than any change of order. Caveats: Bach repeats chorale tunes across harmonizations, which flatters long memory, and Palestrina and Trecento editions use long note values, so part of the duration gain reflects notation.')
+             notes='With richer nodes, a second note of memory adds nothing (86.8 to 86.2), which is the fair comparison. First the baseline everyone asks for: counting the 12 notes without any order gets 41.9 percent, so the order, the graph, adds 28 points. Three lessons. One more note of memory helps, 70 to 78. Letting the graph decide how much memory each context needs is not better for notes alone (73.3, below 2 notes at 78.2), it wins only with richer nodes (88.7). But giving each node one more attribute, how long the note lasts, jumps to 87 to 89, more than any change of order. Caveats: Bach repeats chorale tunes across harmonizations, which flatters long memory, and Palestrina and Trecento editions use long note values, so part of the duration gain reflects notation.')
 
 g = adefs('gc')
 g += T(40, 40, 'Generate 600 melodies per setting, then ask a style classifier and a copy checker', 14, 600, MUT)
@@ -1583,7 +1583,7 @@ for k, (a_, b_, col, fill) in enumerate(chain):
     if k < 3:
         band += P(f'M{x+264},396 L{x+281},396', AC2, 2.5, extra='marker-end="url(#pea)"')
 g += F(3, band)
-g += F(4, T(590, 466, 'Music is the most measurable route to emotion, so it is where a brain can judge a model.', 17, 700, INK, 'middle'))
+g += F(4, T(590, 466, 'Music is one of the most measurable routes to emotion, so it is where a brain can judge a model.', 17, 700, INK, 'middle'))
 EMOTION2 = sec('Music is where emotion can be measured', SVG(g), ch='0',
                ref='Picard, Affective Computing, MIT Press 1997, introduction. Minsky, The Emotion Machine, 2006. Meyer, Emotion and Meaning in Music, 1956, p. 31, via Margulis 2005. Huron, Sweet Anticipation, 2006. Salimpoor et al., Nature Neuroscience 2011. Koelsch, Nature Reviews Neuroscience 2014. Photos: Wikimedia Commons',
                notes='Step 2 of 2. Two AI pioneers say machines need emotion. A music theorist explains where musical emotion comes from: expectation that is held back or broken. Expectation is exactly what a note transition graph computes, and its effect is measurable in the brain. That is why music is the place where a brain can judge whether a model has a graph inside.')
@@ -1671,7 +1671,7 @@ def assemble(cover, old):
     vec2_b = bridge(VEC2, 'If not the vector, look where the fact lives. Causal tracing (Meng et al.) finds a fact in mid layer MLPs at the subject, the figure is under the down arrow on the next slide. The next slide shows why that is still not where editing works.')
     d46_q = bridge(d46, 'Hard question to expect: is the delta graph real, or an artifact of the 12 probe prompts? Three answers from the paper. The probe prompts are disjoint from the prompts that define failure. Trained on 200 facts and tested on 500 new ones, the AUC holds at 0.840 to 0.862. Rerun the 50 riskiest edits from scratch and only 2 of 50 flip.')
     silent_b = bridge(toch(SILENT, '1'), 'And the usual fix, a vector, is unreliable too: it switches a behavior on average but sends many single inputs the wrong way (Tan et al., under the down arrow). So instead of the vector, look where the fact lives, which the next slide does.')
-    lang = [DIV1, CGT, backup(CGT4), toch(story, '1'), backup(toch(surg, '1')), backup(toch(receipts, '1')), silent_b, backup(vec2_b), old[35].replace('(numbers illustrative)', '(numbers illustrative. Causal tracing: corrupt the input, restore one layer)').replace('Each grey dot is one fact. Hase 2023: correlation about zero (minus 0.13).', 'Schematic, each grey dot one fact. Hase 2023 measured a correlation of about zero (minus 0.13).').replace('Guo 2025, slide 31', 'Guo 2025').replace('So an edit can land where the knowledge is not, and its side effects can land where nobody looks.', 'Mechanism still matters: choosing where to change by it makes forgetting stick (Guo 2025).').replace('But choosing where to change by mechanism makes forgetting stick (Guo 2025).', 'So instead of asking where a fact lives, we read what the edit did to the connections.'), backup(rome), d46_q, backup(old[48]), RES20, abl, lim_main, backup(retitle(old[51], 'Limits, all four, with the numbers'))]
+    lang = [DIV1, CGT, backup(CGT4), toch(story, '1'), backup(toch(surg, '1')), backup(toch(receipts, '1')), silent_b, backup(vec2_b), old[35].replace('The first crack: where a fact lives is not where editing works', 'Where a fact lives is not where editing works').replace('(numbers illustrative)', '(numbers illustrative. Causal tracing: corrupt the input, restore one layer)').replace('Each grey dot is one fact. Hase 2023: correlation about zero (minus 0.13).', 'Schematic, each grey dot one fact. Hase 2023 measured a correlation of about zero (minus 0.13).').replace('Guo 2025, slide 31', 'Guo 2025').replace('So an edit can land where the knowledge is not, and its side effects can land where nobody looks.', 'Mechanism still matters: choosing where to change by it makes forgetting stick (Guo 2025).').replace('But choosing where to change by mechanism makes forgetting stick (Guo 2025).', 'So instead of asking where a fact lives, we read what the edit did to the connections.'), backup(rome), d46_q, backup(old[48]), RES20, abl, bridge(lim_main, 'That is the graph inside a language model, published, with its limits. The title says generative models, plural. Text is one kind of knowledge a model holds, and the next part asks whether the same question survives in knowledge that is not words.'), backup(retitle(old[51], 'Limits, all four, with the numbers'))]
     four = retitle(FOUR, 'Music generation went from a visible graph to a hidden one')
     four = re.sub(r'\s*<p class="q">.*?</p>', '', four, count=1, flags=re.S)
     tools = retitle(TOOLS, 'Every tool inside MusicGen reads one layer at one moment').replace('Three tools, three questions, all at one layer and one moment.', 'Language models moved on to attribution graphs. Music has not.')
