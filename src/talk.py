@@ -663,10 +663,10 @@ for k, (a, eq, d1, d2, cite) in enumerate(cols4):
     blk += T(x + 132, 182, d1, 14.5, 600, INK, 'middle') + T(x + 132, 202, d2, 14.5, 600, INK, 'middle') + T(x + 132, 238, cite, 12.5, 400, MUT, 'middle')
     g += F(k, blk) if k else blk
 g += F(4, R(30, 285, 1120, 100, SOFT, LINE, 1, 12) + T(590, 323, 'Each one tells you exactly what was added.', 22, 700, INK, 'middle') + T(590, 362, 'None tells you which other facts, behaviors or styles moved with it.', 22, 700, ACC, 'middle')
-          + T(590, 418, 'Xu et al., ACL 2026: editing, LoRA and steering are one update at three persistence levels.', 14, 600, MUT, 'middle')
-          + T(590, 458, 'Beyond vectors: read how the parts connect, and follow the change.', 19, 700, INK, 'middle'))
+          + T(590, 420, 'Our own test: the size of the change barely beats chance (AUC 0.52 to 0.59).', 16, 600, MUT, 'middle')
+          + T(590, 456, 'Its shape, the delta graph, lifts editor and model alone from 0.705 to 0.798.', 19, 700, INK, 'middle'))
 VECTOR = sec('Every surgery is stored as a vector', SVG(g), ch='0',
-             ref='Arditi et al., NeurIPS 2024. Meng et al., NeurIPS 2022. Hu et al., LoRA, ICLR 2022. Ilharco et al., ICLR 2023. Xu et al., ACL 2026',
+             ref='Arditi et al., NeurIPS 2024. Meng et al., NeurIPS 2022. Hu et al., LoRA, ICLR 2022. Ilharco et al., ICLR 2023. Benbrahim et al., SDM 2026, Table F.1',
              notes='Four surgeries, four one line formulas a CS audience can read. ROME is a rank one LoRA on one layer, which links knowledge editing to something most of the room has used. The point is not the math, it is that each operation is a single added object, and that object carries no information about its side effects.')
 
 # ---- demo: a tiny graph is enough to represent a piece ----
@@ -791,17 +791,56 @@ for k, (a1, a2, kind, cite) in enumerate(cards):
     blk += T(x + 22, 76, a1, 18, 600, INK) + T(x + 22, 98, a2, 14, 400, MUT) + T(x + 22, 178, kind, 14, 600, MU) + T(x + 22, 198, cite, 12.5, 400, MUT)
     g += blk
 # ours, one way
-o = R(30, 236, 1120, 168, '#EEE8F6', 'none', 0, 3) + T(52, 266, 'Ours, under review: the same kind of vector works only one way', 17, 600, INK)
+o = R(30, 236, 1120, 186, '#EEE8F6', 'none', 0, 3) + T(52, 266, 'Ours, under review: the same kind of vector works only one way', 17, 600, INK)
 o += R(60, 290, 200, 46, '#fff', 'none', 0, 3) + T(160, 319, 'a jazz clip', 16, 600, MU, 'middle') + P('M262,313 L420,313', ACC, 2.5, extra='marker-end="url(#msto)"') + T(341, 303, 'minus jazz', 13, 400, MUT, 'middle')
 o += R(424, 290, 210, 46, '#fff', 'none', 0, 3) + T(529, 319, 'not jazz any more', 16, 600, INK, 'middle') + T(660, 320, 'leaving: easy', 16, 600, '#C45200')
 o += R(60, 346, 200, 46, '#fff', 'none', 0, 3) + T(160, 375, 'a classical clip', 16, 600, INK, 'middle') + P('M262,369 L420,369', AC2, 2, extra='marker-end="url(#msta)" stroke-dasharray="6 4"') + T(341, 359, 'plus jazz', 13, 400, MUT, 'middle')
 o += R(424, 346, 210, 46, '#FBE1DE', 'none', 0, 3) + T(529, 375, 'still not jazz', 16, 600, '#DA291C', 'middle') + T(660, 376, 'entering: hard', 16, 600, '#DA291C')
-o += T(820, 316, 'A vector says what we pushed.', 18, 600, INK) + T(820, 344, 'It cannot say why the push', 18, 400, INK) + T(820, 368, 'lands only one way.', 18, 400, INK)
+isl = '<ellipse cx="960" cy="318" rx="52" ry="32" fill="#DCD1EB"/>' + T(960, 323, 'jazz', 15, 600, MU, 'middle')
+import math as _mm
+for k in range(7):
+    a = -_mm.pi * 0.85 + k * _mm.pi * 1.7 / 6
+    x1, y1 = 960 + 52 * _mm.cos(a), 318 + 32 * _mm.sin(a); x2, y2 = 960 + 96 * _mm.cos(a), 318 + 56 * _mm.sin(a)
+    isl += P(f'M{x1:.0f},{y1:.0f} L{x2:.0f},{y2:.0f}', AC2, 1.5, extra='marker-end="url(#msta)"')
+isl += P('M1100,266 Q1060,282 1010,298', '#DA291C', 1.5, extra='stroke-dasharray="4 4" marker-end="url(#msta)"')
+isl += T(960, 398, 'a graph view: many ways out, few ways in', 13, 600, INK, 'middle') + T(960, 414, 'our hypothesis, being tested', 12.5, 400, MUT, 'middle')
+o += isl
 g += F(1, o)
-g += F(2, T(590, 452, 'Music has steering vectors and silent asymmetries too. Next: the graph view.', 19, 700, INK, 'middle'))
-MSTEER = sec('Music generators are steered with vectors too', SVG(g), ch='0',
+g += F(2, T(590, 452, 'A vector says what we pushed. It cannot say why the push lands only one way.', 19, 700, INK, 'middle'))
+MSTEER = sec('Yet music generators are steered with vectors too', SVG(g), ch='0',
              ref='Facchiano et al., arXiv 2504.04479, 2025. Koo et al., SMITIN, 2025. Zhao et al., ICLR 2026. Singh, Cherep, Maes, ICLR 2026. Co-authored work under review, MusicGen. Jazz and classical illustrate the two arms',
-             notes='The music twin of the vector slide. Four ways people steer MusicGen today, all of them a direction or a feature added inside the model. Then our own finding, still under review: removing a style with such a vector works, adding one does not. A vector cannot explain that asymmetry, which is the music version of the silent failure. That is why the next slide looks for a graph.')
+             notes='The music twin of the vector slide. The tiny graph just showed that a style has structure. Yet the way people steer MusicGen today is a direction or a feature added inside the model. Our own finding, still under review: removing a style with such a vector works, adding one does not. A vector cannot explain that. A graph can, if a style is an island with many ways out and few ways in. That picture is our hypothesis, and testing it is part of Part 2.')
+
+# ---- trailer: knowledge is a graph, an edit must follow it ----
+g = adefs('kgt')
+def kn2(x, y, lab, col='#009CBD', up=True, fill=None):
+    return C(x, y, 9, fill or col) + T(x, y - 18 if up else y + 30, lab, 16, 600, INK, 'middle')
+def ke(x1, y1, x2, y2, lab, col=AC2, sw=1.6, dash='', m='kgta', lx=0, ly=-8):
+    import math as _m
+    d = _m.hypot(x2 - x1, y2 - y1); ux, uy = (x2 - x1) / d, (y2 - y1) / d
+    o = P(f'M{x1+ux*12:.1f},{y1+uy*12:.1f} L{x2-ux*13:.1f},{y2-uy*13:.1f}', col, sw, extra=f'marker-end="url(#{m})" ' + (f'stroke-dasharray="{dash}"' if dash else ''))
+    return o + (T((x1 + x2) / 2 + lx, (y1 + y2) / 2 + ly, lab, 12.5, 400, MUT, 'middle') if lab else '')
+SN, SE, WA, US = (90, 170), (300, 170), (520, 170), (740, 170)
+WF, OL, DO = (90, 64), (520, 64), (740, 276)
+ET, PA, FR, EU = (300, 380), (520, 380), (740, 380), (740, 460)
+g += T(30, 470, 'What the model knows, drawn as a knowledge graph', 16, 600, MUT)
+base = ke(*SN, *SE, 'located in') + ke(*SE, *WA, 'city in') + ke(*WA, *US, 'state of') + ke(*SN, *WF, 'built for', lx=34, ly=4) + ke(*WA, *OL, 'capital', lx=-32, ly=4) + ke(*US, *DO, 'currency', lx=-36, ly=4)
+base += ke(*ET, *PA, 'located in', col='#ACA39A') + ke(*PA, *FR, 'city in', col='#ACA39A') + ke(*FR, *EU, '', col='#ACA39A') + T(770, 444, 'currency', 12.5, 400, MUT)
+base += kn2(*SN, 'Space Needle') + kn2(*SE, 'Seattle') + kn2(*WA, 'Washington State', up=False) + kn2(*US, 'United States') + kn2(*WF, "1962 World's Fair") + kn2(*OL, 'Olympia') + kn2(*DO, 'dollar', up=False)
+base += kn2(*ET, 'Eiffel Tower', '#ACA39A') + kn2(*PA, 'Paris', '#ACA39A') + kn2(*FR, 'France', '#ACA39A') + C(*EU, 9, '#ACA39A') + T(EU[0] - 18, EU[1] + 5, 'euro', 16, 600, INK, 'end')
+g += base
+ed = ke(*SN, PA[0], PA[1], '', col=ACC, sw=2.8, m='kgto') + T(250, 290, 'the edit:', 14, 600, '#C45200', 'end') + T(250, 310, 'located in Paris', 14, 600, '#C45200', 'end')
+ed += P(f'M{SN[0]+10},{SN[1]} L{SE[0]-12},{SE[1]}', '#DA291C', 2.2, extra='stroke-dasharray="2 5" stroke-linecap="round"')
+g += F(1, ed)
+q = R(860, 52, 290, 330, SOFT, 'none', 0, 3) + T(880, 82, 'Ask one step further', 15, 600, MUT)
+for k, (qq, said, should) in enumerate([('Which country is it in?', 'United States', 'France'), ('Which state is it in?', 'Washington', 'none: Paris has no state'), ('What currency is used there?', 'dollar', 'euro')]):
+    y = 112 + k * 92
+    q += T(880, y, qq, 16, 600, INK) + T(880, y + 24, 'edited model: ' + said, 14.5, 600, '#DA291C') + T(880, y + 46, 'should be: ' + should, 14.5, 400, MUT)
+g += F(2, q)
+g += F(3, T(1005, 430, 'Change one edge, and every', 17, 600, INK, 'middle') + T(1005, 454, 'path through it must change.', 17, 600, INK, 'middle'))
+KGT = sec('Knowledge is a graph, and an edit has to follow it', SVG(g), ch='0',
+          ref='Cohen et al., Evaluating the Ripple Effects of Knowledge Editing in Language Models, TACL 2024. Zhong et al., MQuAKE, EMNLP 2023. Space Needle answers are an illustration of the failure type',
+          notes='Start from what everyone in the room knows: facts link to other facts. The Space Needle is in Seattle, Seattle is in Washington, Washington is in the United States. Suppose an editor moves the Space Needle to Paris and changes only that one edge. Now every question one step further is wrong: the model still says United States, still says Washington, still says dollar. This is the ripple effect, measured by RippleEdits and MQuAKE. The knowledge has a graph. The question for the talk: does the model have one inside?')
 
 # ---- forecast, two claims ----
 g = adefs('fc2')
@@ -1478,13 +1517,15 @@ def assemble(cover, old):
     toch = lambda sec_, c: re.sub(r'data-ch="[^"]*"', f'data-ch="{c}"', sec_, count=1)
     vector = retitle(VECTOR, 'Every change to a model is stored as a vector')
     # trailer: the problem, the thesis, one best result per domain, the two claims
-    vision = [cover, SILENT, vector, DELTA_T, MSTEER, DEMO2, FORECAST2]
+    vector = retitle(vector, 'Yet every change to a model is stored as a vector')
+    # per domain: the structure is a graph, our graph sees the problem, yet the field uses vectors
+    vision = [cover, KGT, DELTA_T, vector, DEMO2, MSTEER, FORECAST2]
     rome = old[33]
     a = rome.find('<div class="note"'); e = rome.find('  <div class="ref">')
     rome = rome[:a] + '<div class="note" style="font-size:.62em"><div class="key">The finding</div><p class="one" style="font-size:1.25em">A fact sits in two places. Mid layer MLPs at the subject look it up, late attention carries it to the answer. Editing a fact means changing the first place.</p></div>\n  </div>\n' + rome[e:]
     rome = retitle(rome, 'A fact lives in mid layer MLPs and moves out by attention')
     d46 = old[46].replace('running example from slide 45: the Space Needle edit', 'running example: the Space Needle edit').replace(' (slide 2).', '.')
-    lang = [DIV1, toch(surg, '1'), toch(story, '1'), toch(RIPPLE, '1'), toch(receipts, '1'), REFUSAL, CRITIQUE, rome, old[35].replace('Guo 2025, slide 31', 'Guo 2025'), d46, old[48], old[49], old[50], old[51]]
+    lang = [DIV1, toch(surg, '1'), toch(story, '1'), toch(SILENT, '1'), toch(receipts, '1'), REFUSAL, CRITIQUE, rome, old[35].replace('Guo 2025, slide 31', 'Guo 2025'), d46, old[48], old[49], old[50], old[51]]
     four = retitle(FOUR, 'Music generation went from a visible graph to a hidden one')
     four = re.sub(r'\s*<p class="q">.*?</p>', '', four, count=1, flags=re.S)
     tools = retitle(TOOLS, 'Every tool inside MusicGen reads one layer at one moment').replace('Three tools, three questions, all at one layer and one moment.', 'Language models moved on to attribution graphs. Music has not.')
