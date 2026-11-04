@@ -717,22 +717,91 @@ BEFORE = [('1a', '1m', .8), ('1m', '2a', .6), ('2a', '2m', .7), ('2m', '3a', .55
 AFTER = [('1a', '1m', .8), ('1m', '2a', .6), ('2a', '2m', .7), ('2m', '3a', .12), ('3a', '3m', .7), ('3m', '4a', .85), ('4a', '4m', .6), ('1a', '3a', .3), ('2m', '4m', .3), ('1m', '4a', .7)]
 DELTA = [('1m', '4a', .7), ('3m', '4a', .35), ('2m', '3a', -.43)]
 g = adefs('dtg')
-g += T(40, 30, 'The Space Needle edit. Every exam says: passed.', 16, 600, MUT)
-g += _dg(70, 70, BEFORE, 'before', 'before the edit') + T(230, 172, '→', 30, 400, AXIS if False else '#ACA39A', 'middle')
-g += _dg(280, 70, AFTER, 'after', 'after the edit') + T(440, 172, 'minus', 15, 400, MUT, 'middle')
-g += F(1, _dg(490, 70, DELTA, 'delta', 'delta graph: what rewired') + T(620, 120, 'new shortcut', 13, 600, ACC_T if False else '#C45200') + T(620, 200, 'old path weakened', 13, 400, MUT))
-g += T(70, 352, 'attention block', 13, 400, MUT) + C(58, 348, 6, '#009CBD') + T(206, 352, 'MLP block', 13, 400, MUT) + C(194, 348, 6, '#5F6B73')
-g += T(70, 378, 'edges: blocks that move together across 12 prompts', 13, 400, MUT)
-res = T(790, 60, 'Check only 20 of 100 edits. Bad edits found:', 15, 600, MUT)
+g += T(30, 26, 'A real edit from the paper. Every exam says: passed.', 16, 600, MUT)
+g += '<image href="figs/delta_construction_real.png" x="20" y="36" width="600" height="233"/>'
+g += T(100, 286, 'before the edit', 14, 600, INK, 'middle') + T(275, 286, 'after the edit', 14, 600, INK, 'middle') + T(450, 286, 'after minus before', 14, 600, ACC_T if False else '#C45200', 'middle')
+# the same delta read as a graph: blocks by layer, edges where they started moving together
+dg = T(30, 324, 'The same difference, drawn as a graph', 15, 600, MUT)
+xs = [60 + i * 36 for i in range(16)]
+for i, x in enumerate(xs):
+    if i < 15:
+        dg += L(x, 362, xs[i + 1], 362, '#D7D2CB', 1) + L(x, 410, xs[i + 1], 410, '#D7D2CB', 1)
+    dg += L(x, 362, x, 410, '#D7D2CB', 1)
+hot = [(5, 'a', 7, 'm', 3.0), (6, 'a', 8, 'a', 2.4), (6, 'm', 8, 'm', 2.4), (5, 'm', 7, 'a', 1.8), (7, 'a', 9, 'm', 1.6), (6, 'a', 7, 'm', 2.2)]
+for i, ti, j, tj, w in hot:
+    y1 = 362 if ti == 'a' else 410; y2 = 362 if tj == 'a' else 410
+    mx = (xs[i] + xs[j]) / 2; my = min(y1, y2) - 34 if y1 == y2 == 362 else (max(y1, y2) + 34 if y1 == y2 else (y1 + y2) / 2)
+    dg += P(f'M{xs[i]},{y1} Q{mx},{my} {xs[j]},{y2}', ACC, w, extra='stroke-linecap="round" stroke-opacity=".9"')
+for i, x in enumerate(xs):
+    act = 5 <= i <= 9
+    dg += C(x, 362, 6.5, '#009CBD' if act else '#BCE2E8') + C(x, 410, 6.5, '#5F6B73' if act else '#C9C4BD')
+dg += T(36, 366, 'attn', 12, 400, MUT, 'end') + T(36, 414, 'MLP', 12, 400, MUT, 'end') + T(xs[7], 448, 'the edit rewired blocks around layer 7', 13.5, 600, '#C45200', 'middle')
+dg += T(xs[0], 448, 'layer 0', 12, 400, MUT, 'middle') + T(xs[15], 448, 'layer L', 12, 400, MUT, 'middle')
+g += F(1, dg)
+res = T(700, 60, 'Check only 20 of 100 edits. Bad edits found:', 15, 600, MUT)
 for k, (who, n_, col) in enumerate([('at random', 11, '#ACA39A'), ('by editor and model', 14, '#ACA39A'), ('by the delta graph', 17, ACC)]):
-    y = 84 + k * 58
-    res += T(790, y + 16, who, 16, 600 if col == ACC else 400, INK) + R(790, y + 24, n_ * 19, 20, col, 'none', 0, 2) + T(800 + n_ * 19, y + 40, str(n_), 17, 600, INK)
-res += T(790, 290, 'Top 20% by risk: 86% truly fail.', 18, 600, INK) + T(790, 316, 'The other 80%: 49%.', 16, 400, MUT)
+    y = 84 + k * 62
+    res += T(700, y + 16, who, 16, 600 if col == ACC else 400, INK) + R(700, y + 24, n_ * 22, 22, col, 'none', 0, 2) + T(710 + n_ * 22, y + 41, str(n_), 17, 600, INK)
+res += T(700, 300, 'Top 20% by risk: 86% truly fail.', 18, 600, INK) + T(700, 326, 'The other 80%: 49%.', 16, 400, MUT)
+res += T(700, 380, 'The exam saw no change.', 20, 600, INK) + T(700, 410, 'The graph saw the rewiring.', 20, 600, '#C45200')
 g += F(2, res)
-g += F(3, T(590, 446, 'The exam saw no change. The graph saw the shortcut.', 20, 700, INK, 'middle'))
 DELTA_T = sec('Our delta graph: rank edits by how the inside rewired', SVG(g), ch='0', status='pub',
-              ref='Benbrahim, Goghrod, Rashme, Ji, Fu, Zhang, Chen. Delta-Graph Signatures, SDM 2026. Koutra, Vogelstein, Faloutsos, DeltaCon, SDM 2013. Graph drawing is schematic',
-              notes='Same Space Needle edit as the slide before. Record every block on 12 probe prompts before and after the edit, connect blocks that move together, subtract. The edit that passed every exam shows up as a new shortcut and a weakened old path. Rank edits by that picture: with the same budget of 20 checks, the delta graph finds 17 bad edits, the editor and model alone 14, random 11. Part 1 explains how the graph is built.')
+              ref='Benbrahim, Goghrod, Rashme, Ji, Fu, Zhang, Chen. Delta-Graph Signatures, SDM 2026, Figure 1.1 (b). Node link drawing is our rendering of the same difference',
+              notes='A real edit from the paper. Record every attention and MLP block on 12 probe prompts before and after the edit, connect blocks that move together, subtract. The edit passed every exam, yet the difference shows a knot of new connections around layer 7. Below, the same difference drawn as a graph. Rank edits by that picture: with the same budget of 20 checks, the delta graph finds 17 bad edits, the editor and model alone 14, random 11. Part 1 explains how the graph is built.')
+
+# ---- trailer: music is steered with vectors too ----
+def _si_dir(x):
+    return C(x + 60, 150, 5, MU) + P(f'M{x+60},150 L{x+200},112', MU, 2.5, extra='marker-end="url(#mstt)" stroke-linecap="round"') + T(x + 206, 108, '+ jazz', 12, 400, MUT)
+
+def _si_heads(x):
+    o = ''
+    for i in range(7):
+        hx = x + 40 + i * 28; on = i in (2, 5)
+        o += R(hx, 128, 20, 20, MU if on else '#fff', 'none', 0, 2) + (P(f'M{hx+10},124 L{hx+10},108', MU, 2, extra='marker-end="url(#mstt)"') if on else '')
+    return o
+
+def _si_concept(x):
+    import random as _rr
+    r = _rr.Random(7); o = ''
+    for _ in range(9):
+        o += C(x + 60 + r.gauss(0, 10), 145 + r.gauss(0, 7), 3.2, '#ACA39A')
+        o += C(x + 190 + r.gauss(0, 10), 118 + r.gauss(0, 7), 3.2, MU)
+    return o + P(f'M{x+76},140 L{x+172},122', AC2, 2, extra='marker-end="url(#msta)" stroke-dasharray="5 3"')
+
+def _si_feature(x):
+    o = ''
+    hs = [10, 18, 8, 14, 6, 12, 9, 16, 7]
+    for i, h in enumerate(hs):
+        bx = x + 40 + i * 20; hh = 44 if i == 4 else h
+        o += R(bx, 160 - hh, 13, hh, MU if i == 4 else '#C9C4BD', 'none', 0, 1)
+    return o + P(f'M{x+126},112 L{x+126},100', MU, 2, extra='marker-end="url(#mstt)"')
+
+STEER_ICON = [_si_dir, _si_heads, _si_concept, _si_feature]
+
+g = adefs('mst')
+g += T(30, 26, 'How people steer MusicGen today', 16, 600, MUT)
+cards = [('Add a direction', 'genre or instrument', 'activation steering', 'Facchiano et al. 2025'),
+         ('Nudge attention heads', 'chosen by a probe', 'inference time intervention', 'SMITIN, Koo et al. 2025'),
+         ('Learn a concept direction', 'then push along it', 'recursive feature machines', 'Zhao et al., ICLR 2026'),
+         ('Turn up one feature', 'from a sparse dictionary', 'sparse autoencoders', 'Singh, Cherep, Maes, ICLR 2026')]
+for k, (a1, a2, kind, cite) in enumerate(cards):
+    x = 30 + k * 283
+    blk = R(x, 42, 265, 170, SOFT, 'none', 0, 3)
+    blk += STEER_ICON[k](x)
+    blk += T(x + 22, 76, a1, 18, 600, INK) + T(x + 22, 98, a2, 14, 400, MUT) + T(x + 22, 178, kind, 14, 600, MU) + T(x + 22, 198, cite, 12.5, 400, MUT)
+    g += blk
+# ours, one way
+o = R(30, 236, 1120, 168, '#EEE8F6', 'none', 0, 3) + T(52, 266, 'Ours, under review: the same kind of vector works only one way', 17, 600, INK)
+o += R(60, 290, 200, 46, '#fff', 'none', 0, 3) + T(160, 319, 'a jazz clip', 16, 600, MU, 'middle') + P('M262,313 L420,313', ACC, 2.5, extra='marker-end="url(#msto)"') + T(341, 303, 'minus jazz', 13, 400, MUT, 'middle')
+o += R(424, 290, 210, 46, '#fff', 'none', 0, 3) + T(529, 319, 'not jazz any more', 16, 600, INK, 'middle') + T(660, 320, 'leaving: easy', 16, 600, '#C45200')
+o += R(60, 346, 200, 46, '#fff', 'none', 0, 3) + T(160, 375, 'a classical clip', 16, 600, INK, 'middle') + P('M262,369 L420,369', AC2, 2, extra='marker-end="url(#msta)" stroke-dasharray="6 4"') + T(341, 359, 'plus jazz', 13, 400, MUT, 'middle')
+o += R(424, 346, 210, 46, '#FBE1DE', 'none', 0, 3) + T(529, 375, 'still not jazz', 16, 600, '#DA291C', 'middle') + T(660, 376, 'entering: hard', 16, 600, '#DA291C')
+o += T(820, 316, 'A vector says what we pushed.', 18, 600, INK) + T(820, 344, 'It cannot say why the push', 18, 400, INK) + T(820, 368, 'lands only one way.', 18, 400, INK)
+g += F(1, o)
+g += F(2, T(590, 452, 'Music has steering vectors and silent asymmetries too. Next: the graph view.', 19, 700, INK, 'middle'))
+MSTEER = sec('Music generators are steered with vectors too', SVG(g), ch='0',
+             ref='Facchiano et al., arXiv 2504.04479, 2025. Koo et al., SMITIN, 2025. Zhao et al., ICLR 2026. Singh, Cherep, Maes, ICLR 2026. Co-authored work under review, MusicGen. Jazz and classical illustrate the two arms',
+             notes='The music twin of the vector slide. Four ways people steer MusicGen today, all of them a direction or a feature added inside the model. Then our own finding, still under review: removing a style with such a vector works, adding one does not. A vector cannot explain that asymmetry, which is the music version of the silent failure. That is why the next slide looks for a graph.')
 
 # ---- forecast, two claims ----
 g = adefs('fc2')
@@ -1001,7 +1070,7 @@ for d_ in range(12):
     a = -math.pi / 2 + d_ * 2 * math.pi / 12
     x, y = cx + r * math.cos(a), cy + r * math.sin(a)
     ring += C(round(x), round(y), 15 if d_ else 19, ACC if d_ == 0 else '#fff', ACC, 2.5) + T(round(x), round(y) + 5, str(d_), 13, 700, '#fff' if d_ == 0 else ACC, 'middle')
-ring += P('M278,212 L278,238', ACC, 3, extra='marker-end="url(#fdo)"') + T(420, 250, 'fold every octave together,', 14, 700, ACC) + T(420, 270, 'count from the piece\'s own key', 14, 700, ACC) + T(cx, 470, '12 scale degrees: 0 is the home note', 14, 700, ACC, 'middle')
+ring += P('M278,212 L278,224', ACC, 2.5, extra='marker-end="url(#fdo)"') + T(420, 250, 'fold every octave together,', 14, 700, ACC) + T(420, 270, 'count from the piece\'s own key', 14, 700, ACC) + T(cx, 470, '12 scale degrees: 0 is the home note', 14, 700, ACC, 'middle')
 g += F(1, ring)
 fe = {(0, 2): 2, (0, 3): 2, (0, 7): 1, (2, 0): 1, (2, 3): 1, (2, 5): 2, (2, 7): 2, (3, 0): 2, (3, 2): 1, (3, 7): 3, (5, 3): 2, (6, 7): 4, (7, 0): 2, (7, 2): 2, (7, 3): 1, (7, 6): 4, (7, 7): 1, (7, 11): 1, (11, 2): 1}
 rs = {i_: sum(v for (a_, b_), v in fe.items() if a_ == i_) for i_ in range(12)}
@@ -1113,7 +1182,15 @@ hs = [0.3, 0.5, 0.95, 0.35, 0.7, 1.0]
 sur = T(990, 44, 'how surprising is each note?', 15, 700, ACC, 'middle') + ''.join(R(880 + k * 38, 170 - 100 * h, 28, 100 * h, ACC, 'none', 0, 3) for k, h in enumerate(hs)) + L(870, 172, 1110, 172, INK, 1.5) + P('M804,115 L866,115', AC2, 2.5, extra='marker-end="url(#ida)"')
 g += F(2, sur)
 eeg = R(60, 220, 1090, 150, MUL, MU, 2, 10) + T(80, 252, 'EEG while 20 people listen to Bach', 16, 700, MU)
-eeg += P('M80,320 ' + ' '.join(f'L{80 + k * 9},{320 + 22 * math.sin(k * 0.8) * (1.8 if k % 9 == 4 else 0.5)}' for k in range(1, 70)), MU, 2)
+ons = [110 + k * 100 for k in range(6)]
+def _erp(x):
+    v = 0
+    for t0, h in zip(ons, hs):
+        v += 6 * math.exp(-((x - t0 - 14) / 9) ** 2) - 34 * h * math.exp(-((x - t0 - 42) / 15) ** 2)
+    return 318 - v
+eeg += ''.join(L(t0, 270, t0, 356, '#C9C4BD', 1, 'stroke-dasharray="3 3"') + C(t0, 270, 4, INK) for t0 in ons)
+eeg += P('M80,318 ' + ' '.join(f'L{x},{_erp(x):.1f}' for x in range(83, 700, 3)), MU, 2, extra='stroke-linejoin="round"')
+eeg += T(110, 290, 'note', 11.5, 400, MUT, 'middle') + T(ons[5] + 42, 362, 'big surprise, big response', 12.5, 600, MU, 'middle')
 eeg += T(740, 290, 'Surprise explains the brain response', 16, 700, INK) + T(740, 316, 'beyond the sound itself, about 200 ms', 15, 400, INK) + T(740, 340, 'after each note, in 16 of 20 listeners.', 15, 400, INK)
 g += F(3, eeg)
 g += F(4, T(590, 420, 'A graph of note transitions is something the listening brain is measurably tracking.', 19, 700, INK, 'middle') + T(590, 452, 'So the brain can judge a graph.', 18, 700, ACC, 'middle'))
@@ -1313,14 +1390,12 @@ def steps(active):
     return out
 
 def person(x, y, w, h, fname, ini, name, title_lines, col):
+    """photo 96 px on the left, name and credential beside it, content starts at y + 132"""
     out = R(x, y, w, h, '#fff', LINE, 1.5, 14)
-    if fname:
-        out += photo(x + 52, y + 52, 34, fname, ini, col)
-    else:
-        out += C(x + 52, y + 52, 34, MUL, MU, 2.5) + T(x + 52, y + 66, '♫', 38, 700, MU, 'middle')
-    out += T(x + 100, y + 44, name, 18, 700, INK)
+    out += photo(x + 66, y + 66, 48, fname, ini, col)
+    out += T(x + 132, y + 50, name, 20, 700, INK)
     for k, tl in enumerate(title_lines):
-        out += T(x + 100, y + 66 + k * 18, tl, 13, 600, AC2)
+        out += T(x + 132, y + 74 + k * 19, tl, 13.5, 600, AC2)
     return out
 
 def chips(x, y, items, maxw):
@@ -1343,23 +1418,23 @@ def quote(x, y, lines, size=15.5, lh=22):
 # ---- slide 9 ----
 g = adefs('pe')
 g += steps(0)
-c1 = person(30, 50, 545, 262, 'howard-gardner.jpg', 'HG', 'Howard Gardner', ['Harvard psychologist, theory of multiple intelligences'], AC2)
-c1 += chips(60, 132, [('linguistic', 'L'), ('logical mathematical', 'E'), ('musical', 'M'), ('spatial', ''), ('bodily', ''), ('interpersonal', ''), ('intrapersonal', '')], 490)
-c1 += T(60, 222, 'Intelligence is plural. Each kind has its own', 15.5, 600, INK) + T(60, 244, 'brain systems and its own symbols, so one', 15.5, 600, INK) + T(60, 266, 'kind cannot stand in for another.', 15.5, 600, INK)
-c1 += T(555, 294, 'Frames of Mind, 1983', 12.5, 400, MUT, 'end')
+c1 = person(30, 50, 545, 282, 'howard-gardner.jpg', 'HG', 'Howard Gardner', ['Harvard psychologist, theory of multiple intelligences'], AC2)
+c1 += chips(52, 182, [('linguistic', 'L'), ('logical mathematical', 'E'), ('musical', 'M'), ('spatial', ''), ('bodily', ''), ('interpersonal', ''), ('intrapersonal', '')], 490)
+c1 += T(52, 268, 'Intelligence is plural. Each kind has its own', 15.5, 600, INK) + T(52, 290, 'brain systems and its own symbols, so one', 15.5, 600, INK) + T(52, 312, 'kind cannot stand in for another.', 15.5, 600, INK)
+c1 += T(555, 318, 'Frames of Mind, 1983', 12.5, 400, MUT, 'end')
 g += c1
-c2 = person(605, 50, 545, 262, 'fei-fei-li.jpg', 'FL', 'Fei-Fei Li', ['Stanford professor, creator of ImageNet,', 'cofounder of World Labs'], AC2)
-c2 += chips(635, 140, [('language', 'L'), ('perceptual', ''), ('spatial', ''), ('bodily', ''), ('emotional', 'M')], 490)
-c2 += quote(645, 206, [[('Spatial intelligence represents the', False)], [('frontier beyond language', True), ('.', False)]], 18, 26)
-c2 += T(1130, 294, 'From Words to Worlds, a16z, 2025. Five intelligences: interview, 2026', 12.5, 400, MUT, 'end')
+c2 = person(605, 50, 545, 282, 'fei-fei-li.jpg', 'FL', 'Fei-Fei Li', ['Stanford professor, creator of ImageNet,', 'cofounder of World Labs'], AC2)
+c2 += chips(627, 182, [('language', 'L'), ('perceptual', ''), ('spatial', ''), ('bodily', ''), ('emotional', 'M')], 490)
+c2 += quote(645, 236, [[('Spatial intelligence represents the', False)], [('frontier beyond language', True), ('.', False)]], 18, 26)
+c2 += T(1130, 318, 'From Words to Worlds, a16z, 2025. Five intelligences: interview, 2026', 12.5, 400, MUT, 'end')
 g += F(1, c2)
-band = T(30, 340, 'What this talk covers', 14, 700, MUT)
+band = T(30, 356, 'What this talk covers', 14, 700, MUT)
 tiles = [('Text', 'Part 1: facts inside a language model', ACC, ACL, ''), ('Equations', 'next: 36 + 59 runs as two paths inside a model', PURP, '#fff', 'stroke-dasharray="7 5"'), ('Music and emotion', 'Part 2: style, expectation, the brain', MU, MUL, '')]
 for k, (a_, b_, col, fill, dash) in enumerate(tiles):
     x = 30 + k * 377
-    band += R(x, 352, 360, 64, fill, col, 2, 14, dash) + T(x + 18, 378, a_, 17, 700, col) + T(x + 18, 402, b_, 13, 400, INK)
+    band += R(x, 366, 360, 60, fill, col, 2, 14, dash) + T(x + 18, 390, a_, 17, 700, col) + T(x + 18, 413, b_, 13, 400, INK)
 g += F(2, band)
-g += F(3, T(590, 462, 'Equations and music are knowledge beyond text. They may need graphs even more than text does.', 17, 700, INK, 'middle'))
+g += F(3, T(590, 466, 'Equations and music are knowledge beyond text. They may need graphs even more than text does.', 17, 700, INK, 'middle'))
 BEYOND2 = sec('Knowledge is not only text', SVG(g), ch='0',
               ref='Gardner, Frames of Mind, 1983. Fei-Fei Li, From Words to Worlds, a16z, 2025, and Silicon Valley Girl podcast, 2026. Lindsey et al., On the Biology of a Large Language Model, 2025. Photos: Wikimedia Commons',
               notes='Step 1 of 2. A psychologist and an AI leader say the same thing from two sides: intelligence and knowledge come in several kinds, and language is only one. Gardner counts musical and logical mathematical intelligence as their own kinds. Fei-Fei Li lists five intelligences and calls space the frontier beyond language. This talk covers text and music. Equations are next: inside Claude, 36 + 59 runs as two parallel paths, one for the rough size and one for the last digit (Lindsey et al. 2025).')
@@ -1368,27 +1443,27 @@ BEYOND2 = sec('Knowledge is not only text', SVG(g), ch='0',
 g = adefs('pe')
 g += steps(1)
 w3 = 365
-c1 = person(30, 50, w3, 262, 'rosalind-picard.jpg', 'RP', 'Rosalind Picard', ['MIT Media Lab, founder of', 'affective computing'], AC2)
-c1 += quote(62, 172, [[('we must give computers the', False)], [('ability to ', False), ('recognize,', True)], [('understand, even to have', True)], [('and express emotions', True)]], 15.5, 23)
-c1 += T(375, 294, 'Affective Computing, MIT Press, 1997', 12, 400, MUT, 'end')
+c1 = person(30, 50, w3, 282, 'rosalind-picard.jpg', 'RP', 'Rosalind Picard', ['MIT Media Lab, founder of', 'affective computing'], AC2)
+c1 += quote(62, 186, [[('we must give computers the', False)], [('ability to ', False), ('recognize,', True)], [('understand, even to have', True)], [('and express emotions', True)]], 15.5, 23)
+c1 += T(375, 320, 'Affective Computing, MIT Press, 1997', 12, 400, MUT, 'end')
 g += c1
-c2 = person(407, 50, w3, 262, 'marvin-minsky.jpg', 'MM', 'Marvin Minsky', ['MIT, cofounder of the AI Lab,', 'Turing Award 1969'], AC2)
-c2 += quote(439, 172, [[('Each of our major', False)], [('emotional states', True), (' results', False)], [('from turning certain', False)], [('resources on', True), (' while turning', False)], [('certain others off.', False)]], 15.5, 22)
-c2 += T(752, 294, 'The Emotion Machine, 2006', 12, 400, MUT, 'end')
+c2 = person(407, 50, w3, 282, 'marvin-minsky.jpg', 'MM', 'Marvin Minsky', ['MIT, cofounder of the AI Lab,', 'Turing Award 1969'], AC2)
+c2 += quote(439, 186, [[('Each of our major', False)], [('emotional states', True), (' results', False)], [('from turning certain', False)], [('resources on', True), (' while turning', False)], [('certain others off.', False)]], 15.5, 22)
+c2 += T(752, 320, 'The Emotion Machine, 2006', 12, 400, MUT, 'end')
 g += F(1, c2)
-c3 = person(785, 50, w3, 262, 'leonard-meyer.jpg', 'LM', 'Leonard Meyer', ['Music theorist, University of Chicago', 'and University of Pennsylvania'], MU)
-c3 += quote(817, 172, [[('affect is aroused when an', False)], [('expectation', True), (', a tendency to', False)], [('respond, is ', False), ('temporarily', True)], [('inhibited or permanently', True)], [('blocked', True)]], 15.5, 22)
-c3 += T(1130, 294, 'Emotion and Meaning in Music, 1956, p. 31', 12, 400, MUT, 'end')
+c3 = person(785, 50, w3, 282, 'leonard-meyer.jpg', 'LM', 'Leonard Meyer', ['Music theorist, University of', 'Chicago and Penn'], MU)
+c3 += quote(817, 186, [[('affect is aroused when an', False)], [('expectation', True), (', a tendency to', False)], [('respond, is ', False), ('temporarily', True)], [('inhibited or permanently', True)], [('blocked', True)]], 15.5, 22)
+c3 += T(1130, 320, 'Emotion and Meaning in Music, 1956, p. 31', 12, 400, MUT, 'end')
 g += F(2, c3)
-band = T(30, 340, 'Why this matters for a graph', 14, 700, MUT)
+band = T(30, 356, 'Why this matters for a graph', 14, 700, MUT)
 chain = [('music', 'a melody unfolds', MU, MUL), ('expectation', 'what comes next? a transition graph', ACC, ACL), ('emotion', 'dopamine at the peak, Salimpoor 2011', PURP, '#eef0ff'), ('brain response', 'measured in EEG, Di Liberto 2020', MU, MUL)]
 for k, (a_, b_, col, fill) in enumerate(chain):
     x = 30 + k * 283
-    band += R(x, 352, 262, 64, fill, col, 2, 14) + T(x + 16, 378, a_, 16.5, 700, col) + T(x + 16, 401, b_, 12.5, 400, INK)
+    band += R(x, 366, 262, 60, fill, col, 2, 14) + T(x + 16, 390, a_, 16.5, 700, col) + T(x + 16, 413, b_, 12.5, 400, INK)
     if k < 3:
-        band += P(f'M{x+264},384 L{x+281},384', AC2, 2.5, extra='marker-end="url(#pea)"')
+        band += P(f'M{x+264},396 L{x+281},396', AC2, 2.5, extra='marker-end="url(#pea)"')
 g += F(3, band)
-g += F(4, T(590, 462, 'Music is the most measurable route to emotion, so it is where a brain can judge a model.', 17, 700, INK, 'middle'))
+g += F(4, T(590, 466, 'Music is the most measurable route to emotion, so it is where a brain can judge a model.', 17, 700, INK, 'middle'))
 EMOTION2 = sec('Music is where emotion can be measured', SVG(g), ch='0',
                ref='Picard quote from the MIT Press description of Affective Computing, 1997. Minsky, The Emotion Machine, 2006. Meyer, Emotion and Meaning in Music, 1956, p. 31, via Margulis 2005. Huron, Sweet Anticipation, 2006. Salimpoor et al., Nature Neuroscience 2011. Koelsch, Nature Reviews Neuroscience 2014. Photos: Wikimedia Commons',
                notes='Step 2 of 2. Two AI pioneers say machines need emotion. A music theorist explains where musical emotion comes from: expectation that is held back or broken. Expectation is exactly what a note transition graph computes, and its effect is measurable in the brain. That is why music is the place where a brain can judge whether a model has a graph inside. Check the Picard and Minsky wording against the books before the talk.')
@@ -1403,7 +1478,7 @@ def assemble(cover, old):
     toch = lambda sec_, c: re.sub(r'data-ch="[^"]*"', f'data-ch="{c}"', sec_, count=1)
     vector = retitle(VECTOR, 'Every change to a model is stored as a vector')
     # trailer: the problem, the thesis, one best result per domain, the two claims
-    vision = [cover, SILENT, vector, DELTA_T, DEMO2, FORECAST2]
+    vision = [cover, SILENT, vector, DELTA_T, MSTEER, DEMO2, FORECAST2]
     rome = old[33]
     a = rome.find('<div class="note"'); e = rome.find('  <div class="ref">')
     rome = rome[:a] + '<div class="note" style="font-size:.62em"><div class="key">The finding</div><p class="one" style="font-size:1.25em">A fact sits in two places. Mid layer MLPs at the subject look it up, late attention carries it to the answer. Editing a fact means changing the first place.</p></div>\n  </div>\n' + rome[e:]
