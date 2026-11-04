@@ -1413,16 +1413,16 @@ def hbars(x0, y0, rows, scale, maxv, lw=300, bh=34, gap=14):
 
 g = adefs('ro')
 g += T(40, 40, 'Which tradition is this melody from? Rebuilt set of 992 melodies, five fold cross validation (70.9% was on the earlier 1,000 piece set)', 14, 600, MUT)
-rowsA = [('chance', 16.7, '#d3d7da', '', False), ('graph, 1 note of memory', 70.2, GRY, '', False), ('graph, 2 notes of memory', 78.2, '#f6a46a', '+8 points', False),
+rowsA = [('chance', 16.7, '#d3d7da', '', False), ('12 note counts, no order', 41.9, '#d3d7da', '', False), ('graph, 1 note of memory', 70.2, GRY, '+28 over counts', False), ('graph, 2 notes of memory', 78.2, '#f6a46a', '+8 points', False),
          ('graph, memory as needed', 73.3, '#f6a46a', '+3 points', False)]
-g += hbars(40, 64, rowsA, 640, 100)
+g += hbars(40, 56, rowsA, 640, 100, bh=28, gap=10)
 rowsB = [('note plus length, 1 note of memory', 86.8, '#ef7d33', '+17 points', False), ('note plus length, memory as needed', 88.7, ACC, '+19 points', True)]
-g += F(1, L(40, 262, 1150, 262, LINE, 1.5) + hbars(40, 280, rowsB, 640, 100))
-g += F(2, R(160, 392, 860, 48, ACL, ACC, 1.5, 10) + T(590, 423, 'A richer node buys more than a longer memory.', 19, 700, INK, 'middle'))
-g += F(3, T(590, 468, 'For a graph, what a node means matters more than how far back it looks.', 17, 700, ACC, 'middle'))
+g += F(1, L(40, 256, 1150, 256, LINE, 1.5) + hbars(40, 268, rowsB, 640, 100, bh=28, gap=10))
+g += F(2, R(160, 352, 860, 48, ACL, ACC, 1.5, 10) + T(590, 383, 'A richer node buys more than a longer memory.', 19, 700, INK, 'middle'))
+g += F(3, T(590, 440, 'For a graph, what a node means matters more than how far back it looks.', 17, 700, ACC, 'middle'))
 RICHER = sec('Richer nodes beat longer memory', SVG(g), ch='2', status='prog',
              ref='Our experiments, Nov 2026: 992 melodies from six music21 corpora, same five folds for every method. Points are differences from the 1 note graph (70.2%). "Memory as needed" is a variable order model, the IDyOM style',
-             notes='Three lessons. One more note of memory helps, 70 to 78. Letting the graph decide how much memory each context needs is the safest single choice. But giving each node one more attribute, how long the note lasts, jumps to 87 to 89, more than any change of order. Caveats: Bach repeats chorale tunes across harmonizations, which flatters long memory, and Palestrina and Trecento editions use long note values, so part of the duration gain reflects notation.')
+             notes='First the baseline everyone asks for: counting the 12 notes without any order gets 41.9 percent, so the order, the graph, adds 28 points. Three lessons. One more note of memory helps, 70 to 78. Letting the graph decide how much memory each context needs is the safest single choice. But giving each node one more attribute, how long the note lasts, jumps to 87 to 89, more than any change of order. Caveats: Bach repeats chorale tunes across harmonizations, which flatters long memory, and Palestrina and Trecento editions use long note values, so part of the duration gain reflects notation.')
 
 g = adefs('gc')
 g += T(40, 40, 'Generate 600 melodies per setting, then ask a style classifier and a copy checker', 14, 600, MUT)
@@ -1438,17 +1438,16 @@ for k, (lab, st, cp, col) in enumerate(cols_):
     cp_ += R(x, 260 - cp * 9, 90, cp * 9, col, 'none', 0, 4) + T(x + 45, 252 - cp * 9, f'{cp} notes', 15, 700, INK, 'middle') + T(x + 45, 282, lab, 13.5, 600, INK, 'middle')
 cp_ += L(670, 260, 1080, 260, INK, 1.5) + L(670, 260 - 10.9 * 9, 1080, 260 - 10.9 * 9, '#c0392b', 1.5, 'stroke-dasharray="6 4"') + T(672, 260 - 10.9 * 9 - 6, 'real melodies: 10.9', 12.5, 700, '#c0392b')
 g += F(1, cp_ + T(880, 306, 'more memory sounds more like the style, because it copies', 14, 700, ACC, 'middle'))
-pb = T(40, 334, 'Listen: same rhythm and key, only the order of pitches changes', 14, 700, MUT)
-for k, (clip_, lab_) in enumerate([('bach_real', 'Bach, real'), ('bach_order1', '1 note'), ('bach_order2', '2 notes'), ('bach_ordervar', 'as needed')]):
-    pb += playbtn(40 + k * 133, 344, 125, clip_, lab_, AC2 if k == 0 else ACC)
+pb = T(40, 334, 'Vote: which one is the real Bach? Same rhythm and key, only the order of pitches changes', 14, 700, MUT)
+pb += playbtn(40, 344, 250, 'bach_order2', 'melody A', AC2) + playbtn(300, 344, 250, 'bach_real', 'melody B', AC2)
 for k, (clip_, lab_) in enumerate([('essen_real', 'Folk, real'), ('essen_order1', '1 note'), ('essen_order2', '2 notes'), ('essen_ordervar', 'as needed')]):
     pb += playbtn(610 + k * 133, 344, 125, clip_, lab_, AC2 if k == 0 else MU)
 g += F(2, pb)
-g += F(3, T(590, 420, 'With no copy longer than 6 notes, 2 notes of memory still reaches 61%.', 17, 700, INK, 'middle')
-          + T(590, 452, 'The useful graph remembers a little and copies nothing long.', 18, 700, ACC, 'middle'))
+g += F(3, T(40, 408, 'B is the real Bach. A came from the 2 note graph, with no copy longer than 6 notes.', 15, 600, '#C45200') + T(590, 436, 'With no copy longer than 6 notes, 2 notes of memory still reaches 61%.', 17, 700, INK, 'middle')
+          + T(590, 464, 'The useful graph remembers a little and copies nothing long.', 18, 700, ACC, 'middle'))
 COPY = sec('More memory sounds more like the style, because it copies', SVG(g), ch='2', status='prog',
            ref='Our experiments, Nov 2026. Clips: order 2 and the other settings sampled with a 6 note copy limit, one sample each, fixed seed, no cherry picking. Real Bach melody: BWV 329 soprano, held out',
-           notes='Generation tells the other half. Plain sampling with more memory is recognized as its style more often, 57 to 65, but the variable order model copies 12 note stretches verbatim and 99 percent of its 4 note patterns already exist in training. A 6 note copy limit keeps most of the gain. Honest caveat: these automatic judges rate generated melodies above real held out ones (52 percent), so they measure typicality, not musical conviction. A listening test is the next step. The LLM judge numbers on the memory order slide come from the website, not from this run.')
+           notes='Live vote first: play melody A, then B, and ask for hands, which one is the real Bach. Then reveal. This is a pilot of the listening test, either result is honest data. Generation tells the other half. Plain sampling with more memory is recognized as its style more often, 57 to 65, but the variable order model copies 12 note stretches verbatim and 99 percent of its 4 note patterns already exist in training. A 6 note copy limit keeps most of the gain. Honest caveat: these automatic judges rate generated melodies above real held out ones (52 percent), so they measure typicality, not musical conviction. A listening test is the next step. The LLM judge numbers on the memory order slide come from the website, not from this run.')
 
 # ======================= ROUND 8 (Nov 2 2026): slides 9 and 10 on one template =======================
 PURP = '#5a4fcf'
@@ -1499,9 +1498,9 @@ c1 += T(52, 268, 'Intelligence is plural. Each kind has its own', 15.5, 600, INK
 c1 += T(555, 318, 'Frames of Mind, 1983', 12.5, 400, MUT, 'end')
 g += c1
 c2 = person(605, 50, 545, 282, 'fei-fei-li.jpg', 'FL', 'Fei-Fei Li', ['Stanford professor, creator of ImageNet,', 'cofounder of World Labs'], AC2)
-c2 += chips(627, 182, [('language', 'L'), ('perceptual', ''), ('spatial', ''), ('bodily', ''), ('emotional', 'M')], 490)
+c2 += chips(627, 182, [('linguistic', 'L'), ('spatial', ''), ('emotional, still missing', 'M')], 490)
 c2 += quote(645, 236, [[('Spatial intelligence is', False)], [("AI's next frontier", True), ('.', False)]], 18, 26)
-c2 += T(1130, 318, 'From Words to Worlds, essay, 2025. Five intelligences: interview, 2026', 12.5, 400, MUT, 'end')
+c2 += T(1130, 318, "From Words to Worlds, essay, 2025. Lenny's Podcast, Nov 2025", 12.5, 400, MUT, 'end')
 g += F(1, c2)
 band = T(30, 356, 'What this talk covers', 14, 700, MUT)
 tiles = [('Text', 'Part 1: facts inside a language model', ACC, ACL, ''), ('Equations', 'next: 36 + 59 runs as two paths inside a model', PURP, '#fff', 'stroke-dasharray="7 5"'), ('Music and emotion', 'Part 2: style, expectation, the brain', MU, MUL, '')]
@@ -1511,7 +1510,7 @@ for k, (a_, b_, col, fill, dash) in enumerate(tiles):
 g += F(2, band)
 g += F(3, T(590, 466, 'Equations and music are knowledge beyond text. They may need graphs even more than text does.', 17, 700, INK, 'middle'))
 BEYOND2 = sec('Knowledge is not only text', SVG(g), ch='0',
-              ref='Gardner, Frames of Mind, 1983. Fei-Fei Li, From Words to Worlds: Spatial Intelligence is AI\'s Next Frontier, Substack essay, Nov 2025, and Silicon Valley Girl podcast, 2026. Lindsey et al., On the Biology of a Large Language Model, 2025. Photos: Wikimedia Commons',
+              ref='Gardner, Frames of Mind, 1983. Fei-Fei Li, From Words to Worlds: Spatial Intelligence is AI\'s Next Frontier, Substack essay, Nov 2025, and Lenny\'s Podcast, Nov 2025. Lindsey et al., On the Biology of a Large Language Model, 2025. Photos: Wikimedia Commons',
               notes='Step 1 of 2. A psychologist and an AI leader say the same thing from two sides: intelligence and knowledge come in several kinds, and language is only one. Gardner counts musical and logical mathematical intelligence as their own kinds. Fei-Fei Li lists five intelligences and calls space the frontier beyond language. This talk covers text and music. Equations are next: inside Claude, 36 + 59 runs as two parallel paths, one for the rough size and one for the last digit (Lindsey et al. 2025).')
 
 # ---- slide 10 ----
@@ -1544,6 +1543,45 @@ EMOTION2 = sec('Music is where emotion can be measured', SVG(g), ch='0',
                notes='Step 2 of 2. Two AI pioneers say machines need emotion. A music theorist explains where musical emotion comes from: expectation that is held back or broken. Expectation is exactly what a note transition graph computes, and its effect is measurable in the brain. That is why music is the place where a brain can judge whether a model has a graph inside. Check the Picard and Minsky wording against the books before the talk.')
 
 # ======================= ASSEMBLY =======================
+# ---- loop it1: results slide that pays off the trailer bars (P15, P10) ----
+g = adefs('r20')
+g += T(40, 34, '100 edits, all with perfect scores, 56 of them secretly bad. Check only 20. Bad edits found:', 16, 600, MUT)
+def _bar20(k, who, n_, rate, col, bold=False):
+    y = 66 + k * 72
+    return T(40, y + 18, who, 18, 600 if bold else 400, INK) + R(40, y + 28, n_ * 30, 26, col, 'none', 0, 2) + T(52 + n_ * 30, y + 48, str(n_), 20, 600, INK) + T(110 + n_ * 30, y + 48, f'{rate}% of checks bad', 14, 400, MUT)
+g += _bar20(0, 'at random', 11, 56, '#ACA39A') + _bar20(1, 'by editor and model', 14, 70, '#ACA39A')
+g += F(1, _bar20(2, 'by the delta graph', 17, 86, ACC, True))
+box = ''
+for k, (big, a, b) in enumerate([('0.703 to 0.797', 'ranking quality (AUC), editor and model only,', 'then with the delta graph'), ('0.853 to 0.904', 'second dataset (wiki_recent), 500 real', 'Wikipedia facts, the same pattern')]):
+    x = 40 + k * 560
+    box += R(x, 300, 540, 96, SOFT, 'none', 0, 3) + T(x + 20, 346, big, 30, 400, INK, extra='font-family="et-book,Georgia,serif" style="font-size-adjust:none"') + T(x + 250, 336, a, 14, 400, MUT) + T(x + 250, 358, b, 14, 400, MUT)
+g += F(2, box)
+g += F(3, T(590, 452, 'Next: is it the size of the change, or its shape?', 19, 700, INK, 'middle'))
+RES20 = sec('Results: same checking budget, more bad edits caught', SVG(g), ch='1', status='pub',
+            ref='Benbrahim et al., SDM 2026, Tables 5.1 to 5.5. Counts are the expected bad edits among 20 checks at the reported rates',
+            notes='The same three bars as the trailer, now with the method behind them. Show random and editor first, then ask: from the inside, how many of the 20 would you expect to be bad? Then reveal 17. The rates are what the paper reports: 56 percent at random, 70 by editor and model, 86 with the delta graph. Ranking quality goes from 0.703 to 0.797, and on a second dataset of real Wikipedia facts from 0.853 to 0.904.')
+
+# ---- loop it1: one slide for the vector evidence (P03) ----
+import random as _r3
+g = adefs('vv')
+g += T(40, 34, 'Refusal in 13 chat models', 16, 600, MUT)
+g += T(40, 92, 'normal model', 16, 400, INK) + R(240, 74, 260, 26, AC2, 'none', 0, 2) + T(510, 92, 'refuses', 15, 400, MUT)
+g += T(40, 150, 'one direction removed', 16, 600, '#C45200') + R(240, 132, 14, 26, ACC, 'none', 0, 2) + T(264, 150, 'almost never refuses', 15, 600, '#C45200')
+g += T(40, 196, 'difference of means at one layer, removed everywhere', 13.5, 400, MUT)
+sc = T(620, 34, 'One steering vector, applied to single inputs', 16, 600, MUT)
+_r3.seed(3)
+for v in [_r3.gauss(1.2, 1.6) for _ in range(46)]:
+    x = 880 + v * 52; y = 150 - _r3.uniform(0, 80)
+    sc += C(round(x), round(y), 5, ACC if v > 0 else AC2, extra='opacity=".8"')
+sc += L(620, 170, 1150, 170, INK, 1.5) + L(880, 60, 880, 176, '#DA291C', 1.5, 'stroke-dasharray="5 4"') + T(880, 194, '0: no effect', 13, 600, '#DA291C', 'middle')
+sc += P(f'M{880+1.2*52},56 L{880+1.2*52},170', ACC, 2.5) + T(880 + 1.2 * 52 + 8, 66, 'average: it works', 14, 600, '#C45200')
+sc += T(620, 194, 'moved the opposite way', 13, 400, MUT) + T(1150, 194, 'moved as intended', 13, 400, MUT, 'end')
+g += F(1, sc)
+g += F(2, R(40, 250, 1110, 110, SOFT, 'none', 0, 3) + T(590, 296, 'A vector works on average and fails on many single inputs.', 21, 400, INK, 'middle', extra='font-family="et-book,Georgia,serif" style="font-size-adjust:none"') + T(590, 330, 'Our reading: a detector cannot be the vector we added. It has to look at what the vector did to the rest of the network.', 15, 600, '#C45200', 'middle'))
+VEC2 = sec('A vector switches a behavior on average, and fails on many single inputs', SVG(g), ch='1',
+           ref='Arditi et al., Refusal in Language Models Is Mediated by a Single Direction, NeurIPS 2024, Figure 1 (redrawn). Tan et al., Analysing the Generalisation and Reliability of Steering Vectors, NeurIPS 2024 (schematic)',
+           notes='Two results side by side. Arditi: in 13 chat models, one direction found by a difference of means at one layer controls refusal, remove it and the model stops refusing. Tan: the same kind of vector, applied input by input, sends a large share of inputs the opposite way, on many datasets close to half. The bridge is our reading, not their claim: if the vector itself is unreliable per input, the signal for a bad change has to come from what the change did to the rest of the network.')
+
 def backup(sec_html):
     """a backup slide: stacked under the slide before it (down arrow), not counted in the main run"""
     sec_html = re.sub(r'<section( class="([^"]*)")?', lambda m: '<section class="backup ' + (m.group(2) or '') + '"', sec_html, count=1)
@@ -1572,7 +1610,11 @@ def assemble(cover, old):
     rome = retitle(rome, 'A fact lives in mid layer MLPs and moves out by attention')
     d46 = old[46].replace('running example from slide 45: the Space Needle edit', 'running example: the Space Needle edit').replace(' (slide 2).', '.')
     rome = retitle(rome, 'If not the vector, look where the fact lives')
-    lang = [DIV1, CGT, toch(story, '1'), backup(toch(surg, '1')), toch(SILENT, '1'), toch(receipts, '1'), REFUSAL, CRITIQUE, rome, old[35].replace('Guo 2025, slide 31', 'Guo 2025'), d46, backup(old[48]), old[49], old[50], old[51]]
+    abl = old[50]
+    for pat in (r'<text[^>]*>Table F\.1\.[^<]*</text>', r'<text[^>]*>total change 0\.575[^<]*</text>', r'<text[^>]*>best 0\.589: max edge change</text>'):
+        abl = re.sub(pat, '', abl)
+    abl = re.sub(r'(<aside class="notes">)(.*?)(</aside>)', lambda m: m.group(1) + m.group(2) + ' The five single numbers from Table F.1: max edge change 0.589, total change 0.575, top 5 node share 0.564, top 1 node share 0.521. The main text reports 0.703 and 0.797 for the same experiment, Table F.1 gives 0.705 and 0.798.' + m.group(3), abl, count=1, flags=re.S) if '<aside class="notes">' in abl else notes(abl, 'The five single numbers from Table F.1: max edge change 0.589, total change 0.575, top 5 node share 0.564, top 1 node share 0.521.')
+    lang = [DIV1, CGT, toch(story, '1'), backup(toch(surg, '1')), toch(SILENT, '1'), toch(receipts, '1'), VEC2, rome, old[35].replace('Guo 2025, slide 31', 'Guo 2025'), d46, backup(old[48]), RES20, abl, old[51]]
     four = retitle(FOUR, 'Music generation went from a visible graph to a hidden one')
     four = re.sub(r'\s*<p class="q">.*?</p>', '', four, count=1, flags=re.S)
     tools = retitle(TOOLS, 'Every tool inside MusicGen reads one layer at one moment').replace('Three tools, three questions, all at one layer and one moment.', 'Language models moved on to attribution graphs. Music has not.')
@@ -1584,7 +1626,8 @@ def assemble(cover, old):
     path = retitle(PATH, 'Too little memory gives a graph without syntax, too much gives a path').replace('An 89 note Bach chorale at first and third order.', 'An 89 note Bach chorale at first and third order. LLM judge result from zhiqian.ai/music-markov')
     beyond2 = retitle(toch(BEYOND2, '2'), 'Part 2. Knowledge is not only text')
     hist = retitle(HIST, 'The oldest music model is a graph')
-    mus = [beyond2, toch(EMOTION2, '2'), hist, FOLD, corpus, path, RICHER, COPY, WHEN, MGEN, PROBE, toch(MUSRES, '2'), BRL, BRI, BRR, BRG, PLAN]
+    bri = retitle(BRI, 'Like a language model, a note transition graph predicts the brain')
+    mus = [beyond2, toch(EMOTION2, '2'), hist, FOLD, corpus, path, RICHER, COPY, WHEN, MGEN, PROBE, toch(MUSRES, '2'), bri, backup(BRL), BRR, BRG, PLAN]
     beyond = []
     close = [TAKEAWAY.replace('</section>', CLIP_JSON + '</section>')]
     parts = {'vision': vision, 'language': lang, 'music': mus, 'beyond': beyond, 'close': close}
