@@ -28,7 +28,7 @@ html,body,.reveal-viewport{{background:{BG} !important}}
 .reveal .slides section{{font-size-adjust:.45}}
 .reveal .slides section svg,.reveal .slides section h2,.reveal .slides section .ref,.reveal section.titlehero{{font-size-adjust:none}}
 .reveal svg text:not([font-family]){{font-family:{SANS}}}
-.reveal .progress,.reveal .slide-number{{display:none !important}}
+.reveal > .progress,.reveal .slide-number{{display:none !important}}
 .reveal .controls{{display:none !important}}
 /* headline: ET Book, left, no bar */
 .reveal h2{{font-family:{SERIF} !important;font-size-adjust:none;font-weight:400 !important;font-size:40px !important;line-height:1.12;color:{INK} !important;

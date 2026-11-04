@@ -600,7 +600,7 @@ for ang in (-0.45, 0.35, 2.8, 3.6):
     isl += P(f'M{x1:.0f},{y1:.0f} L{x2:.0f},{y2:.0f}', GRN, 2, extra='marker-end="url(#mra)"')
 isl += P('M790,190 C850,175 880,170 893,160', RED, 2, extra='stroke-dasharray="5 4"') + T(786, 182, 'rare way in', 12.5, 600, RED, 'end') + T(955, 200, 'many ways out, few ways in', 13.5, 700, INK, 'middle')
 g += F(4, isl + T(590, 380, 'Leaving a style is easy. Entering one is not.', 22, 700, INK, 'middle') + T(590, 414, 'A vector cannot explain that. Reachability on a graph can.', 18, 700, ACC, 'middle'))
-MUSRES = sec('Steering leaves a style easily but cannot enter one', SVG(g), ch='0', status='rev',
+MUSRES = sec('Steering leaves a style easily but rarely enters one', SVG(g), ch='0', status='rev',
              ref='Co-authored work under review, MusicGen small and medium. Jazz and classical are an illustration of the two arms',
              notes='Same vector tool as the refusal direction, now in a music generator. Removing a style works and keeps the music coherent. Adding the same direction to music without that style does not make it acquire the style, and a bigger push breaks the audio first. Replace this drawing with real clips and numbers from the paper when available.')
 
@@ -866,7 +866,7 @@ ch += L(X1, 70, X1, Y0, '#D7D2CB', 1) + L(X2, 70, X2, Y0, '#D7D2CB', 1) + T(X1, 
 for name, a, b in H:
     ch += P(f'M{X1},{Y0 - a * YS:.1f} L{X2},{Y0 - b * YS:.1f}', '#7C878E', 1.6, extra='stroke-opacity=".75"') + C(X1, round(Y0 - a * YS, 1), 4, '#5F5D50') + C(X2, round(Y0 - b * YS, 1), 4, '#5F5D50')
 ch += T(X1 - 14, Y0 - 76 * YS + 5, 'about 76%', 16, 600, INK, 'end') + T(X1 - 14, Y0 - 59 * YS + 5, '59%', 14, 400, MUT, 'end')
-ch += T(X2 + 14, Y0 - 9 * YS + 5, '6 to 12%', 16, 600, INK) + T(860, 118, 'a cliff of', 16, 600, '#C45200', 'middle') + T(860, 138, '52 to 70 points', 16, 600, '#C45200', 'middle')
+ch += T(X2 + 14, Y0 - 9 * YS + 5, '6 to 12%', 16, 600, INK) + T(860, 118, 'a cliff of', 16, 600, '#C45200', 'middle') + T(860, 138, 'about 50 to 70 points', 16, 600, '#C45200', 'middle')
 g += F(1, ch)
 rep = R(1000, 86, 180, 262, SOFT, 'none', 0, 3) + T(1016, 114, 'The graph splits', 15, 600, INK) + T(1016, 134, 'the failures', 15, 600, INK)
 rep += T(1016, 170, 'missing edges:', 14, 600, '#C45200') + T(1016, 190, 'fix the graph. On', 14, 400, INK) + T(1016, 210, 'CORAL, 51 edges cut', 14, 400, INK) + T(1016, 230, 'misses 8.2% to 0%', 14, 600, INK)
@@ -876,6 +876,22 @@ g += F(3, T(590, 466, 'A graph tells which questions cannot be answered, before 
 CGT = sec('Two hops break every model. The graph says why', SVG(g), ch='1', status='acc',
           ref='Ours, Diagnosing Multi-Hop KG Question Answering Failures: A Typed Homomorphism Framework with Clinical Repair, CIKM 2026, Table 4 and Table 6. MIMIC-III, CORAL from PhysioNet',
           notes='Our CIKM 2026 paper, the knowledge graph from the opening made concrete. On clinical records that no model has seen in training, seven of nine models reach about 76 percent at one hop and fall to 6 to 12 percent at two hops, from 3B up to a 1.6T mixture of experts. Part of that cliff is not the model at all: if the record never stored the edge, no model can answer. The paper turns that into a theorem and a test that runs before retrieval. On CORAL, adding 51 missing edges removes every structural miss, 8.2 percent to zero. What remains is the model reasoning gap. On MIMIC-III, only 3 of 239 two hop questions (1.3 percent) have no path, so almost all of that cliff is the models reasoning, not the record.')
+
+# ---- backup under the CIKM slide: the four classes ----
+g = T(40, 40, 'The "no path" side of slide 9, checked in this order. Each question gets exactly one label.', 14, 600, MUT)
+cls4 = [('1', 'Out of scope', 'more hops than the graph is certified for', 'no change to the graph, the workload asks too much'),
+        ('2', 'Entity failure', 'a needed entity type has no instances at all', 'fix how the graph is populated'),
+        ('3', 'Relation failure', 'a needed relation type is not in the schema', 'fix the schema'),
+        ('4', 'Composition failure', 'types exist, but this patient\'s path is missing', 'repair that edge')]
+for k, (n_, name, why, fix) in enumerate(cls4):
+    y = 64 + k * 74
+    g += R(40, y, 1100, 62, SOFT, 'none', 0, 6) + T(70, y + 38, n_, 22, 700, '#C45200', 'middle') + T(100, y + 27, name, 17, 700, INK) + T(100, y + 49, why, 14.5, 400, INK) + T(1120, y + 38, fix, 14.5, 600, '#C45200', 'end')
+g += T(590, 392, 'None of the four applies: a path exists, so a wrong answer is the model\'s own reasoning.', 17, 700, INK, 'middle')
+g += T(590, 420, 'Typed homomorphism: read the question as a small typed graph. It must map into the record, types and edges preserved.', 14.5, 400, MUT, 'middle')
+g += T(590, 446, 'MIMIC-III: 3 of 239 two hop questions land in the four classes. CORAL: 8.2%, and repairing 51 edges brings it to 0%.', 14.5, 400, MUT, 'middle')
+CGT4 = sec('Four ways a question can be impossible before any model tries', SVG(g), ch='1', status='acc',
+           ref='Ours, CIKM 2026, Definition 8 (priority ordered failure classes), Theorem 1 and Table 6',
+           notes='Only if asked. The four classes refine the missing edge box on slide 9. The order matters: each question gets the first label that applies. Entity and relation failures are design errors in the graph, composition failure is a documentation gap fixed by adding the edge, out of scope means the questions ask for more hops than we can certify, so nothing in the graph changes.')
 
 # ---- forecast, two claims ----
 g = adefs('fc2')
@@ -893,7 +909,7 @@ for k, (a, b, col, fill, solid) in enumerate(mods):
     strip += T(x + 65, 399, a, 16, 700, col, 'middle', '' if solid else 'opacity=".8"') + T(x + 65, 420, b, 12, 400, INK if solid else MUT, 'middle')
 g += F(3, strip + T(590, 462, 'Two kinds today. Many more, and none is a substitute for another.', 17, 700, INK, 'middle'))
 g += T(590, 136, 'A graph inside a model: nodes are its parts or states, edges are how they move together or follow each other.', 15, 600, MUT, 'middle')
-FORECAST2 = sec('Two claims for the next forty minutes', SVG(g), ch='0',
+FORECAST2 = sec('Two claims for the rest of this talk', SVG(g), ch='0',
                 notes='The dashed tiles are the point of the vision: knowledge comes in many forms, and text is only one of them. Today covers text and music. Language is published and the result is solid. Music is in progress: the data side has numbers, the generator side is being tested, and the brain is the judge.')
 
 # ---- part dividers, plain ----
@@ -1441,7 +1457,7 @@ g += F(1, cp_)
 pb = T(40, 334, 'Vote: which one is the real Bach? Same rhythm and key, only the order of pitches changes', 14, 700, MUT)
 pb += playbtn(40, 344, 250, 'bach_order2', 'melody A', AC2) + playbtn(300, 344, 250, 'bach_real', 'melody B', AC2)
 g += F(2, pb)
-g += F(3, T(610, 372, 'B is the real Bach. A came from the 2 note graph,', 15, 600, '#C45200') + T(610, 392, 'copying nothing longer than 6 notes, and still scores 61%.', 15, 600, '#C45200')
+g += F(3, T(610, 372, 'B is the real Bach. A came from the 2 note graph,', 15, 600, '#C45200') + T(610, 392, 'and under that 6 note copy limit it still scores 61% (64% free).', 15, 600, '#C45200')
           + T(590, 450, 'The useful graph remembers a little and copies nothing long.', 18, 700, ACC, 'middle'))
 COPY = sec('More memory sounds more like the style, because it copies', SVG(g), ch='2', status='prog',
            ref='Our experiments, Nov 2026. Clips: order 2 and the other settings sampled with a 6 note copy limit, one sample each, fixed seed, no cherry picking. Real Bach melody: BWV 329 soprano, held out',
@@ -1509,7 +1525,7 @@ g += F(2, band)
 g += F(3, T(590, 466, 'Equations and music are knowledge beyond text. They may need graphs even more than text does.', 17, 700, INK, 'middle'))
 BEYOND2 = sec('Knowledge is not only text', SVG(g), ch='0',
               ref='Gardner, Frames of Mind, 1983. Fei-Fei Li, From Words to Worlds: Spatial Intelligence is AI\'s Next Frontier, Substack essay, Nov 2025, and Lenny\'s Podcast, Nov 2025. Lindsey et al., On the Biology of a Large Language Model, 2025. Photos: Wikimedia Commons',
-              notes='Step 1 of 2. A psychologist and an AI leader say the same thing from two sides: intelligence and knowledge come in several kinds, and language is only one. Gardner counts musical and logical mathematical intelligence as their own kinds. Fei-Fei Li lists five intelligences and calls space the frontier beyond language. This talk covers text and music. Equations are next: inside Claude, 36 + 59 runs as two parallel paths, one for the rough size and one for the last digit (Lindsey et al. 2025).')
+              notes='Step 1 of 2. A psychologist and an AI leader say the same thing from two sides: intelligence and knowledge come in several kinds, and language is only one. Gardner counts musical and logical mathematical intelligence as their own kinds. Fei-Fei Li names linguistic and spatial intelligence and says emotional intelligence is still missing in AI, and calls space the frontier beyond language. This talk covers text and music. Equations are next: inside Claude, 36 + 59 runs as two parallel paths, one for the rough size and one for the last digit (Lindsey et al. 2025).')
 
 # ---- slide 10 ----
 g = adefs('pe')
@@ -1538,7 +1554,7 @@ g += F(3, band)
 g += F(4, T(590, 466, 'Music is the most measurable route to emotion, so it is where a brain can judge a model.', 17, 700, INK, 'middle'))
 EMOTION2 = sec('Music is where emotion can be measured', SVG(g), ch='0',
                ref='Picard, Affective Computing, MIT Press 1997, introduction. Minsky, The Emotion Machine, 2006. Meyer, Emotion and Meaning in Music, 1956, p. 31, via Margulis 2005. Huron, Sweet Anticipation, 2006. Salimpoor et al., Nature Neuroscience 2011. Koelsch, Nature Reviews Neuroscience 2014. Photos: Wikimedia Commons',
-               notes='Step 2 of 2. Two AI pioneers say machines need emotion. A music theorist explains where musical emotion comes from: expectation that is held back or broken. Expectation is exactly what a note transition graph computes, and its effect is measurable in the brain. That is why music is the place where a brain can judge whether a model has a graph inside. Check the Picard and Minsky wording against the books before the talk.')
+               notes='Step 2 of 2. Two AI pioneers say machines need emotion. A music theorist explains where musical emotion comes from: expectation that is held back or broken. Expectation is exactly what a note transition graph computes, and its effect is measurable in the brain. That is why music is the place where a brain can judge whether a model has a graph inside.')
 
 # ======================= ASSEMBLY =======================
 # ---- loop it1: results slide that pays off the trailer bars (P15, P10) ----
@@ -1611,11 +1627,11 @@ def assemble(cover, old):
     rome = retitle(rome, 'A fact lives in mid layer MLPs and moves out by attention')
     d46 = old[46].replace('3. Before minus after', '3. After minus before').replace('running example from slide 45: the Space Needle edit', 'running example: the Space Needle edit').replace(' (slide 2).', '.')
     rome = retitle(rome, 'If not the vector, look where the fact lives')
-    abl = old[50].replace('Same probes, same before/after difference, scored different ways (AUC on the 1,761 benchmark-perfect edits)', 'Same probes, same difference, scored different ways. Appendix run, Table F.1, so 0.705 and 0.798 here').replace('Also holds: on 500 unseen facts', 'Also holds when trained on 200 facts and tested on 500 unseen ones')
+    abl = old[50].replace('on 500 unseen facts, AUC 0.840 to 0.862.', 'trained on 200 facts, tested on 500 new ones, AUC 0.840 to 0.862.').replace('Same probes, same before/after difference, scored different ways (AUC on the 1,761 benchmark-perfect edits)', 'Same probes, same difference, scored different ways. Appendix run, Table F.1, so 0.705 and 0.798 here').replace('Also holds: on 500 unseen facts', 'Also holds when trained on 200 facts and tested on 500 unseen ones')
     for pat in (r'<text[^>]*>Table F\.1\.[^<]*</text>', r'<text[^>]*>total change 0\.575[^<]*</text>', r'<text[^>]*>best 0\.589: max edge change</text>'):
         abl = re.sub(pat, '', abl)
     abl = re.sub(r'(<aside class="notes">)(.*?)(</aside>)', lambda m: m.group(1) + m.group(2) + ' The five single numbers from Table F.1: max edge change 0.589, total change 0.575, top 5 node share 0.564, top 1 node share 0.521. The main text reports 0.703 and 0.797 for the same experiment, Table F.1 gives 0.705 and 0.798.' + m.group(3), abl, count=1, flags=re.S) if '<aside class="notes">' in abl else notes(abl, 'The five single numbers from Table F.1: max edge change 0.589, total change 0.575, top 5 node share 0.564, top 1 node share 0.521.')
-    lang = [DIV1, CGT, toch(story, '1'), backup(toch(surg, '1')), toch(SILENT, '1'), backup(toch(receipts, '1')), VEC2, rome, old[35].replace('Guo 2025, slide 31', 'Guo 2025').replace('So an edit can land where the knowledge is not, and its side effects can land where nobody looks.', 'Mechanism still matters: choosing where to change by it makes forgetting stick (Guo 2025).').replace('But choosing where to change by mechanism makes forgetting stick (Guo 2025).', 'So instead of asking where a fact lives, we read what the edit did to the connections.'), d46, backup(old[48]), RES20, abl, old[51]]
+    lang = [DIV1, CGT, backup(CGT4), toch(story, '1'), backup(toch(surg, '1')), backup(toch(receipts, '1')), toch(SILENT, '1'), VEC2, rome, old[35].replace('Guo 2025, slide 31', 'Guo 2025').replace('So an edit can land where the knowledge is not, and its side effects can land where nobody looks.', 'Mechanism still matters: choosing where to change by it makes forgetting stick (Guo 2025).').replace('But choosing where to change by mechanism makes forgetting stick (Guo 2025).', 'So instead of asking where a fact lives, we read what the edit did to the connections.'), d46, backup(old[48]), RES20, abl, old[51]]
     four = retitle(FOUR, 'Music generation went from a visible graph to a hidden one')
     four = re.sub(r'\s*<p class="q">.*?</p>', '', four, count=1, flags=re.S)
     tools = retitle(TOOLS, 'Every tool inside MusicGen reads one layer at one moment').replace('Three tools, three questions, all at one layer and one moment.', 'Language models moved on to attribution graphs. Music has not.')
