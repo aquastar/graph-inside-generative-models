@@ -48,7 +48,7 @@ html,body,.reveal-viewport{{background:{BG} !important}}
   font:400 13px/1 {SANS} !important;text-transform:uppercase !important;letter-spacing:.14em !important;top:14px !important;right:44px !important}}
 .reveal .status.published{{border-bottom:2px solid {LINE} !important}}
 .reveal .status.review{{border-bottom:2px solid {AXIS} !important}}
-.reveal .status.progress{{border-bottom:2px solid {ACC} !important}}
+.reveal .status.progress{{border-bottom:2px solid {ACC} !important;display:block !important;height:auto !important;width:auto !important;left:auto !important;bottom:auto !important;background:none !important}}
 .reveal .status.open,.reveal .status.plan{{border-bottom:2px dashed {INK2} !important}}
 /* sidenote citation */
 .reveal .ref .rsep{{display:inline-block;width:1px;height:.85em;background:{AXIS};margin:0 .65em;vertical-align:-.1em}}
