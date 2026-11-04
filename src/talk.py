@@ -167,7 +167,7 @@ for i, (a, b) in enumerate(lim):
 g += F(4, T(590, 460, 'A graph signal that a single number cannot give, with honest limits.', 18, 700, INK, 'middle'))
 SHAPE = sec('Shape beats size, and where it stops', SVG(g), ch='1', status='pub',
             ref='Benbrahim et al., SDM 2026, Table F.1, Tables 5.1, 5.2 and 5.5, Sections 5.2 to 5.6',
-            notes='Five single numbers: max edge change 0.589, mean 0.572, total 0.575, top 5 node share 0.564, top 1 node share 0.521. On 500 unseen facts the AUC holds at 0.840 to 0.862. Only 2 of the 50 riskiest flip when rerun. Labels depend on which 12 held out prompts define failure. Scale: 7B and 8B models, three editors, two benchmark families.')
+            notes='Five single numbers: max edge change 0.589, mean 0.572, total 0.575, top 5 node share 0.564, top 1 node share 0.521. Trained on 200 facts and tested on 500 unseen ones, the AUC holds at 0.840 to 0.862 (the slide boxes are the wiki_recent run, 0.853 to 0.904). Only 2 of the 50 riskiest flip when rerun. Labels depend on which 12 held out prompts define failure. Scale: 7B and 8B models, three editors, two benchmark families.')
 
 # ---- bridge to time, with the outside judge ----
 g = adefs('b1')
@@ -212,7 +212,7 @@ FE_COMPOSE = fe('compose', 'The graph composes',
 
 # ---- 144 numbers name the corpus ----
 styles = ['Bach chorale', 'Essen folk song', 'Monteverdi', 'Palestrina', "Ryan's fiddle", 'Trecento']
-conf = [[66, 9, 2, 20, 2, 2], [16, 62, 2, 4, 13, 4], [1, 4, 80, 11, 0, 3], [20, 4, 0, 71, 2, 3], [4, 8, 0, 2, 82, 2], [5, 4, 0, 19, 5, 67]]
+conf = [[64, 10, 1, 18, 3, 4], [12, 70, 0, 4, 12, 1], [10, 6, 53, 24, 0, 6], [17, 5, 1, 70, 3, 4], [3, 10, 0, 2, 83, 2], [4, 4, 0, 22, 4, 66]]  # 992 melodies, LR order 1, row normalized
 g = adefs('cm')
 pipe = [('one piece', 'monophonic melody'), ('12 by 12 table', 'scale degree transitions'), ('144 numbers', 'no music theory'), ('logistic regression', 'names the corpus')]
 for i, (a, b) in enumerate(pipe):
@@ -230,12 +230,12 @@ for i, s in enumerate(styles):
         fill = ACC if i == j else ('#fbd3b4' if v >= 10 else '#f4f5f6')
         cm += R(mx + j * cs, my + i * cs, cs - 3, cs - 3, fill, 'none', 0, 3) + T(mx + j * cs + 23, my + i * cs + 30, str(v), 14, 700, '#fff' if i == j else INK, 'middle')
 g += F(1, cm)
-g += F(2, R(820, 70, 330, 120, ACL, ACC, 1.5, 10) + T(985, 128, '70.9%', 44, 700, ACC, 'middle') + T(985, 166, 'five fold accuracy, chance 17%', 14, 600, INK, 'middle'))
-g += F(3, R(820, 210, 330, 150, '#fff', LINE, 1.5, 10) + T(840, 240, 'Confusions make musical sense', 15, 700, AC2) + T(840, 268, 'Bach and Palestrina swap about 20%', 13.5, 400, INK) + T(840, 292, 'folk and fiddle swap 13 to 16%', 13.5, 400, INK) + T(840, 316, 'Monteverdi and fiddle: never', 13.5, 400, INK) + T(840, 344, 'row normalized, percent', 12, 400, MUT))
+g += F(2, R(820, 70, 330, 120, ACL, ACC, 1.5, 10) + T(985, 128, '70.2%', 44, 700, ACC, 'middle') + T(985, 166, 'five fold accuracy, chance 17%', 14, 600, INK, 'middle'))
+g += F(3, R(820, 210, 330, 150, '#fff', LINE, 1.5, 10) + T(840, 240, 'Confusions make musical sense', 15, 700, AC2) + T(840, 268, 'Bach and Palestrina swap about 17%', 13.5, 400, INK) + T(840, 292, 'folk and fiddle swap 10 to 12%', 13.5, 400, INK) + T(840, 316, 'Monteverdi and fiddle: never', 13.5, 400, INK) + T(840, 344, 'row normalized, percent', 12, 400, MUT))
 g += F(4, T(590, 465, 'A first order graph already carries a style. 144 numbers name the corpus.', 18, 700, INK, 'middle'))
 CORPUS = sec('144 numbers name the corpus', SVG(g), ch='2', status='prog',
-             ref='1,000 pieces, six public corpora (Bach chorales, Essen, Monteverdi, Palestrina, Ryan\'s Mammoth Collection, Trecento), parsed with music21. zhiqian.ai/music-markov',
-             notes='Chance with six styles is 17%, majority class 21%. Rebuilt from scratch in Nov 2026: 70.2% plus or minus 2.7. No tuning, the number is what the script prints on a first run. The script is public on the site.')
+             ref='992 melodies, six public corpora (Bach chorales, Essen, Monteverdi, Palestrina, Ryan\'s Mammoth Collection, Trecento), parsed with music21, five fold cross validation. zhiqian.ai/music-markov',
+             notes='Chance with six styles is 17%, majority class 21%. Counting the 12 notes without order gives 41.9%, so the graph adds 28 points. Rebuilt from scratch in Nov 2026: 70.2% plus or minus 2.7. No tuning, the number is what the script prints on a first run. The script is public on the site.')
 
 # ---- where the graph becomes a path ----
 g = adefs('gp')
@@ -453,7 +453,7 @@ def chipx(x, y, s, col):
 g = adefs('pm')
 g += f'<foreignObject x="10" y="20" width="640" height="340"><div xmlns="http://www.w3.org/1999/xhtml" style="width:640px;height:340px;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1.5px #d3d7da,0 10px 30px rgba(17,17,17,.10)"><iframe class="fe-frame" data-src="figs/fe-chain.html?autoplay=1" title="Für Elise Markov chain" style="width:640px;height:340px;border:0;background:#fff"></iframe></div></foreignObject>'
 g += T(330, 388, 'Für Elise as a graph: it learns the melody, then composes', 15, 700, MU, 'middle')
-res = [('70.9%', '144 numbers per piece name its tradition', 'six corpora, about 1,000 pieces, chance 17%', ACC, 'in progress', 'part'),
+res = [('70.2%', '144 numbers per piece name its tradition', 'six corpora, 992 melodies, chance 17%', ACC, 'in progress', 'part'),
        ('one way', 'steering MusicGen removes a style, cannot add one', 'a reachability question on a hidden graph', ACC, 'under review', 'part'),
        ('89% to 6%', 'revisits fall as memory grows: a graph becomes a path', 'the useful graph lives in between', ACC, 'in progress', 'part')]
 for i, (big, a, b, col, st, k) in enumerate(res):
@@ -673,7 +673,7 @@ VECTOR = sec('Every surgery is stored as a vector', SVG(g), ch='0',
 g = adefs('dm2')
 g += f'<foreignObject x="20" y="10" width="740" height="410"><div xmlns="http://www.w3.org/1999/xhtml" style="width:740px;height:410px;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1.5px #d3d7da,0 10px 30px rgba(17,17,17,.10)"><iframe class="fe-frame" data-src="figs/fe-chain.html?autoplay=1" title="Für Elise Markov chain" style="width:740px;height:410px;border:0;background:#fff"></iframe></div></foreignObject>'
 g += T(790, 34, 'Graphs in music, in this talk', 15, 600, MUT)
-MENU = [('1', 'Note to note graph', '144 numbers name the tradition', '70.9%, chance 17%', False),
+MENU = [('1', 'Note to note graph', '144 numbers name the tradition', '70.2%, chance 17%', False),
         ('2', 'Richer nodes', 'note plus its length', '88.7%', False),
         ('3', "The listener's graph", 'its surprise tracks the brain', 'IDyOM, EEG', False),
         ('4', 'A graph inside MusicGen', 'read from the generator itself', 'next step', True)]
@@ -686,7 +686,7 @@ for k, (num, name, line, val, plan) in enumerate(MENU):
 g += T(590, 466, 'A tiny graph already captures a style. Part 2 walks down this list.', 20, 700, INK, 'middle')
 DEMO2 = sec('A tiny graph is enough to represent a piece of music', SVG(g), ch='0', status='prog',
             ref='Opening of Beethoven, Für Elise, animation from zhiqian.ai, click for sound. Five fold cross validation, zhiqian.ai/music-markov',
-            notes='Let the ball learn the opening, then compose. Then the point: this little graph is not a toy. The same 144 numbers per piece, fed to a plain classifier, name the tradition of a piece it has never seen 70.9% of the time across 1,000 pieces in six corpora.')
+            notes='Let the ball learn the opening, then compose. Then the point: this little graph is not a toy. The same 144 numbers per piece, fed to a plain classifier, name the tradition of a piece it has never seen 70.2% of the time across 992 melodies in six corpora, against 41.9% for note counts without order.')
 
 # ---- trailer: the delta graph drawn ----
 def _dg(ox, oy, edges, mode, lab):
@@ -856,7 +856,7 @@ g += P(f'M{AD[0]+11},{AD[1]-6} L{AL[0]-12},{AL[1]+4}', '#DA291C', 1.8, extra='st
 for (x, y), lab in ((PT, 'Patient'), (AD, 'Admission'), (AL, 'Allergy'), (SY, 'chest pain')):
     g += C(x, y, 9, '#009CBD') + T(x, y + 30, lab, 16, 600, INK, 'middle')
 g += T(30, 300, '1 hop: why was this patient admitted?', 15.5, 600, INK) + T(30, 324, '2 hops: what allergy does the patient admitted', 15.5, 600, INK) + T(30, 346, 'for chest pain have?', 15.5, 600, INK)
-g += T(30, 386, 'No path in the graph, no correct answer,', 16, 600, '#C45200') + T(30, 410, 'for any model at any size.', 16, 600, '#C45200')
+g += T(30, 386, 'Our test: does the question map into the record?', 16, 600, '#C45200') + T(30, 410, 'No path in the graph, no correct answer, for any model.', 16, 600, '#C45200')
 # slope chart, MIMIC-III exact match, 9 models
 X1, X2, Y0, YS = 680, 940, 400, 4.0
 H = [('Kimi-K2.5', 76.7, 9.1), ('GPT-OSS-120B', 76.0, 6.0), ('DeepSeek-V4-Pro', 76.0, 7.0), ('GLM-5.1', 76.0, 9.0), ('Gemma4-31B', 76.0, 6.0),
@@ -868,14 +868,14 @@ for name, a, b in H:
 ch += T(X1 - 14, Y0 - 76 * YS + 5, 'about 76%', 16, 600, INK, 'end') + T(X1 - 14, Y0 - 59 * YS + 5, '59%', 14, 400, MUT, 'end')
 ch += T(X2 + 14, Y0 - 9 * YS + 5, '6 to 12%', 16, 600, INK) + T(860, 118, 'a cliff of', 16, 600, '#C45200', 'middle') + T(860, 138, '52 to 70 points', 16, 600, '#C45200', 'middle')
 g += F(1, ch)
-rep = R(1000, 86, 180, 250, SOFT, 'none', 0, 3) + T(1016, 114, 'The graph splits', 15, 600, INK) + T(1016, 134, 'the failures', 15, 600, INK)
+rep = R(1000, 86, 180, 262, SOFT, 'none', 0, 3) + T(1016, 114, 'The graph splits', 15, 600, INK) + T(1016, 134, 'the failures', 15, 600, INK)
 rep += T(1016, 170, 'missing edges:', 14, 600, '#C45200') + T(1016, 190, 'fix the graph. On', 14, 400, INK) + T(1016, 210, 'CORAL, 51 edges cut', 14, 400, INK) + T(1016, 230, 'misses 8.2% to 0%', 14, 600, INK)
-rep += T(1016, 270, 'the rest:', 14, 600, INK) + T(1016, 290, 'the model\'s own', 14, 400, INK) + T(1016, 310, 'reasoning', 14, 400, INK)
+rep += T(1016, 270, 'On MIMIC-III only 1.3%', 14, 600, INK) + T(1016, 290, 'of 2 hop questions have', 14, 400, INK) + T(1016, 310, 'no path: the cliff is', 14, 400, INK) + T(1016, 330, 'the models\' reasoning', 14, 400, INK)
 g += F(2, rep)
 g += F(3, T(590, 466, 'A graph tells which questions cannot be answered, before any model tries.', 19, 700, INK, 'middle'))
 CGT = sec('Two hops break every model. The graph says why', SVG(g), ch='1', status='acc',
           ref='Ours, Diagnosing Multi-Hop KG Question Answering Failures: A Typed Homomorphism Framework with Clinical Repair, CIKM 2026, Table 4 and Table 6. MIMIC-III, CORAL from PhysioNet',
-          notes='Our CIKM 2026 paper, the knowledge graph from the opening made concrete. On clinical records that no model has seen in training, seven of nine models reach about 76 percent at one hop and fall to 6 to 12 percent at two hops, from 3B up to a 1.6T mixture of experts. Part of that cliff is not the model at all: if the record never stored the edge, no model can answer. The paper turns that into a theorem and a test that runs before retrieval. On CORAL, adding 51 missing edges removes every structural miss, 8.2 percent to zero. What remains is the model reasoning gap.')
+          notes='Our CIKM 2026 paper, the knowledge graph from the opening made concrete. On clinical records that no model has seen in training, seven of nine models reach about 76 percent at one hop and fall to 6 to 12 percent at two hops, from 3B up to a 1.6T mixture of experts. Part of that cliff is not the model at all: if the record never stored the edge, no model can answer. The paper turns that into a theorem and a test that runs before retrieval. On CORAL, adding 51 missing edges removes every structural miss, 8.2 percent to zero. What remains is the model reasoning gap. On MIMIC-III, only 3 of 239 two hop questions (1.3 percent) have no path, so almost all of that cliff is the models reasoning, not the record.')
 
 # ---- forecast, two claims ----
 g = adefs('fc2')
@@ -884,8 +884,8 @@ for k, (a, st, kk, col) in enumerate(CLAIMS):
     y = 140 + k * 100
     g += F(k + 1, C(80, y + 30, 24, col) + T(80, y + 38, str(k + 1), 20, 700, '#fff', 'middle') + wrap(122, y + 24, a, 19, 600, INK, width=80, lh=26) + tag(122, y + 64, st, kk))
 mods = [('Text', 'today, Part 1', ACC, ACL, True), ('Music', 'today, Part 2', MU, MUL, True), ('Equations', 'proofs, physics', '#5a4fcf', '#fff', False),
-        ('Images', 'vision', AC2, '#fff', False), ('Space', '3D, maps', AC2, '#fff', False), ('Motion', 'bodies, robots', AC2, '#fff', False),
-        ('Molecules', 'proteins, DNA', AC2, '#fff', False), ('Code', 'programs', AC2, '#fff', False)]
+        ('Code', 'programs', AC2, '#fff', False), ('Images', 'vision', AC2, '#fff', False), ('Space', '3D, maps', AC2, '#fff', False),
+        ('Motion', 'bodies, robots', AC2, '#fff', False), ('Molecules', 'proteins, DNA', AC2, '#fff', False)]
 strip = T(30, 360, 'Kinds of knowledge a generative model holds', 14, 700, MUT)
 for k, (a, b, col, fill, solid) in enumerate(mods):
     x = 30 + k * 141
@@ -1412,7 +1412,7 @@ def hbars(x0, y0, rows, scale, maxv, lw=300, bh=34, gap=14):
     return out
 
 g = adefs('ro')
-g += T(40, 40, 'Which tradition is this melody from? Rebuilt set of 992 melodies, five fold cross validation (70.9% was on the earlier 1,000 piece set)', 14, 600, MUT)
+g += T(40, 40, 'Which tradition is this melody from? 992 melodies, six traditions, five fold cross validation', 14, 600, MUT)
 rowsA = [('chance', 16.7, '#d3d7da', '', False), ('12 note counts, no order', 41.9, '#d3d7da', '', False), ('graph, 1 note of memory', 70.2, GRY, '+28 over counts', False), ('graph, 2 notes of memory', 78.2, '#f6a46a', '+8 points', False),
          ('graph, memory as needed', 73.3, '#f6a46a', '+3 points', False)]
 g += hbars(40, 56, rowsA, 640, 100, bh=28, gap=10)
@@ -1422,7 +1422,7 @@ g += F(2, R(160, 352, 860, 48, ACL, ACC, 1.5, 10) + T(590, 383, 'A richer node b
 g += F(3, T(590, 440, 'For a graph, what a node means matters more than how far back it looks.', 17, 700, ACC, 'middle'))
 RICHER = sec('Richer nodes beat longer memory', SVG(g), ch='2', status='prog',
              ref='Our experiments, Nov 2026: 992 melodies from six music21 corpora, same five folds for every method. Points are differences from the 1 note graph (70.2%). "Memory as needed" is a variable order model, the IDyOM style',
-             notes='First the baseline everyone asks for: counting the 12 notes without any order gets 41.9 percent, so the order, the graph, adds 28 points. Three lessons. One more note of memory helps, 70 to 78. Letting the graph decide how much memory each context needs is the safest single choice. But giving each node one more attribute, how long the note lasts, jumps to 87 to 89, more than any change of order. Caveats: Bach repeats chorale tunes across harmonizations, which flatters long memory, and Palestrina and Trecento editions use long note values, so part of the duration gain reflects notation.')
+             notes='First the baseline everyone asks for: counting the 12 notes without any order gets 41.9 percent, so the order, the graph, adds 28 points. Three lessons. One more note of memory helps, 70 to 78. Letting the graph decide how much memory each context needs is not better for notes alone (73.3, below 2 notes at 78.2), it wins only with richer nodes (88.7). But giving each node one more attribute, how long the note lasts, jumps to 87 to 89, more than any change of order. Caveats: Bach repeats chorale tunes across harmonizations, which flatters long memory, and Palestrina and Trecento editions use long note values, so part of the duration gain reflects notation.')
 
 g = adefs('gc')
 g += T(40, 40, 'Generate 600 melodies per setting, then ask a style classifier and a copy checker', 14, 600, MUT)
@@ -1437,17 +1437,15 @@ for k, (lab, st, cp, col) in enumerate(cols_):
     x = 690 + k * 130
     cp_ += R(x, 260 - cp * 9, 90, cp * 9, col, 'none', 0, 4) + T(x + 45, 252 - cp * 9, f'{cp} notes', 15, 700, INK, 'middle') + T(x + 45, 282, lab, 13.5, 600, INK, 'middle')
 cp_ += L(670, 260, 1080, 260, INK, 1.5) + L(670, 260 - 10.9 * 9, 1080, 260 - 10.9 * 9, '#c0392b', 1.5, 'stroke-dasharray="6 4"') + T(672, 260 - 10.9 * 9 - 6, 'real melodies: 10.9', 12.5, 700, '#c0392b')
-g += F(1, cp_ + T(880, 306, 'more memory sounds more like the style, because it copies', 14, 700, ACC, 'middle'))
+g += F(1, cp_)
 pb = T(40, 334, 'Vote: which one is the real Bach? Same rhythm and key, only the order of pitches changes', 14, 700, MUT)
 pb += playbtn(40, 344, 250, 'bach_order2', 'melody A', AC2) + playbtn(300, 344, 250, 'bach_real', 'melody B', AC2)
-for k, (clip_, lab_) in enumerate([('essen_real', 'Folk, real'), ('essen_order1', '1 note'), ('essen_order2', '2 notes'), ('essen_ordervar', 'as needed')]):
-    pb += playbtn(610 + k * 133, 344, 125, clip_, lab_, AC2 if k == 0 else MU)
 g += F(2, pb)
-g += F(3, T(40, 408, 'B is the real Bach. A came from the 2 note graph, with no copy longer than 6 notes.', 15, 600, '#C45200') + T(590, 436, 'With no copy longer than 6 notes, 2 notes of memory still reaches 61%.', 17, 700, INK, 'middle')
-          + T(590, 464, 'The useful graph remembers a little and copies nothing long.', 18, 700, ACC, 'middle'))
+g += F(3, T(610, 372, 'B is the real Bach. A came from the 2 note graph,', 15, 600, '#C45200') + T(610, 392, 'copying nothing longer than 6 notes, and still scores 61%.', 15, 600, '#C45200')
+          + T(590, 450, 'The useful graph remembers a little and copies nothing long.', 18, 700, ACC, 'middle'))
 COPY = sec('More memory sounds more like the style, because it copies', SVG(g), ch='2', status='prog',
            ref='Our experiments, Nov 2026. Clips: order 2 and the other settings sampled with a 6 note copy limit, one sample each, fixed seed, no cherry picking. Real Bach melody: BWV 329 soprano, held out',
-           notes='Live vote first: play melody A, then B, and ask for hands, which one is the real Bach. Then reveal. This is a pilot of the listening test, either result is honest data. Generation tells the other half. Plain sampling with more memory is recognized as its style more often, 57 to 65, but the variable order model copies 12 note stretches verbatim and 99 percent of its 4 note patterns already exist in training. A 6 note copy limit keeps most of the gain. Honest caveat: these automatic judges rate generated melodies above real held out ones (52 percent), so they measure typicality, not musical conviction. A listening test is the next step. The LLM judge numbers on the memory order slide come from the website, not from this run.')
+           notes='Live vote first (the folk clips are in the repo if asked): play melody A, then B, and ask for hands, which one is the real Bach. Then reveal. This is a pilot of the listening test, either result is honest data. Generation tells the other half. Plain sampling with more memory is recognized as its style more often, 57 to 65, but the variable order model copies 12 note stretches verbatim and 99 percent of its 4 note patterns already exist in training. A 6 note copy limit keeps most of the gain. Honest caveat: these automatic judges rate generated melodies above real held out ones (52 percent), so they measure typicality, not musical conviction. A listening test is the next step. The LLM judge numbers on the memory order slide come from the website, not from this run.')
 
 # ======================= ROUND 8 (Nov 2 2026): slides 9 and 10 on one template =======================
 PURP = '#5a4fcf'
@@ -1503,7 +1501,7 @@ c2 += quote(645, 236, [[('Spatial intelligence is', False)], [("AI's next fronti
 c2 += T(1130, 318, "From Words to Worlds, essay, 2025. Lenny's Podcast, Nov 2025", 12.5, 400, MUT, 'end')
 g += F(1, c2)
 band = T(30, 356, 'What this talk covers', 14, 700, MUT)
-tiles = [('Text', 'Part 1: facts inside a language model', ACC, ACL, ''), ('Equations', 'next: 36 + 59 runs as two paths inside a model', PURP, '#fff', 'stroke-dasharray="7 5"'), ('Music and emotion', 'Part 2: style, expectation, the brain', MU, MUL, '')]
+tiles = [('Text', 'Part 1: facts inside a language model', ACC, ACL, ''), ('Equations', 'not today: 36 + 59 runs as two paths inside a model', PURP, '#fff', 'stroke-dasharray="7 5"'), ('Music and emotion', 'Part 2: style, expectation, the brain', MU, MUL, '')]
 for k, (a_, b_, col, fill, dash) in enumerate(tiles):
     x = 30 + k * 377
     band += R(x, 366, 360, 60, fill, col, 2, 14, dash) + T(x + 18, 390, a_, 17, 700, col) + T(x + 18, 413, b_, 13, 400, INK)
@@ -1592,7 +1590,7 @@ def backup(sec_html):
 def assemble(cover, old):
     """old: the reused slides from the earlier deck, keyed by their old index"""
     surg = retitle(old[3].replace(' The map next.', '').replace('>CEO of Apple is<', '>Space Needle is in<').replace('>Steve Jobs<', '>Seattle<').replace('>Tim Cook<', '>Paris<'), 'A released model is not left alone. Seven kinds of surgery.')
-    story = old[43]
+    story = retitle(old[43], 'After release, every change is checked by an exam that only reads answers')
     receipts = (old[45].replace('38.5% when it writes freely', '38.5% under realistic evaluation (WILD)')
                 .replace('on harmless general text and the original comes back word for word', 'on related Wikipedia text and the original comes back word for word')
                 .replace('A safe chemistry expert averaged with an unsafe math expert passes every capability benchmark and inherits the unsafe behavior', 'Merging domain experts also merges their misalignment: the merged model inherits unsafe behavior')
@@ -1608,9 +1606,9 @@ def assemble(cover, old):
     a = rome.find('<div class="note"'); e = rome.find('  <div class="ref">')
     rome = rome[:a] + '<div class="note" style="font-size:.62em"><div class="key">The finding</div><p class="one" style="font-size:1.25em">A fact sits in two places. Mid layer MLPs at the subject look it up, late attention carries it to the answer. Editing a fact means changing the first place.</p></div>\n  </div>\n' + rome[e:]
     rome = retitle(rome, 'A fact lives in mid layer MLPs and moves out by attention')
-    d46 = old[46].replace('running example from slide 45: the Space Needle edit', 'running example: the Space Needle edit').replace(' (slide 2).', '.')
+    d46 = old[46].replace('3. Before minus after', '3. After minus before').replace('running example from slide 45: the Space Needle edit', 'running example: the Space Needle edit').replace(' (slide 2).', '.')
     rome = retitle(rome, 'If not the vector, look where the fact lives')
-    abl = old[50]
+    abl = old[50].replace('Same probes, same before/after difference, scored different ways (AUC on the 1,761 benchmark-perfect edits)', 'Same probes, same difference, scored different ways. Appendix run, Table F.1, so 0.705 and 0.798 here').replace('Also holds: on 500 unseen facts', 'Also holds when trained on 200 facts and tested on 500 unseen ones')
     for pat in (r'<text[^>]*>Table F\.1\.[^<]*</text>', r'<text[^>]*>total change 0\.575[^<]*</text>', r'<text[^>]*>best 0\.589: max edge change</text>'):
         abl = re.sub(pat, '', abl)
     abl = re.sub(r'(<aside class="notes">)(.*?)(</aside>)', lambda m: m.group(1) + m.group(2) + ' The five single numbers from Table F.1: max edge change 0.589, total change 0.575, top 5 node share 0.564, top 1 node share 0.521. The main text reports 0.703 and 0.797 for the same experiment, Table F.1 gives 0.705 and 0.798.' + m.group(3), abl, count=1, flags=re.S) if '<aside class="notes">' in abl else notes(abl, 'The five single numbers from Table F.1: max edge change 0.589, total change 0.575, top 5 node share 0.564, top 1 node share 0.521.')

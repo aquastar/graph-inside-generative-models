@@ -369,6 +369,7 @@ def cap_fragments(sec, n=4):
     return re.sub(r'data-fragment-index="(\d+)"', lambda m: f'data-fragment-index="{remap[int(m.group(1))]}"', sec)
 
 allsecs = [cap_fragments(no_motion(x)) for x in allsecs]
+allsecs = [re.sub(r'\s*<div class="lessontag">[^<]*</div>', '', x) for x in allsecs]
 allsecs = [SV.ref_separators(SV.fixups(SV.restyle(x, cover='titlehero' in x[:200]))) for x in allsecs]
 # backup slides become vertical stacks under the slide before them, so the page counter and the ending stay on the main run
 _stack = []
