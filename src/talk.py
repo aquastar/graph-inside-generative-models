@@ -823,24 +823,30 @@ def ke(x1, y1, x2, y2, lab, col=AC2, sw=1.6, dash='', m='kgta', lx=0, ly=-8):
 SN, SE, WA, US = (90, 170), (300, 170), (520, 170), (740, 170)
 WF, OL, DO = (90, 64), (520, 64), (740, 276)
 ET, PA, FR, EU = (300, 380), (520, 380), (740, 380), (740, 460)
-g += T(30, 470, 'What the model knows, drawn as a knowledge graph', 16, 600, MUT)
 base = ke(*SN, *SE, 'located in') + ke(*SE, *WA, 'city in') + ke(*WA, *US, 'state of') + ke(*SN, *WF, 'built for', lx=34, ly=4) + ke(*WA, *OL, 'capital', lx=-32, ly=4) + ke(*US, *DO, 'currency', lx=-36, ly=4)
 base += ke(*ET, *PA, 'located in', col='#ACA39A') + ke(*PA, *FR, 'city in', col='#ACA39A') + ke(*FR, *EU, '', col='#ACA39A') + T(770, 444, 'currency', 12.5, 400, MUT)
 base += kn2(*SN, 'Space Needle') + kn2(*SE, 'Seattle') + kn2(*WA, 'Washington State', up=False) + kn2(*US, 'United States') + kn2(*WF, "1962 World's Fair") + kn2(*OL, 'Olympia') + kn2(*DO, 'dollar', up=False)
 base += kn2(*ET, 'Eiffel Tower', '#ACA39A') + kn2(*PA, 'Paris', '#ACA39A') + kn2(*FR, 'France', '#ACA39A') + C(*EU, 9, '#ACA39A') + T(EU[0] - 18, EU[1] + 5, 'euro', 16, 600, INK, 'end')
-g += base
+intro = R(860, 52, 290, 330, SOFT, 'none', 0, 3)
+sil = 'M1005,292 L988,200 M1005,292 L1022,200 M988,200 L1005,138 L1022,200 M1005,124 L1005,76'
+intro += P(sil, '#ACA39A', 2.5, extra='stroke-linecap="round"') + '<ellipse cx="1005" cy="130" rx="46" ry="9" fill="#ACA39A"/>' + L(930, 292, 1080, 292, '#ACA39A', 1.5)
+intro += (f'<foreignObject x="860" y="52" width="290" height="250"><div xmlns="http://www.w3.org/1999/xhtml" style="width:290px;height:250px;overflow:hidden;border-radius:3px">'
+          f'<img src="figs/space-needle.jpg" alt="" onerror="this.remove()" style="width:290px;height:250px;object-fit:cover;max-width:none;max-height:none;margin:0;border:0;box-shadow:none"/></div></foreignObject>')
+intro += T(878, 330, 'The Space Needle, Seattle', 17, 600, INK) + T(878, 352, "built for the 1962 World's Fair,", 14, 400, MUT) + T(878, 372, '184 m (605 ft) tall', 14, 400, MUT)
+g += intro
+g += F(1, base + T(30, 470, 'What the model knows, drawn as a knowledge graph', 16, 600, MUT))
 ed = ke(*SN, PA[0], PA[1], '', col=ACC, sw=2.8, m='kgto') + T(250, 290, 'the edit:', 14, 600, '#C45200', 'end') + T(250, 310, 'located in Paris', 14, 600, '#C45200', 'end')
 ed += P(f'M{SN[0]+10},{SN[1]} L{SE[0]-12},{SE[1]}', '#DA291C', 2.2, extra='stroke-dasharray="2 5" stroke-linecap="round"')
-g += F(1, ed)
+g += F(2, ed)
 q = R(860, 52, 290, 330, SOFT, 'none', 0, 3) + T(880, 82, 'Ask one step further', 15, 600, MUT)
 for k, (qq, said, should) in enumerate([('Which country is it in?', 'United States', 'France'), ('Which state is it in?', 'Washington', 'none: Paris has no state'), ('What currency is used there?', 'dollar', 'euro')]):
     y = 112 + k * 92
     q += T(880, y, qq, 16, 600, INK) + T(880, y + 24, 'edited model: ' + said, 14.5, 600, '#DA291C') + T(880, y + 46, 'should be: ' + should, 14.5, 400, MUT)
-g += F(2, q)
-g += F(3, T(1005, 430, 'Change one edge, and every', 17, 600, INK, 'middle') + T(1005, 454, 'path through it must change.', 17, 600, INK, 'middle'))
+g += F(3, q)
+g += F(4, T(1005, 430, 'Change one edge, and every', 17, 600, INK, 'middle') + T(1005, 454, 'path through it must change.', 17, 600, INK, 'middle'))
 KGT = sec('Knowledge is a graph, and an edit has to follow it', SVG(g), ch='0',
           ref='Cohen et al., Evaluating the Ripple Effects of Knowledge Editing in Language Models, TACL 2024. Zhong et al., MQuAKE, EMNLP 2023. Space Needle answers are an illustration of the failure type',
-          notes='Start from what everyone in the room knows: facts link to other facts. The Space Needle is in Seattle, Seattle is in Washington, Washington is in the United States. Suppose an editor moves the Space Needle to Paris and changes only that one edge. Now every question one step further is wrong: the model still says United States, still says Washington, still says dollar. This is the ripple effect, measured by RippleEdits and MQuAKE. The knowledge has a graph. The question for the talk: does the model have one inside?')
+          notes='Open on the photo: a landmark everyone knows, in Seattle, built for the 1962 World\'s Fair. Click: this is what a model knows about it, drawn as a knowledge graph. Facts link to other facts. The Space Needle is in Seattle, Seattle is in Washington, Washington is in the United States. Suppose an editor moves the Space Needle to Paris and changes only that one edge. Now every question one step further is wrong: the model still says United States, still says Washington, still says dollar. This is the ripple effect, measured by RippleEdits and MQuAKE. The knowledge has a graph. The question for the talk: does the model have one inside?')
 
 # ---- Part 1 opener: multi-hop questions fall off a cliff, and the graph says why (our CIKM 2026 paper) ----
 g = adefs('cgt')
