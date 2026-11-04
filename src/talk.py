@@ -592,14 +592,14 @@ g += F(2, P('M254,275 L380,275', ACC, 3.5, extra='marker-end="url(#mro)"') + T(3
           + clip(386, 240, 'still not jazz', 'the push barely registers', RED, '#fdecea'))
 g += F(3, P('M600,275 L700,275', ACC, 4.5, extra='marker-end="url(#mro)" stroke-dasharray="8 5"') + T(650, 262, 'push harder', 13, 700, ACC, 'middle')
           + clip(706, 240, 'noise', 'it breaks before it turns jazz', RED, '#fdecea'))
-isl = R(760, 40, 390, 170, '#fff', LINE, 1.5, 12) + T(955, 70, 'One picture that explains it', 15, 700, AC2, 'middle')
+isl = R(760, 40, 390, 170, '#fff', LINE, 1.5, 12) + T(955, 66, 'One picture that would explain it', 15, 700, AC2, 'middle') + T(955, 86, 'our hypothesis, being tested', 12.5, 400, MUT, 'middle')
 isl += f'<ellipse cx="955" cy="140" rx="70" ry="38" fill="{MUL}" stroke="{MU}" stroke-width="2.5"/>' + T(955, 146, 'jazz', 15, 700, MU, 'middle')
 for ang in (-0.45, 0.35, 2.8, 3.6):
     x1, y1 = 955 + 70 * math.cos(ang), 140 + 38 * math.sin(ang)
     x2, y2 = 955 + 150 * math.cos(ang), 140 + 62 * math.sin(ang)
     isl += P(f'M{x1:.0f},{y1:.0f} L{x2:.0f},{y2:.0f}', GRN, 2, extra='marker-end="url(#mra)"')
 isl += P('M790,190 C850,175 880,170 893,160', RED, 2, extra='stroke-dasharray="5 4"') + T(786, 182, 'rare way in', 12.5, 600, RED, 'end') + T(955, 200, 'many ways out, few ways in', 13.5, 700, INK, 'middle')
-g += F(4, isl + T(590, 380, 'Leaving a style is easy. Entering one is not.', 22, 700, INK, 'middle') + T(590, 414, 'A vector cannot explain that. Reachability on a graph can.', 18, 700, ACC, 'middle'))
+g += F(4, isl + T(590, 380, 'Leaving a style is easy. Entering one is not.', 22, 700, INK, 'middle') + T(590, 414, 'A vector cannot explain that. Reachability on a graph could.', 18, 700, ACC, 'middle'))
 MUSRES = sec('Steering leaves a style easily but rarely enters one', SVG(g), ch='0', status='rev',
              ref='Co-authored work under review, MusicGen small and medium. Jazz and classical are an illustration of the two arms',
              notes='Same vector tool as the refusal direction, now in a music generator. Removing a style works and keeps the music coherent. Adding the same direction to music without that style does not make it acquire the style, and a bigger push breaks the audio first. Replace this drawing with real clips and numbers from the paper when available.')
@@ -648,7 +648,7 @@ ASK = sec('Where I would love your help', SVG(g, 478), ch='4',
 # ======================= ROUND 3 (Nov 1 2026, late) =======================
 # Two claims only (language, music with the brain), matching the subtitle.
 CLAIMS = [('Language: a graph of how a model rewires after an edit catches failures that every benchmark passed.', 'published', 'done', ACC),
-          ('Music: a tiny graph already carries a style, and the listener\'s brain can judge whether a generator has one inside.', 'in progress', 'part', MU)]
+          ('Music: a tiny graph already carries a style, and the listener\'s brain is the judge we will use for a generator.', 'in progress', 'part', MU)]
 
 # ---- every surgery is stored as a vector (concrete) ----
 g = adefs('vc')
@@ -986,7 +986,7 @@ def _gi(kind, x, y, col):
 
 g = adefs('tk2')
 g += T(40, 30, 'Covered today', 15, 600, MUT)
-g += R(40, 44, 360, 52, '#E0F1F5', 'none', 0, 3) + T(58, 76, 'Text', 19, 600, '#007A94') + T(118, 76, 'Part 1: facts inside a language model', 13.5, 400, INK)
+g += R(40, 44, 360, 52, '#FDEBDD', 'none', 0, 3) + T(58, 76, 'Text', 19, 600, '#C45200') + T(118, 76, 'Part 1: facts inside a language model', 13.5, 400, INK)
 g += R(416, 44, 360, 52, '#EEE8F6', 'none', 0, 3) + T(434, 76, 'Music', 19, 600, MU) + T(512, 76, 'Part 2: style, expectation, the brain', 13.5, 400, INK)
 g += T(40, 140, 'Not covered, and each already carries a graph', 15, 600, MUT)
 KINDS = [('eq', 'Equations', 'each step rests on earlier ones'), ('code', 'Code', 'functions call other functions'),
@@ -1461,7 +1461,7 @@ pb += playbtn(40, 344, 250, 'bach_order2', 'melody A', AC2) + playbtn(300, 344, 
 g += F(2, pb)
 g += F(3, T(610, 372, 'B is the real Bach. A came from the 2 note graph,', 15, 600, '#C45200') + T(610, 392, 'and under that 6 note copy limit it still scores 61% (64% free).', 15, 600, '#C45200')
           + T(590, 450, 'The useful graph remembers a little and copies nothing long.', 18, 700, ACC, 'middle'))
-COPY = sec('More memory sounds more like the style, because it copies', SVG(g), ch='2', status='prog',
+COPY = sec('The longest memory sounds most like the style, because it copies', SVG(g), ch='2', status='prog',
            ref='Our experiments, Nov 2026. Clips: order 2 and the other settings sampled with a 6 note copy limit, one sample each, fixed seed, no cherry picking. Real Bach melody: BWV 329 soprano, held out',
            notes='Live vote first (the folk clips are in the repo if asked): play melody A, then B, and ask for hands, which one is the real Bach. Then reveal. This is a pilot of the listening test, either result is honest data. Generation tells the other half. Plain sampling with more memory is recognized as its style more often, 57 to 65, but the variable order model copies 12 note stretches verbatim and 99 percent of its 4 note patterns already exist in training. A 6 note copy limit keeps most of the gain. Honest caveat: these automatic judges rate generated melodies above real held out ones (52 percent), so they measure typicality, not musical conviction. A listening test is the next step. The LLM judge numbers on the memory order slide come from the website, not from this run.')
 
@@ -1640,7 +1640,7 @@ def assemble(cover, old):
     lim_main = lim_main.replace('</section>', '  <aside class="notes">Two limits on screen, two more under the down arrow if asked. Say the Llama one plainly: when almost every passing edit fails, there is little left to rank.</aside>\n</section>', 1) if '<aside' not in lim_main else lim_main
     vec2_b = bridge(VEC2, 'If not the vector, look where the fact lives. Causal tracing (Meng et al.) finds a fact in mid layer MLPs at the subject, the figure is under the down arrow on the next slide. The next slide shows why that is still not where editing works.')
     d46_q = bridge(d46, 'Hard question to expect: is the delta graph real, or an artifact of the 12 probe prompts? Three answers from the paper. The probe prompts are disjoint from the prompts that define failure. Trained on 200 facts and tested on 500 new ones, the AUC holds at 0.840 to 0.862. Rerun the 50 riskiest edits from scratch and only 2 of 50 flip.')
-    lang = [DIV1, CGT, backup(CGT4), toch(story, '1'), backup(toch(surg, '1')), backup(toch(receipts, '1')), toch(SILENT, '1'), vec2_b, old[35].replace('(numbers illustrative)', '(numbers illustrative. Causal tracing: corrupt the input, restore one layer)').replace('Guo 2025, slide 31', 'Guo 2025').replace('So an edit can land where the knowledge is not, and its side effects can land where nobody looks.', 'Mechanism still matters: choosing where to change by it makes forgetting stick (Guo 2025).').replace('But choosing where to change by mechanism makes forgetting stick (Guo 2025).', 'So instead of asking where a fact lives, we read what the edit did to the connections.'), backup(rome), d46_q, backup(old[48]), RES20, abl, lim_main, backup(retitle(old[51], 'Limits, all four, with the numbers'))]
+    lang = [DIV1, CGT, backup(CGT4), toch(story, '1'), backup(toch(surg, '1')), backup(toch(receipts, '1')), toch(SILENT, '1'), vec2_b, old[35].replace('(numbers illustrative)', '(numbers illustrative. Causal tracing: corrupt the input, restore one layer)').replace('Each grey dot is one fact. Hase 2023: correlation about zero (minus 0.13).', 'Schematic, each grey dot one fact. Hase 2023 measured a correlation of about zero (minus 0.13).').replace('Guo 2025, slide 31', 'Guo 2025').replace('So an edit can land where the knowledge is not, and its side effects can land where nobody looks.', 'Mechanism still matters: choosing where to change by it makes forgetting stick (Guo 2025).').replace('But choosing where to change by mechanism makes forgetting stick (Guo 2025).', 'So instead of asking where a fact lives, we read what the edit did to the connections.'), backup(rome), d46_q, backup(old[48]), RES20, abl, lim_main, backup(retitle(old[51], 'Limits, all four, with the numbers'))]
     four = retitle(FOUR, 'Music generation went from a visible graph to a hidden one')
     four = re.sub(r'\s*<p class="q">.*?</p>', '', four, count=1, flags=re.S)
     tools = retitle(TOOLS, 'Every tool inside MusicGen reads one layer at one moment').replace('Three tools, three questions, all at one layer and one moment.', 'Language models moved on to attribution graphs. Music has not.')
@@ -1652,7 +1652,7 @@ def assemble(cover, old):
     path = retitle(PATH, 'Too little memory gives a graph without syntax, too much gives a path').replace('An 89 note Bach chorale at first and third order.', 'An 89 note Bach chorale at first and third order. LLM judge result from zhiqian.ai/music-markov')
     beyond2 = retitle(toch(BEYOND2, '2'), 'Part 2. Knowledge is not only text')
     hist = retitle(HIST, 'The oldest music model is a graph')
-    bri = retitle(BRI, 'Like a language model, a note transition graph predicts the brain')
+    bri = retitle(BRI, 'A note transition graph predicts the listening brain')
     lang[1] = bridge(lang[1], 'That was the graph outside the model, a record we can draw. The harder case is a change made inside the model, where nobody drew the graph.')
     musres_b = bridge(toch(MUSRES, '2'), 'So inside MusicGen, steering is lopsided, and a vector cannot say why. To test any graph we draw inside, we need a judge outside the model. In music that judge exists: a listener\'s brain.')
     emo_b = bridge(toch(EMOTION2, '2'), 'If emotion lives in expectation, the first question is what a listener expects. The oldest answer is a graph.')
