@@ -827,12 +827,10 @@ base = ke(*SN, *SE, 'located in') + ke(*SE, *WA, 'city in') + ke(*WA, *US, 'stat
 base += ke(*ET, *PA, 'located in', col='#ACA39A') + ke(*PA, *FR, 'city in', col='#ACA39A') + ke(*FR, *EU, '', col='#ACA39A') + T(770, 444, 'currency', 12.5, 400, MUT)
 base += kn2(*SN, 'Space Needle') + kn2(*SE, 'Seattle') + kn2(*WA, 'Washington State', up=False) + kn2(*US, 'United States') + kn2(*WF, "1962 World's Fair") + kn2(*OL, 'Olympia') + kn2(*DO, 'dollar', up=False)
 base += kn2(*ET, 'Eiffel Tower', '#ACA39A') + kn2(*PA, 'Paris', '#ACA39A') + kn2(*FR, 'France', '#ACA39A') + C(*EU, 9, '#ACA39A') + T(EU[0] - 18, EU[1] + 5, 'euro', 16, 600, INK, 'end')
-intro = R(860, 52, 290, 330, SOFT, 'none', 0, 3)
-sil = 'M1005,292 L988,200 M1005,292 L1022,200 M988,200 L1005,138 L1022,200 M1005,124 L1005,76'
-intro += P(sil, '#ACA39A', 2.5, extra='stroke-linecap="round"') + '<ellipse cx="1005" cy="130" rx="46" ry="9" fill="#ACA39A"/>' + L(930, 292, 1080, 292, '#ACA39A', 1.5)
-intro += (f'<foreignObject x="860" y="52" width="290" height="250"><div xmlns="http://www.w3.org/1999/xhtml" style="width:290px;height:250px;overflow:hidden;border-radius:3px">'
-          f'<img src="figs/space-needle.jpg" alt="" onerror="this.remove()" style="width:290px;height:250px;object-fit:cover;max-width:none;max-height:none;margin:0;border:0;box-shadow:none"/></div></foreignObject>')
-intro += T(878, 330, 'The Space Needle, Seattle', 17, 600, INK) + T(878, 352, "built for the 1962 World's Fair,", 14, 400, MUT) + T(878, 372, '184 m (605 ft) tall', 14, 400, MUT)
+intro = (f'<foreignObject x="860" y="52" width="290" height="330"><div xmlns="http://www.w3.org/1999/xhtml" style="width:290px;height:330px;overflow:hidden;border-radius:3px;background:#F1EDE7">'
+         f'<img src="figs/space-needle.jpg" alt="The Space Needle in Seattle" style="width:290px;height:330px;object-fit:cover;max-width:none;max-height:none;margin:0;border:0;box-shadow:none"/></div></foreignObject>')
+intro += R(860, 318, 290, 64, '#FBFAF7', 'none', 0, 0, 'fill-opacity=".9"')
+intro += T(876, 342, 'The Space Needle, Seattle', 17, 600, INK) + T(876, 364, "built for the 1962 World's Fair, 184 m tall", 13.5, 400, MUT)
 g += intro
 g += F(1, base + T(30, 470, 'What the model knows, drawn as a knowledge graph', 16, 600, MUT))
 ed = ke(*SN, PA[0], PA[1], '', col=ACC, sw=2.8, m='kgto') + T(250, 290, 'the edit:', 14, 600, '#C45200', 'end') + T(250, 310, 'located in Paris', 14, 600, '#C45200', 'end')
