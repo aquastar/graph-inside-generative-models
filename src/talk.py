@@ -842,6 +842,37 @@ KGT = sec('Knowledge is a graph, and an edit has to follow it', SVG(g), ch='0',
           ref='Cohen et al., Evaluating the Ripple Effects of Knowledge Editing in Language Models, TACL 2024. Zhong et al., MQuAKE, EMNLP 2023. Space Needle answers are an illustration of the failure type',
           notes='Start from what everyone in the room knows: facts link to other facts. The Space Needle is in Seattle, Seattle is in Washington, Washington is in the United States. Suppose an editor moves the Space Needle to Paris and changes only that one edge. Now every question one step further is wrong: the model still says United States, still says Washington, still says dollar. This is the ripple effect, measured by RippleEdits and MQuAKE. The knowledge has a graph. The question for the talk: does the model have one inside?')
 
+# ---- Part 1 opener: multi-hop questions fall off a cliff, and the graph says why (our CIKM 2026 paper) ----
+g = adefs('cgt')
+g += T(30, 26, 'A clinical record, drawn as a knowledge graph', 16, 600, MUT)
+PT, AD, AL, SY = (80, 150), (290, 150), (480, 90), (480, 230)
+g += P(f'M{PT[0]+12},{PT[1]} L{AD[0]-13},{AD[1]}', AC2, 1.8, extra='marker-end="url(#cgta)"') + T(185, 140, 'admitted', 13, 400, MUT, 'middle')
+g += P(f'M{AD[0]+11},{AD[1]-6} L{SY[0]-12},{SY[1]-4}', AC2, 1.8, extra='marker-end="url(#cgta)"') + T(366, 222, 'symptom', 13, 400, MUT, 'middle')
+g += P(f'M{AD[0]+11},{AD[1]-6} L{AL[0]-12},{AL[1]+4}', '#DA291C', 1.8, extra='stroke-dasharray="5 5"') + T(352, 70, 'allergy edge', 13, 400, '#DA291C', 'middle') + T(352, 86, 'never recorded', 13, 400, '#DA291C', 'middle')
+for (x, y), lab in ((PT, 'Patient'), (AD, 'Admission'), (AL, 'Allergy'), (SY, 'chest pain')):
+    g += C(x, y, 9, '#009CBD') + T(x, y + 30, lab, 16, 600, INK, 'middle')
+g += T(30, 300, '1 hop: why was this patient admitted?', 15.5, 600, INK) + T(30, 324, '2 hops: what allergy does the patient admitted', 15.5, 600, INK) + T(30, 346, 'for chest pain have?', 15.5, 600, INK)
+g += T(30, 386, 'No path in the graph, no correct answer,', 16, 600, '#C45200') + T(30, 410, 'for any model at any size.', 16, 600, '#C45200')
+# slope chart, MIMIC-III exact match, 9 models
+X1, X2, Y0, YS = 680, 940, 400, 4.0
+H = [('Kimi-K2.5', 76.7, 9.1), ('GPT-OSS-120B', 76.0, 6.0), ('DeepSeek-V4-Pro', 76.0, 7.0), ('GLM-5.1', 76.0, 9.0), ('Gemma4-31B', 76.0, 6.0),
+     ('Nemotron-3-Super', 76.0, 8.0), ('Qwen3.5', 59.0, 7.0), ('Llama3.2-3B', 76.0, 12.0), ('Mistral-7B', 75.0, 12.0)]
+ch = T(600, 26, 'Exact match on MIMIC-III, 9 models from 3B to 1.6T parameters', 15, 600, MUT)
+ch += L(X1, 70, X1, Y0, '#D7D2CB', 1) + L(X2, 70, X2, Y0, '#D7D2CB', 1) + T(X1, Y0 + 24, '1 hop', 15, 600, INK, 'middle') + T(X2, Y0 + 24, '2 hops', 15, 600, INK, 'middle')
+for name, a, b in H:
+    ch += P(f'M{X1},{Y0 - a * YS:.1f} L{X2},{Y0 - b * YS:.1f}', '#7C878E', 1.6, extra='stroke-opacity=".75"') + C(X1, round(Y0 - a * YS, 1), 4, '#5F5D50') + C(X2, round(Y0 - b * YS, 1), 4, '#5F5D50')
+ch += T(X1 - 14, Y0 - 76 * YS + 5, 'about 76%', 16, 600, INK, 'end') + T(X1 - 14, Y0 - 59 * YS + 5, '59%', 14, 400, MUT, 'end')
+ch += T(X2 + 14, Y0 - 9 * YS + 5, '6 to 12%', 16, 600, INK) + T(860, 118, 'a cliff of', 16, 600, '#C45200', 'middle') + T(860, 138, '52 to 70 points', 16, 600, '#C45200', 'middle')
+g += F(1, ch)
+rep = R(1000, 86, 180, 250, SOFT, 'none', 0, 3) + T(1016, 114, 'The graph splits', 15, 600, INK) + T(1016, 134, 'the failures', 15, 600, INK)
+rep += T(1016, 170, 'missing edges:', 14, 600, '#C45200') + T(1016, 190, 'fix the graph. On', 14, 400, INK) + T(1016, 210, 'CORAL, 51 edges cut', 14, 400, INK) + T(1016, 230, 'misses 8.2% to 0%', 14, 600, INK)
+rep += T(1016, 270, 'the rest:', 14, 600, INK) + T(1016, 290, 'the model\'s own', 14, 400, INK) + T(1016, 310, 'reasoning', 14, 400, INK)
+g += F(2, rep)
+g += F(3, T(590, 466, 'A graph tells which questions cannot be answered, before any model tries.', 19, 700, INK, 'middle'))
+CGT = sec('Two hops break every model. The graph says why', SVG(g), ch='1', status='acc',
+          ref='Ours, Diagnosing Multi-Hop KG Question Answering Failures: A Typed Homomorphism Framework with Clinical Repair, CIKM 2026, Table 4 and Table 6. MIMIC-III, CORAL from PhysioNet',
+          notes='Our CIKM 2026 paper, the knowledge graph from the opening made concrete. On clinical records that no model has seen in training, seven of nine models reach about 76 percent at one hop and fall to 6 to 12 percent at two hops, from 3B up to a 1.6T mixture of experts. Part of that cliff is not the model at all: if the record never stored the edge, no model can answer. The paper turns that into a theorem and a test that runs before retrieval. On CORAL, adding 51 missing edges removes every structural miss, 8.2 percent to zero. What remains is the model reasoning gap.')
+
 # ---- forecast, two claims ----
 g = adefs('fc2')
 g += T(590, 60, THROUGH_A, 32, 700, INK, 'middle') + T(590, 104, THROUGH_B, 32, 700, ACC, 'middle')
@@ -1525,7 +1556,7 @@ def assemble(cover, old):
     rome = rome[:a] + '<div class="note" style="font-size:.62em"><div class="key">The finding</div><p class="one" style="font-size:1.25em">A fact sits in two places. Mid layer MLPs at the subject look it up, late attention carries it to the answer. Editing a fact means changing the first place.</p></div>\n  </div>\n' + rome[e:]
     rome = retitle(rome, 'A fact lives in mid layer MLPs and moves out by attention')
     d46 = old[46].replace('running example from slide 45: the Space Needle edit', 'running example: the Space Needle edit').replace(' (slide 2).', '.')
-    lang = [DIV1, toch(surg, '1'), toch(story, '1'), toch(SILENT, '1'), toch(receipts, '1'), REFUSAL, CRITIQUE, rome, old[35].replace('Guo 2025, slide 31', 'Guo 2025'), d46, old[48], old[49], old[50], old[51]]
+    lang = [DIV1, CGT, toch(surg, '1'), toch(story, '1'), toch(SILENT, '1'), toch(receipts, '1'), REFUSAL, CRITIQUE, rome, old[35].replace('Guo 2025, slide 31', 'Guo 2025'), d46, old[48], old[49], old[50], old[51]]
     four = retitle(FOUR, 'Music generation went from a visible graph to a hidden one')
     four = re.sub(r'\s*<p class="q">.*?</p>', '', four, count=1, flags=re.S)
     tools = retitle(TOOLS, 'Every tool inside MusicGen reads one layer at one moment').replace('Three tools, three questions, all at one layer and one moment.', 'Language models moved on to attribution graphs. Music has not.')
