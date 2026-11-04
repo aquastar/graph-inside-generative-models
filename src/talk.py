@@ -598,7 +598,7 @@ for ang in (-0.45, 0.35, 2.8, 3.6):
     x1, y1 = 955 + 70 * math.cos(ang), 140 + 38 * math.sin(ang)
     x2, y2 = 955 + 150 * math.cos(ang), 140 + 62 * math.sin(ang)
     isl += P(f'M{x1:.0f},{y1:.0f} L{x2:.0f},{y2:.0f}', GRN, 2, extra='marker-end="url(#mra)"')
-isl += P('M790,190 C850,175 880,170 893,160', RED, 2, extra='stroke-dasharray="5 4"') + T(955, 200, 'many ways out, few ways in', 13.5, 700, INK, 'middle')
+isl += P('M790,190 C850,175 880,170 893,160', RED, 2, extra='stroke-dasharray="5 4"') + T(786, 182, 'rare way in', 12.5, 600, RED, 'end') + T(955, 200, 'many ways out, few ways in', 13.5, 700, INK, 'middle')
 g += F(4, isl + T(590, 380, 'Leaving a style is easy. Entering one is not.', 22, 700, INK, 'middle') + T(590, 414, 'A vector cannot explain that. Reachability on a graph can.', 18, 700, ACC, 'middle'))
 MUSRES = sec('Steering leaves a style easily but cannot enter one', SVG(g), ch='0', status='rev',
              ref='Co-authored work under review, MusicGen small and medium. Jazz and classical are an illustration of the two arms',
@@ -802,7 +802,7 @@ for k in range(7):
     a = -_mm.pi * 0.85 + k * _mm.pi * 1.7 / 6
     x1, y1 = 960 + 52 * _mm.cos(a), 318 + 32 * _mm.sin(a); x2, y2 = 960 + 96 * _mm.cos(a), 318 + 56 * _mm.sin(a)
     isl += P(f'M{x1:.0f},{y1:.0f} L{x2:.0f},{y2:.0f}', AC2, 1.5, extra='marker-end="url(#msta)"')
-isl += P('M1100,266 Q1060,282 1010,298', '#DA291C', 1.5, extra='stroke-dasharray="4 4" marker-end="url(#msta)"')
+isl += P('M1100,266 Q1060,282 1010,298', '#DA291C', 1.5, extra='stroke-dasharray="4 4" marker-end="url(#msta)"') + T(1104, 262, 'rare way in', 12, 600, '#DA291C')
 isl += T(960, 398, 'a graph view: many ways out, few ways in', 13, 600, INK, 'middle') + T(960, 414, 'our hypothesis, being tested', 12.5, 400, MUT, 'middle')
 o += isl
 g += F(1, o)
