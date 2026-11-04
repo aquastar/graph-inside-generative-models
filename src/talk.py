@@ -999,7 +999,7 @@ for k, (kind, name, line) in enumerate(KINDS):
     g += R(cx, cy, 356, 134, SOFT, 'none', 0, 3) + _gi(kind, cx + 62, cy + 67, AC2)
     g += T(cx + 124, cy + 58, name, 21, 600, INK) + T(cx + 124, cy + 86, line, 14, 400, MUT)
 TAKEAWAY = sec('Language and music are two of many places a graph may hide', SVG(g), ch='4',
-               notes='No conclusion slide, just the map of what is left. Text and music were today. Equations, code, images, space, motion and molecules each already have a natural graph, and each has its own generative models. Every one of these is a place where the same question can be asked, and where someone in this department may already have the data or the expertise.')
+               notes='One sentence before the map, no more: in language the graph inside is published and ranks risky edits, it does not repair them, in music it is in progress and the judge is planned. Then the map. No conclusion slide, just the map of what is left. Text and music were today. Equations, code, images, space, motion and molecules each already have a natural graph, and each has its own generative models. Every one of these is a place where the same question can be asked, and where someone in this department may already have the data or the expertise.')
 
 # ======================= ROUND 4 (Nov 2 2026): Space Needle anchor =======================
 RED = '#c0392b'
@@ -1605,7 +1605,7 @@ g += F(2, box)
 g += F(3, T(590, 452, 'Next: is it the size of the change, or its shape?', 19, 700, INK, 'middle'))
 RES20 = sec('Results: same checking budget, more bad edits caught', SVG(g), ch='1', status='pub',
             ref='Benbrahim et al., SDM 2026, Tables 5.1 to 5.5. Counts are the expected bad edits among 20 checks at the reported rates',
-            notes='The same three bars as the trailer, now with the method behind them. Show random and editor first, then ask: from the inside, how many of the 20 would you expect to be bad? Then reveal 17. The rates are what the paper reports: 56 percent at random, 70 by editor and model, 86 with the delta graph. Ranking quality goes from 0.703 to 0.797, and on a second dataset of real Wikipedia facts from 0.853 to 0.904.')
+            notes='The same three bars as the trailer, now with the method behind them. Do not ask the room to guess, they saw 17 at minute 3. Say instead: these are the bars from the start of the talk, now you know what the orange one measures. Then click to 17. The rates are what the paper reports: 56 percent at random, 70 by editor and model, 86 with the delta graph. Ranking quality goes from 0.703 to 0.797, and on a second dataset of real Wikipedia facts from 0.853 to 0.904.')
 
 # ---- loop it1: one slide for the vector evidence (P03) ----
 import random as _r3
@@ -1634,6 +1634,11 @@ def backup(sec_html):
     if 'class="status' in sec_html:
         return re.sub(r'(<span class="status [^"]*">)', r'\1Backup, ', sec_html, count=1)
     return sec_html.replace('</h2>', '</h2><span class="status plan">Backup</span>', 1)
+
+_fb = lambda sec_, line: sec_.replace('<aside class="notes">', '<aside class="notes">If sound fails: ' + line + ' ', 1)
+DEMO2 = _fb(DEMO2, 'skip the click, point at the arrows, and say the ball walks the graph, one move per note.')
+FOLD = _fb(FOLD, 'say what the second clip would show: the right notes in the wrong sentences, it sounds like Für Elise in pieces.')
+COPY = _fb(COPY, 'skip the vote. Say B is the real Bach, A comes from the 2 note graph, and that the vote is a pilot of the listening test. Move on.')
 
 def assemble(cover, old):
     """old: the reused slides from the earlier deck, keyed by their old index"""
@@ -1669,7 +1674,7 @@ def assemble(cover, old):
     lim_main = _l[:_a] + '<text x="915" y="150" font-size="17" font-weight="700" fill="#1F1E1B" text-anchor="middle">Two more under the down arrow:</text><text x="915" y="182" font-size="15" fill="#5F5D50" text-anchor="middle">checking 20% catches about a third of all bad edits</text><text x="915" y="208" font-size="15" fill="#5F5D50" text-anchor="middle">and on CounterFact there is nothing to catch</text>' + _l[_b:]
     lim_main = lim_main.replace('</section>', '  <aside class="notes">Two limits on screen, two more under the down arrow if asked. Say the Llama one plainly: when almost every passing edit fails, there is little left to rank.</aside>\n</section>', 1) if '<aside' not in lim_main else lim_main
     vec2_b = bridge(VEC2, 'If not the vector, look where the fact lives. Causal tracing (Meng et al.) finds a fact in mid layer MLPs at the subject, the figure is under the down arrow on the next slide. The next slide shows why that is still not where editing works.')
-    d46_q = bridge(d46, 'Hard question to expect: is the delta graph real, or an artifact of the 12 probe prompts? Three answers from the paper. The probe prompts are disjoint from the prompts that define failure. Trained on 200 facts and tested on 500 new ones, the AUC holds at 0.840 to 0.862. Rerun the 50 riskiest edits from scratch and only 2 of 50 flip.')
+    d46_q = bridge(d46, 'If asked how a partial correlation over 64 blocks is estimated from 12 prompts: it is not well posed alone, ridge with one fixed lambda shapes the graph, which is why the paper leans on held out evidence. Hard question to expect: is the delta graph real, or an artifact of the 12 probe prompts? Three answers from the paper. The probe prompts are disjoint from the prompts that define failure. Trained on 200 facts and tested on 500 new ones, the AUC holds at 0.840 to 0.862. Rerun the 50 riskiest edits from scratch and only 2 of 50 flip.')
     silent_b = bridge(toch(SILENT, '1'), 'And the usual fix, a vector, is unreliable too: it switches a behavior on average but sends many single inputs the wrong way (Tan et al., under the down arrow). So instead of the vector, look where the fact lives, which the next slide does.')
     lang = [DIV1, CGT, backup(CGT4), toch(story, '1'), backup(toch(surg, '1')), backup(toch(receipts, '1')), silent_b, backup(vec2_b), old[35].replace('The first crack: where a fact lives is not where editing works', 'Where a fact lives is not where editing works').replace('(numbers illustrative)', '(numbers illustrative. Causal tracing: corrupt the input, restore one layer)').replace('Each grey dot is one fact. Hase 2023: correlation about zero (minus 0.13).', 'Schematic, each grey dot one fact. Hase 2023 measured a correlation of about zero (minus 0.13).').replace('Guo 2025, slide 31', 'Guo 2025').replace('So an edit can land where the knowledge is not, and its side effects can land where nobody looks.', 'Mechanism still matters: choosing where to change by it makes forgetting stick (Guo 2025).').replace('But choosing where to change by mechanism makes forgetting stick (Guo 2025).', 'So instead of asking where a fact lives, we read what the edit did to the connections.'), backup(rome), d46_q, backup(old[48]), RES20, abl, bridge(lim_main, 'That is the graph inside a language model, published, with its limits. The title says generative models, plural. Text is one kind of knowledge a model holds, and the next part asks whether the same question survives in knowledge that is not words.'), backup(retitle(old[51], 'Limits, all four, with the numbers'))]
     four = retitle(FOUR, 'Music generation went from a visible graph to a hidden one')
