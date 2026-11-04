@@ -1224,24 +1224,51 @@ MGEN = sec('MusicGen is a next token predictor for sound', SVG(g), ch='2',
            ref='Copet et al., Simple and Controllable Music Generation, NeurIPS 2023. Demo: ai.honu.io/papers/musicgen. Live: huggingface.co/spaces/facebook/MusicGen',
            notes='MusicGen never sees a waveform. EnCodec compresses every 20 ms into four integers from four codebooks of 2,048 entries, 50 steps per second. The four rows are staggered by one step, so all four are predicted together. A single Transformer, conditioned on a text prompt, predicts the next tokens. Consider playing a 10 second sample from the demo page here.')
 
-# ---- M7: probing ----
+# ---- M7: probing, then shapes (helix, circle of fifths) ----
+import math as _pm
 g = adefs('pb')
-for k in range(6):
-    g += R(60, 70 + k * 46, 200, 36, SOFT, '#9aa6ae', 1.2, 6) + T(160, 93 + k * 46, f'layer {6 - k}', 13, 600, MUT, 'middle')
-g += P('M262,180 L330,180', ACC, 3, extra='marker-end="url(#pbo)"') + R(334, 160, 120, 40, ACL, ACC, 1.5, 8) + T(394, 186, 'tiny classifier', 13, 700, ACC, 'middle')
-g += T(160, 370, 'freeze the generator, read a layer', 14, 700, INK, 'middle') + T(160, 392, 'ask: is the chord, the scale, the tempo in there?', 13, 400, MUT, 'middle')
-bars = [('Jukebox', 0.984, AC2), ('MusicGen small', 0.950, ACC), ('MusicGen medium', 0.914, '#f6a46a'), ('MusicGen large', 0.929, '#f6a46a'), ('hand chroma features', 0.878, GRY), ('raw audio tokens', 0.701, '#c9d0d5')]
 g += T(40, 24, 'MusicGen is a GPT over audio tokens, 4 integers per 20 ms, with no music theory built in (down arrow).', 14, 600, MUT)
-blk = T(820, 50, 'average probe accuracy on music theory concepts', 14, 700, INK, 'middle')
-for k, (a_, v, col) in enumerate(bars):
-    y = 72 + k * 46
-    blk += T(690, y + 22, a_, 14, 700 if 'small' in a_ else 600, INK, 'end') + R(700, y, (v - 0.6) * 1000, 30, col, 'none', 0, 3) + T(700 + (v - 0.6) * 1000 + 8, y + 21, f'{v:.3f}', 14, 700, INK)
-g += F(1, blk + T(820, 360, 'axis starts at 0.6', 12, 400, MUT, 'middle'))
-g += F(2, R(470, 380, 680, 50, SOFT, LINE, 1, 8) + T(810, 411, 'Bigger is not clearer: the smallest MusicGen reads best.', 16, 700, INK, 'middle'))
-g += F(3, T(590, 466, 'Music theory is in there. A probe finds it, but a probe is still a vector.', 19, 700, ACC, 'middle'))
-PROBE = sec('Music theory can be read from a generator\'s layers', SVG(g), ch='2',
-            ref='Wei, Freeman, Donahue, Sun, Do Music Generation Models Encode Music Theory?, ISMIR 2024, Table 2. Castellon, Donahue, Liang, ISMIR 2021',
-            notes='Wei et al. built SynTheory, synthetic clips where one concept changes at a time: tempo, time signature, notes, intervals, scales, chords, chord progressions. They froze the generators and trained tiny classifiers on each layer. Concepts are linearly readable. Plain chroma features tie the models on static notes and lose on progressions. Castellon et al. found Jukebox layers beat tag trained representations by about 30 percent, most on key detection. Bridge: a probe tells us what is stored, not how the states move. That is the graph question.')
+# column 1: a probe reads it
+c1 = T(220, 60, 'A tiny classifier on a frozen layer', 15, 700, INK, 'middle') + T(220, 80, 'reads music theory', 15, 700, INK, 'middle')
+bars = [('Jukebox', 0.984, AC2), ('MusicGen small', 0.950, ACC), ('MusicGen medium', 0.914, '#f6a46a'), ('MusicGen large', 0.929, '#f6a46a'), ('hand chroma', 0.878, GRY), ('raw tokens', 0.701, '#c9d0d5')]
+for k_, (a_, v, col) in enumerate(bars):
+    y = 98 + k_ * 32
+    c1 += T(160, y + 16, a_, 13, 700 if 'small' in a_ else 500, INK, 'end') + R(168, y, (v - 0.6) * 420, 22, col, 'none', 0, 3) + T(168 + (v - 0.6) * 420 + 6, y + 16, f'{v:.2f}', 12.5, 700, INK)
+c1 += T(220, 312, 'average probe accuracy, axis from 0.6', 12.5, 400, MUT, 'middle') + T(220, 334, 'the smallest MusicGen reads best', 13.5, 600, INK, 'middle')
+g += F(1, c1)
+# column 2: pitch on a helix
+c2 = T(600, 60, 'Pitch sits on a helix', 15, 700, INK, 'middle') + T(600, 80, 'one turn per octave', 13.5, 400, MUT, 'middle')
+pts = []
+hx = lambda t: (600 + 86 * _pm.sin(2 * _pm.pi * t / 12), 266 - t * 6.6 + 26 * _pm.cos(2 * _pm.pi * t / 12))
+for n in range(25):
+    pts.append(hx(n) + (n,))
+for q in range(96):
+    t1, t2 = q / 4, (q + 1) / 4
+    (x1, y1), (x2, y2) = hx(t1), hx(t2)
+    c2 += P(f'M{x1:.1f},{y1:.1f} L{x2:.1f},{y2:.1f}', MU, 2, extra='' if _pm.cos(2 * _pm.pi * (t1 + 0.125) / 12) > 0 else 'opacity=".3"')
+for x, y, n in pts:
+    front = _pm.cos(2 * _pm.pi * n / 12) > -0.01
+    c2 += C(x, y, 6.5 if n % 12 == 0 else 3.6, ACC if n % 12 == 0 else MU, extra='' if front else 'opacity=".3"')
+c2 += P(f'M{pts[0][0]:.0f},{pts[0][1]:.0f} L{pts[24][0]:.0f},{pts[24][1]:.0f}', ACC, 1.6, extra='stroke-dasharray="4 4"')
+c2 += T(pts[0][0] + 12, pts[0][1] + 5, 'C3', 12.5, 700, '#C45200') + T(pts[12][0] + 12, pts[12][1] + 5, 'C4', 12.5, 700, '#C45200') + T(pts[24][0] + 12, pts[24][1] + 5, 'C5', 12.5, 700, '#C45200')
+c2 += T(600, 312, 'clean guitar: two turns per octave', 12.5, 400, MUT, 'middle') + T(600, 334, 'Jukebox and MusicGen large, Jul 2026', 13.5, 600, INK, 'middle')
+g += F(2, c2)
+# column 3: keys on the circle of fifths
+c3 = T(980, 60, 'Keys sit on the circle of fifths', 15, 700, INK, 'middle') + T(980, 80, 'clearest in the deepest layers', 13.5, 400, MUT, 'middle')
+names = ['C', 'G', 'D', 'A', 'E', 'B', 'F#', 'C#', 'G#', 'D#', 'A#', 'F']
+xy = [(980 + 84 * _pm.sin(2 * _pm.pi * q / 12), 192 - 84 * _pm.cos(2 * _pm.pi * q / 12)) for q in range(12)]
+for q in range(12):
+    a, b = xy[q], xy[(q + 1) % 12]
+    c3 += P(f'M{a[0]:.0f},{a[1]:.0f} L{b[0]:.0f},{b[1]:.0f}', LINE, 1.4)
+for q, (x, y) in enumerate(xy):
+    c3 += C(x, y, 13, '#fff', ACC if q == 0 else MU, 1.6) + T(x, y + 4.5, names[q], 11.5, 700, '#C45200' if q == 0 else MU, 'middle')
+c3 += T(980, 312, 'a key probe, scored by transposing', 12.5, 400, MUT, 'middle') + T(980, 334, 'MERT and MusicGen, ISMIR 2026', 13.5, 600, INK, 'middle')
+g += F(3, c3)
+g += F(4, T(590, 392, 'Each shape is a graph we already know: the semitone chain wound by the octave, and a 12 node cycle.', 17, 700, INK, 'middle')
+          + T(590, 426, 'Both are snapshots of single states. Still missing: a graph of how one state follows the next.', 18, 700, ACC, 'middle'))
+PROBE = sec('Inside a music generator, music theory has a shape', SVG(g), ch='2',
+            ref='Wei, Freeman, Donahue, Sun, ISMIR 2024, Table 2. Do Music Foundation Models Embed Pitch in Helical Structure?, arXiv 2607.29086, 2026. Kanatas, Kong, Alonso-Jim&eacute;nez, Serra, Bogdanov, What Makes a Good Layer?, ISMIR 2026',
+            notes='Three steps, one click each. First, a probe reads music theory (Wei et al.). Second, a July 2026 preprint feeds 36 single notes, C3 to B5, to Jukebox and MusicGen large, projects each layer to 3D and fits a helix: both form one, clearer in deeper layers, Jukebox mean helicality 2.28 and MusicGen 1.16 against 0.37 for random points, and the shape depends on the instrument, a Hammond organ winds once per octave, a clean electric guitar twice. Third, Kanatas et al. at ISMIR 2026 study 12 music models including MusicGen small, medium and large: a key probe projected on the circle of fifths stays consistent under transposition, and tonal tasks peak in the deepest layers. Our reading, not theirs: a helix is the semitone chain wound by the octave, the circle of fifths is a 12 node cycle, so these are graphs too, but graphs of where a single state sits. Neither paper reads how one state follows the next, and that transition graph is what our plan builds. Then bridge to steering: and to change the music, people still push a vector. Details of the probe study: Wei et al. built SynTheory, synthetic clips where one concept changes at a time: tempo, time signature, notes, intervals, scales, chords, chord progressions. They froze the generators and trained tiny classifiers on each layer. Concepts are linearly readable. Plain chroma features tie the models on static notes and lose on progressions. Castellon et al. found Jukebox layers beat tag trained representations by about 30 percent, most on key detection. Bridge: a probe tells us what is stored, not how the states move. That is the graph question.')
 
 # ---- B1: language models already met the brain ----
 g = adefs('lb')
