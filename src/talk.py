@@ -674,7 +674,7 @@ g = adefs('dm2')
 g += f'<foreignObject x="20" y="10" width="740" height="410"><div xmlns="http://www.w3.org/1999/xhtml" style="width:740px;height:410px;border-radius:12px;overflow:hidden;box-shadow:0 0 0 1.5px #d3d7da,0 10px 30px rgba(17,17,17,.10)"><iframe class="fe-frame" data-src="figs/fe-chain.html?autoplay=1" title="Für Elise Markov chain" style="width:740px;height:410px;border:0;background:#fff"></iframe></div></foreignObject>'
 g += T(790, 34, 'Graphs in music, in this talk', 15, 600, MUT)
 MENU = [('1', 'Note to note graph', '144 numbers name the tradition', '70.2%, chance 17%', False),
-        ('2', 'Richer nodes', 'note plus its length', '88.7%', False),
+        ('2', 'Richer nodes', 'note plus its length', '86.8%', False),
         ('3', "The listener's graph", 'its surprise tracks the brain', 'IDyOM, EEG', False),
         ('4', 'A graph inside MusicGen', 'read from the generator itself', 'next step', True)]
 for k, (num, name, line, val, plan) in enumerate(MENU):
@@ -791,7 +791,7 @@ for k, (a1, a2, kind, cite) in enumerate(cards):
     blk += T(x + 22, 76, a1, 18, 600, INK) + T(x + 22, 98, a2, 14, 400, MUT) + T(x + 22, 178, kind, 14, 600, MU) + T(x + 22, 198, cite, 12.5, 400, MUT)
     g += blk
 # ours, one way
-o = R(30, 236, 1120, 186, '#EEE8F6', 'none', 0, 3) + T(52, 266, 'Ours, under review: the same kind of vector works only one way', 17, 600, INK)
+o = R(30, 236, 1120, 186, '#EEE8F6', 'none', 0, 3) + T(52, 266, 'Ours, under review: for the styles we tested, the same kind of vector works only one way', 17, 600, INK)
 o += R(60, 290, 200, 46, '#fff', 'none', 0, 3) + T(160, 319, 'a jazz clip', 16, 600, MU, 'middle') + P('M262,313 L420,313', ACC, 2.5, extra='marker-end="url(#msto)"') + T(341, 303, 'minus jazz', 13, 400, MUT, 'middle')
 o += R(424, 290, 210, 46, '#fff', 'none', 0, 3) + T(529, 319, 'not jazz any more', 16, 600, INK, 'middle') + T(660, 320, 'leaving: easy', 16, 600, '#C45200')
 o += R(60, 346, 200, 46, '#fff', 'none', 0, 3) + T(160, 375, 'a classical clip', 16, 600, INK, 'middle') + P('M262,369 L420,369', AC2, 2, extra='marker-end="url(#msta)" stroke-dasharray="6 4"') + T(341, 359, 'plus jazz', 13, 400, MUT, 'middle')
@@ -802,13 +802,13 @@ for k in range(7):
     a = -_mm.pi * 0.85 + k * _mm.pi * 1.7 / 6
     x1, y1 = 960 + 52 * _mm.cos(a), 318 + 32 * _mm.sin(a); x2, y2 = 960 + 96 * _mm.cos(a), 318 + 56 * _mm.sin(a)
     isl += P(f'M{x1:.0f},{y1:.0f} L{x2:.0f},{y2:.0f}', AC2, 1.5, extra='marker-end="url(#msta)"')
-isl += P('M1100,266 Q1060,282 1010,298', '#DA291C', 1.5, extra='stroke-dasharray="4 4" marker-end="url(#msta)"') + T(1104, 262, 'rare way in', 12, 600, '#DA291C')
+isl += P('M1100,266 Q1060,282 1010,298', '#DA291C', 1.5, extra='stroke-dasharray="4 4" marker-end="url(#msta)"') + T(1144, 256, 'rare way in', 12, 600, '#DA291C', 'end')
 isl += T(960, 398, 'a graph view: many ways out, few ways in', 13, 600, INK, 'middle') + T(960, 414, 'our hypothesis, being tested', 12.5, 400, MUT, 'middle')
 o += isl
 g += F(1, o)
 g += F(2, T(590, 452, 'A vector says what we pushed. It cannot say why the push lands only one way.', 19, 700, INK, 'middle'))
 MSTEER = sec('Yet music generators are steered with vectors too', SVG(g), ch='0',
-             ref='Facchiano et al., arXiv 2504.04479, 2025. Koo et al., SMITIN, 2025. Zhao et al., ICLR 2026. Singh, Cherep, Maes, ICLR 2026. Co-authored work under review, MusicGen. Jazz and classical illustrate the two arms',
+             ref='Facchiano et al., arXiv 2504.04479, 2025. Narashiman et al., arXiv 2506.10225, 2025. Koo et al., SMITIN, 2025. Zhao et al., ICLR 2026. Singh, Cherep, Maes, ICLR 2026. Co-authored work under review, MusicGen. Jazz and classical illustrate the two arms',
              notes='The music twin of the vector slide. The tiny graph just showed that a style has structure. Yet the way people steer MusicGen today is a direction or a feature added inside the model. Our own finding, still under review: removing a style with such a vector works, adding one does not. A vector cannot explain that. A graph can, if a style is an island with many ways out and few ways in. That picture is our hypothesis, and testing it is part of Part 2.')
 
 # ---- trailer: knowledge is a graph, an edit must follow it ----
@@ -1251,7 +1251,7 @@ for x, y, n in pts:
     c2 += C(x, y, 6.5 if n % 12 == 0 else 3.6, ACC if n % 12 == 0 else MU, extra='' if front else 'opacity=".3"')
 c2 += P(f'M{pts[0][0]:.0f},{pts[0][1]:.0f} L{pts[24][0]:.0f},{pts[24][1]:.0f}', ACC, 1.6, extra='stroke-dasharray="4 4"')
 c2 += T(pts[0][0] + 12, pts[0][1] + 5, 'C3', 12.5, 700, '#C45200') + T(pts[12][0] + 12, pts[12][1] + 5, 'C4', 12.5, 700, '#C45200') + T(pts[24][0] + 12, pts[24][1] + 5, 'C5', 12.5, 700, '#C45200')
-c2 += T(600, 312, 'clean guitar: two turns per octave', 12.5, 400, MUT, 'middle') + T(600, 334, 'Jukebox and MusicGen large, Jul 2026', 13.5, 600, INK, 'middle')
+c2 += T(600, 312, 'shown: one turn per octave, clean guitar: two', 12.5, 400, MUT, 'middle') + T(600, 334, 'Jukebox and MusicGen large, Jul 2026', 13.5, 600, INK, 'middle')
 g += F(2, c2)
 # column 3: keys on the circle of fifths
 c3 = T(980, 60, 'Keys sit on the circle of fifths', 15, 700, INK, 'middle') + T(980, 80, 'clearest in the deepest layers', 13.5, 400, MUT, 'middle')
@@ -1344,14 +1344,14 @@ for k, (a_, who, b_) in enumerate(cards):
     g += F(k, R(40, y, 700, 94, '#fff', LINE, 1.5, 10) + T(60, y + 30, a_, 17, 700, AC2) + T(720, y + 30, who, 13, 600, MUT, 'end') + wrap(60, y + 58, b_, 14.5, 400, INK, width=88, lh=20)) if k else R(40, y, 700, 94, '#fff', LINE, 1.5, 10) + T(60, y + 30, a_, 17, 700, AC2) + T(720, y + 30, who, 13, 600, MUT, 'end') + wrap(60, y + 58, b_, 14.5, 400, INK, width=88, lh=20)
 g += F(3, R(780, 40, 370, 310, ACL, ACC, 2, 12) + T(965, 84, 'Missing', 22, 700, ACC, 'middle') + T(965, 126, 'Nobody has read a graph', 16, 700, INK, 'middle') + T(965, 150, 'from inside a music generator', 16, 700, INK, 'middle') + T(965, 174, 'and asked the brain', 16, 700, INK, 'middle') + T(965, 198, 'whether it is real.', 16, 700, INK, 'middle')
           + T(965, 250, 'The outside: outputs, embeddings.', 14, 400, MUT, 'middle') + T(965, 274, 'The inside: how states connect.', 14, 700, ACC, 'middle'))
-g += F(4, T(590, 420, 'Music generators meet the brain only from the outside so far.', 20, 700, INK, 'middle'))
-BRG = sec('Music generators meet the brain only from the outside so far', SVG(g), ch='2',
-          ref='Pepino et al., arXiv 2511.16849, 2025. Noguchi et al., arXiv 2603.03190, 2026. Denk et al., Nature Communications 2025',
-          notes='Same yardstick as language, applied to audio and music. Three lines of work, all looking at what comes out of a model or at whole embeddings. Noguchi is the closest: it uses MusicGen large output probabilities, not internal layers, no steering and no style. The gap is the inside.')
+g += F(4, T(590, 420, 'Music generators meet the brain through outputs, embeddings and layers, never as a graph.', 19, 700, INK, 'middle'))
+BRG = sec('Music generators meet the brain, but never as a graph', SVG(g), ch='2',
+          ref='Pepino et al., arXiv 2511.16849, 2025. Noguchi et al., arXiv 2603.03190, 2026. Denk et al., Nature Communications 2025. Mischler et al., Nature Communications 2025',
+          notes='Same yardstick as language, applied to audio and music. Three lines of work on the cards look at what comes out of a model or at whole embeddings. A fourth goes inside: Mischler, Mesgarani and colleagues (Nature Communications, Oct 2025) fit the 13 layers of a symbolic music transformer (Musicautobot) to EEG from 10 pianists and 10 non musicians and to intracranial recordings, deeper layers predict better and musicians use longer context. None of them reads a graph of how states follow each other. Noguchi is the closest: it uses MusicGen large output probabilities, not internal layers, no steering and no style. The gap is the inside.')
 
 # ---- plan ----
 g = adefs('pn')
-g += T(40, 30, 'So far the brain has met music generators only from the outside: their outputs and their embeddings. Missing: the inside.', 15, 600, MUT)
+g += T(40, 30, 'So far the brain has met music generators through outputs, embeddings and layer activations. Missing: a graph of how states follow each other.', 15, 600, MUT)
 steps = [('1', 'Generate', 'clips of each style with MusicGen, keep the middle layer state at every step', AC2),
          ('2', 'Read a graph', 'cluster the states, count transitions: a graph from inside the model', ACC),
          ('3', 'Play to listeners', 'record EEG while people listen to the same clips', MU)]
@@ -1367,7 +1367,7 @@ for k, (a_, col) in enumerate([('surprise from IDyOM, a graph from scores', AC2)
 g += F(3, cmp_)
 g += F(4, T(590, 416, 'If the graph inside the generator explains the listener as well as the generator itself,', 17, 700, INK, 'middle') + T(590, 446, 'the graph is real. If not, it is our drawing, not the model\'s.', 17, 700, ACC, 'middle'))
 PLAN = secx('Our plan: a graph from inside MusicGen, judged by the brain', SVG(g), ch='2', status='plan',
-            ref='Outside only so far (down arrow): Pepino et al. 2025, Noguchi et al. 2026, Denk et al., Nature Communications 2025',
+            ref='So far (down arrow): Pepino et al. 2025, Noguchi et al. 2026, Denk et al. 2025, Mischler et al., Nature Communications 2025',
             notes='One question replaces the earlier four outcome matrix. Three sources of surprise for the same clips, one yardstick. The scores graph (IDyOM) is the baseline from music cognition, MusicGen output surprisal is what Noguchi used, and the graph from inside MusicGen is ours. The steering asymmetry shown after the probing slide is the follow up: once the graph is validated, ask whether steering can reach a style on it.')
 
 # ======================= ROUND 6 (Nov 2 2026): knowledge beyond text, emotion =======================
@@ -1657,7 +1657,7 @@ def assemble(cover, old):
     toch = lambda sec_, c: re.sub(r'data-ch="[^"]*"', f'data-ch="{c}"', sec_, count=1)
     vector = retitle(VECTOR, 'Every change to a model is stored as a vector')
     # trailer: the problem, the thesis, one best result per domain, the two claims
-    vector = retitle(vector, 'Yet every change to a model is stored as a vector')
+    vector = retitle(vector, 'Yet every change to a model is applied as a vector')
     # per domain: the structure is a graph, our graph sees the problem, yet the field uses vectors
     vision = [cover, KGT, DELTA_T, vector, DEMO2, MSTEER, FORECAST2]
     rome = old[33]
@@ -1674,7 +1674,7 @@ def assemble(cover, old):
     lim_main = _l[:_a] + '<text x="915" y="150" font-size="17" font-weight="700" fill="#1F1E1B" text-anchor="middle">Two more under the down arrow:</text><text x="915" y="182" font-size="15" fill="#5F5D50" text-anchor="middle">checking 20% catches about a third of all bad edits</text><text x="915" y="208" font-size="15" fill="#5F5D50" text-anchor="middle">and on CounterFact there is nothing to catch</text>' + _l[_b:]
     lim_main = lim_main.replace('</section>', '  <aside class="notes">Two limits on screen, two more under the down arrow if asked. Say the Llama one plainly: when almost every passing edit fails, there is little left to rank.</aside>\n</section>', 1) if '<aside' not in lim_main else lim_main
     vec2_b = bridge(VEC2, 'If not the vector, look where the fact lives. Causal tracing (Meng et al.) finds a fact in mid layer MLPs at the subject, the figure is under the down arrow on the next slide. The next slide shows why that is still not where editing works.')
-    d46_q = bridge(d46, 'If asked how a partial correlation over 64 blocks is estimated from 12 prompts: it is not well posed alone, ridge with one fixed lambda shapes the graph, which is why the paper leans on held out evidence. Hard question to expect: is the delta graph real, or an artifact of the 12 probe prompts? Three answers from the paper. The probe prompts are disjoint from the prompts that define failure. Trained on 200 facts and tested on 500 new ones, the AUC holds at 0.840 to 0.862. Rerun the 50 riskiest edits from scratch and only 2 of 50 flip.')
+    d46_q = bridge(d46, 'Nearest 2026 cousin, if asked: Circuit-Diff (Friedman and Song, arXiv 2609.23892, Sep 2026) also compares attribution graphs before and after a factual edit, but to label features, not to rank which edits went wrong. If asked how a partial correlation over 64 blocks is estimated from 12 prompts: it is not well posed alone, ridge with one fixed lambda shapes the graph, which is why the paper leans on held out evidence. Hard question to expect: is the delta graph real, or an artifact of the 12 probe prompts? Three answers from the paper. The probe prompts are disjoint from the prompts that define failure. Trained on 200 facts and tested on 500 new ones, the AUC holds at 0.840 to 0.862. Rerun the 50 riskiest edits from scratch and only 2 of 50 flip.')
     silent_b = bridge(toch(SILENT, '1'), 'And the usual fix, a vector, is unreliable too: it switches a behavior on average but sends many single inputs the wrong way (Tan et al., under the down arrow). So instead of the vector, look where the fact lives, which the next slide does.')
     lang = [DIV1, CGT, backup(CGT4), toch(story, '1'), backup(toch(surg, '1')), backup(toch(receipts, '1')), silent_b, backup(vec2_b), old[35].replace('The first crack: where a fact lives is not where editing works', 'Where a fact lives is not where editing works').replace('(numbers illustrative)', '(numbers illustrative. Causal tracing: corrupt the input, restore one layer)').replace('Each grey dot is one fact. Hase 2023: correlation about zero (minus 0.13).', 'Schematic, each grey dot one fact. Hase 2023 measured a correlation of about zero (minus 0.13).').replace('Guo 2025, slide 31', 'Guo 2025').replace('So an edit can land where the knowledge is not, and its side effects can land where nobody looks.', 'Mechanism still matters: choosing where to change by it makes forgetting stick (Guo 2025).').replace('But choosing where to change by mechanism makes forgetting stick (Guo 2025).', 'So instead of asking where a fact lives, we read what the edit did to the connections.'), backup(rome), d46_q, backup(old[48]), RES20, abl, bridge(lim_main, 'That is the graph inside a language model, published, with its limits. The title says generative models, plural. Text is one kind of knowledge a model holds, and the next part asks whether the same question survives in knowledge that is not words.'), backup(retitle(old[51], 'Limits, all four, with the numbers'))]
     four = retitle(FOUR, 'Music generation went from a visible graph to a hidden one')
