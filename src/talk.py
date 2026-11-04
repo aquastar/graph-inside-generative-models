@@ -664,9 +664,9 @@ for k, (a, eq, d1, d2, cite) in enumerate(cols4):
     g += F(k, blk) if k else blk
 g += F(4, R(30, 285, 1120, 100, SOFT, LINE, 1, 12) + T(590, 323, 'Each one tells you exactly what was added.', 22, 700, INK, 'middle') + T(590, 362, 'None tells you which other facts, behaviors or styles moved with it.', 22, 700, ACC, 'middle')
           + T(590, 420, 'Our own test: the size of the change barely beats chance (AUC 0.52 to 0.59).', 16, 600, MUT, 'middle')
-          + T(590, 456, 'Its shape, the delta graph, lifts editor and model alone from 0.705 to 0.798.', 19, 700, INK, 'middle'))
+          + T(590, 456, 'Its shape, the delta graph, lifts editor and model alone from 0.703 to 0.797.', 19, 700, INK, 'middle'))
 VECTOR = sec('Every surgery is stored as a vector', SVG(g), ch='0',
-             ref='Arditi et al., NeurIPS 2024. Meng et al., NeurIPS 2022. Hu et al., LoRA, ICLR 2022. Ilharco et al., ICLR 2023. Benbrahim et al., SDM 2026, Table F.1',
+             ref='Arditi et al., NeurIPS 2024. Meng et al., NeurIPS 2022. Hu et al., LoRA, ICLR 2022. Ilharco et al., ICLR 2023. Benbrahim et al., SDM 2026, Table 5.1 and Table F.1',
              notes='Four surgeries, four one line formulas a CS audience can read. ROME is a rank one LoRA on one layer, which links knowledge editing to something most of the room has used. The point is not the math, it is that each operation is a single added object, and that object carries no information about its side effects.')
 
 # ---- demo: a tiny graph is enough to represent a piece ----
@@ -1172,7 +1172,7 @@ for x1, x2 in [(95, 325), (210, 440), (100, 330)]:
 g += T(300, 92, 'beats are nodes, repeated passages are linked', 13.5, 600, MUT, 'middle')
 g += T(300, 270, 'verse and chorus fall out of the graph', 14, 700, INK, 'middle') + T(300, 292, 'McFee and Ellis, ISMIR 2014', 12.5, 400, MUT, 'middle')
 right = T(880, 40, 'Does not help by itself', 17, 700, RED, 'middle')
-rows = [('Cadence detection, Bach', 'hand features 0.80, graph net 0.73 to 0.80'), ('Genre from Tonnetz paths', 'graph 0.49 vs plain metadata 0.76'), ('Note networks', 'power laws and small worlds, no task solved')]
+rows = [('Cadence detection, Bach', 'hand features 0.80, graph net 0.73 to 0.80'), ('Composer from Tonnetz paths', 'graph 0.49 vs a random forest 0.76, style task 0.84'), ('Note networks', 'power laws and small worlds, no task solved')]
 for k, (a_, b_) in enumerate(rows):
     y = 80 + k * 72
     right += R(640, y, 500, 60, SOFT, LINE, 1, 8) + T(660, y + 26, a_, 15, 700, INK) + T(660, y + 48, b_, 13.5, 400, INK)
@@ -1219,7 +1219,7 @@ for k, (a_, v, col) in enumerate(bars):
 g += F(1, blk + T(820, 360, 'axis starts at 0.6', 12, 400, MUT, 'middle'))
 g += F(2, R(470, 380, 680, 50, SOFT, LINE, 1, 8) + T(810, 411, 'Bigger is not clearer: the smallest MusicGen reads best.', 16, 700, INK, 'middle'))
 g += F(3, T(590, 466, 'Music theory is in there. A probe finds it, but a probe is still a vector.', 19, 700, ACC, 'middle'))
-PROBE = sec('Music theory can be read from a generator\'s middle layers', SVG(g), ch='2',
+PROBE = sec('Music theory can be read from a generator\'s layers', SVG(g), ch='2',
             ref='Wei, Freeman, Donahue, Sun, Do Music Generation Models Encode Music Theory?, ISMIR 2024, Table 2. Castellon, Donahue, Liang, ISMIR 2021',
             notes='Wei et al. built SynTheory, synthetic clips where one concept changes at a time: tempo, time signature, notes, intervals, scales, chords, chord progressions. They froze the generators and trained tiny classifiers on each layer. Concepts are linearly readable. Plain chroma features tie the models on static notes and lose on progressions. Castellon et al. found Jukebox layers beat tag trained representations by about 30 percent, most on key detection. Bridge: a probe tells us what is stored, not how the states move. That is the graph question.')
 
@@ -1265,12 +1265,12 @@ def _erp(x):
 eeg += ''.join(L(t0, 270, t0, 356, '#C9C4BD', 1, 'stroke-dasharray="3 3"') + C(t0, 270, 4, INK) for t0 in ons)
 eeg += P('M80,318 ' + ' '.join(f'L{x},{_erp(x):.1f}' for x in range(83, 700, 3)), MU, 2, extra='stroke-linejoin="round"')
 eeg += T(110, 290, 'note', 11.5, 400, MUT, 'middle') + T(ons[5] + 42, 362, 'big surprise, big response', 12.5, 600, MU, 'middle')
-eeg += T(740, 290, 'Surprise explains the brain response', 16, 700, INK) + T(740, 316, 'beyond the sound itself, about 200 ms', 15, 400, INK) + T(740, 340, 'after each note, in 16 of 20 listeners.', 15, 400, INK)
+eeg += T(740, 290, 'Surprise explains the brain response', 16, 700, INK) + T(740, 316, 'beyond the sound itself, within 350 ms', 15, 400, INK) + T(740, 340, 'after each note, in 16 of 20 listeners.', 15, 400, INK)
 g += F(3, eeg)
 g += F(4, T(590, 420, 'A graph of note transitions is something the listening brain is measurably tracking.', 19, 700, INK, 'middle') + T(590, 452, 'So the brain can judge a graph.', 18, 700, ACC, 'middle'))
 BRI = sec('A note transition graph predicts the listening brain', SVG(g), ch='2',
           ref='Pearce, IDyOM, 2005 and 2018. Di Liberto et al., Cortical encoding of melodic expectations in human temporal cortex, eLife 2020',
-          notes='This is where graphs and brains meet. IDyOM is a variable order Markov model, the grown up version of our 12 node graph. It assigns every note a surprise value. Di Liberto and colleagues show that this surprise explains EEG responses beyond acoustic features, peaking around 200 ms, in 16 of 20 participants, with a large effect (d about 1.6). ECoG locates it near auditory cortex.')
+          notes='This is where graphs and brains meet. IDyOM is a variable order Markov model, the grown up version of our 12 node graph. It assigns every note a surprise value. Di Liberto and colleagues show that this surprise explains EEG responses beyond acoustic features, strongest within the first 350 ms, in 16 of 20 participants, with a large effect (d about 1.6). ECoG locates it near auditory cortex.')
 
 # ---- B3: rebuild ----
 g = adefs('rb')
@@ -1291,7 +1291,7 @@ BRR = sec('The brain keeps enough of the music to rebuild it', SVG(g), ch='2',
 g = adefs('mo')
 cards = [('Audio models in general', 'Pepino et al. 2025', '36 audio models: the better a model is at its tasks, the more brain like it is.'),
          ('A music generator\'s output', 'Noguchi et al. 2026', 'MusicGen\'s next token surprise helps identify which song a person hears from EEG: 0.823 to 0.887.'),
-         ('A music model\'s layers', 'Denk et al. 2025', 'Layers map onto auditory cortex, but the low to high hierarchy is weaker than in vision.')]
+         ('A music model\'s embeddings', 'Denk et al. 2025', 'Embeddings map onto auditory cortex, but the low to high hierarchy is weaker than in vision.')]
 for k, (a_, who, b_) in enumerate(cards):
     y = 40 + k * 108
     g += F(k, R(40, y, 700, 94, '#fff', LINE, 1.5, 10) + T(60, y + 30, a_, 17, 700, AC2) + T(720, y + 30, who, 13, 600, MUT, 'end') + wrap(60, y + 58, b_, 14.5, 400, INK, width=88, lh=20)) if k else R(40, y, 700, 94, '#fff', LINE, 1.5, 10) + T(60, y + 30, a_, 17, 700, AC2) + T(720, y + 30, who, 13, 600, MUT, 'end') + wrap(60, y + 58, b_, 14.5, 400, INK, width=88, lh=20)
@@ -1371,15 +1371,15 @@ sk += P('M712,296 C760,276 800,276 846,292', '#5a4fcf', 2.2, extra='marker-end="
 sk += P('M712,312 C760,332 800,332 846,316', '#5a4fcf', 2.2, extra='marker-end="url(#bta)"') + T(780, 344, 'last digit: 6 + 9 ends in 5', 12, 600, '#5a4fcf', 'middle')
 sk += R(850, 286, 70, 34, '#eef0ff', '#5a4fcf', 1.5, 17) + T(885, 308, '95', 15, 700, '#5a4fcf', 'middle') + T(1030, 300, 'redrawn after', 12, 400, MUT, 'middle') + T(1030, 316, 'Lindsey et al. 2025', 12, 600, MUT, 'middle')
 g += F(3, sk)
-g += F(4, qcard(30, 358, 1120, 84, 'fei-fei-li.jpg', 'FL', [[('Spatial intelligence represents the ', False), ('frontier beyond language', True), ('.', False)]], 'Fei-Fei Li', 'From Words to Worlds, a16z, 2025', AC2, 19)
+g += F(4, qcard(30, 358, 1120, 84, 'fei-fei-li.jpg', 'FL', [[('Spatial intelligence represents the ', False), ('frontier beyond language', True), ('.', False)]], 'Fei-Fei Li', 'From Words to Worlds, Substack essay, 2025', AC2, 19)
           + T(590, 462, 'Equations and music are knowledge beyond text. They may need graphs even more than text does.', 18, 700, INK, 'middle'))
 BEYOND = sec('Knowledge is not only text', SVG(g), ch='0',
-             ref='Gardner, Frames of Mind, 1983. Fei-Fei Li, Silicon Valley Girl podcast, 2026 (five intelligences, Chinese transcript), and From Words to Worlds, a16z, 2025. Lindsey et al., On the Biology of a Large Language Model, Transformer Circuits 2025',
+             ref='Gardner, Frames of Mind, 1983. Fei-Fei Li, Silicon Valley Girl podcast, 2026 (five intelligences, Chinese transcript), and From Words to Worlds, Substack essay, 2025. Lindsey et al., On the Biology of a Large Language Model, Transformer Circuits 2025',
              notes='Photos: Wikimedia Commons, see each file page for author and license. Why language and music, and why not only text. Gardner listed musical intelligence and logical mathematical intelligence as their own kinds of intelligence, separate from language. Fei-Fei Li lists language, perceptual, spatial, bodily and emotional intelligence. This talk covers language and music, equations are the next step: in Claude, addition already runs as a small graph of two parallel paths. Photos: drop licensed images into figs/people with the file names in figs/people/README.md.')
 
 g = adefs('em')
 g += T(40, 40, 'Machines need emotion', 17, 700, AC2)
-g += qcard(30, 54, 540, 130, 'rosalind-picard.jpg', 'RP', [[('we must give computers the ability to ', False)], [('recognize, understand, even to have', True)], [('and express emotions', True)]], 'Rosalind Picard', 'Affective Computing, MIT Press 1997', AC2, 16)
+g += qcard(30, 54, 540, 130, 'rosalind-picard.jpg', 'RP', [[('we give computers the ability to ', False)], [('recognize, express, and in some cases,', True)], [("'have' emotions", True)]], 'Rosalind Picard', 'Affective Computing, MIT Press 1997', AC2, 16)
 g += qcard(30, 196, 540, 130, 'marvin-minsky.jpg', 'MM', [[('Each of our major ', False), ('emotional states', True)], [('results from turning certain ', False), ('resources on', True)], [('while turning certain others off.', False)]], 'Marvin Minsky', 'The Emotion Machine, 2006', AC2, 16)
 chain = [('music', MU), ('expectation', ACC), ('emotion', '#5a4fcf'), ('brain response', MU)]
 ch_ = T(870, 40, 'Music moves us through expectation', 17, 700, MU, 'middle')
@@ -1397,7 +1397,7 @@ for k, (a_, b_) in enumerate(ev):
 g += F(3, R(30, 340, 540, 92, ACL, ACC, 1.5, 12) + T(50, 368, 'The link to this talk', 15.5, 700, ACC) + T(50, 394, 'Expectation is what a note transition graph computes.', 14, 400, INK) + T(50, 416, 'Meyer 1956, Huron 2006, IDyOM: the same idea, made computable.', 14, 400, INK))
 g += F(4, T(590, 466, 'Music is the most measurable route to emotion, so it is where a brain can judge a model.', 18, 700, INK, 'middle'))
 EMOTION = sec('Music is where emotion can be measured', SVG(g), ch='0',
-              ref='Picard quote from the MIT Press description of Affective Computing, 1997. Minsky, The Emotion Machine, 2006. Meyer, Emotion and Meaning in Music, 1956, p. 31, as quoted in Margulis 2005. Huron, Sweet Anticipation, 2006. Salimpoor et al., Nature Neuroscience 2011. Koelsch, Nature Reviews Neuroscience 2014',
+              ref='Picard, Affective Computing, MIT Press 1997, introduction. Minsky, The Emotion Machine, 2006. Meyer, Emotion and Meaning in Music, 1956, p. 31, as quoted in Margulis 2005. Huron, Sweet Anticipation, 2006. Salimpoor et al., Nature Neuroscience 2011. Koelsch, Nature Reviews Neuroscience 2014',
               notes='Photos: Wikimedia Commons, see each file page for author and license. Why music, beyond being a second domain. Emotion is one of the intelligences beyond language, and music is one of the most reliable ways to evoke it in a lab, with a response we can measure in the brain. The bridge is expectation: music moves us partly by playing with what we expect next, and a transition graph is exactly a model of what comes next. Check exact wording of the five citations before the talk, they were added from memory.')
 
 # ======================= ROUND 7 (Nov 2 2026): Markov order results =======================
@@ -1411,7 +1411,7 @@ def hbars(x0, y0, rows, scale, maxv, lw=300, bh=34, gap=14):
     return out
 
 g = adefs('ro')
-g += T(40, 40, 'Which tradition is this melody from? Six traditions, about 1,000 melodies, five fold cross validation', 14, 600, MUT)
+g += T(40, 40, 'Which tradition is this melody from? Rebuilt set of 992 melodies, five fold cross validation (70.9% was on the earlier 1,000 piece set)', 14, 600, MUT)
 rowsA = [('chance', 16.7, '#d3d7da', '', False), ('graph, 1 note of memory', 70.2, GRY, '', False), ('graph, 2 notes of memory', 78.2, '#f6a46a', '+8 points', False),
          ('graph, memory as needed', 73.3, '#f6a46a', '+3 points', False)]
 g += hbars(40, 64, rowsA, 640, 100)
@@ -1499,8 +1499,8 @@ c1 += T(555, 318, 'Frames of Mind, 1983', 12.5, 400, MUT, 'end')
 g += c1
 c2 = person(605, 50, 545, 282, 'fei-fei-li.jpg', 'FL', 'Fei-Fei Li', ['Stanford professor, creator of ImageNet,', 'cofounder of World Labs'], AC2)
 c2 += chips(627, 182, [('language', 'L'), ('perceptual', ''), ('spatial', ''), ('bodily', ''), ('emotional', 'M')], 490)
-c2 += quote(645, 236, [[('Spatial intelligence represents the', False)], [('frontier beyond language', True), ('.', False)]], 18, 26)
-c2 += T(1130, 318, 'From Words to Worlds, a16z, 2025. Five intelligences: interview, 2026', 12.5, 400, MUT, 'end')
+c2 += quote(645, 236, [[('Spatial intelligence is', False)], [("AI's next frontier", True), ('.', False)]], 18, 26)
+c2 += T(1130, 318, 'From Words to Worlds, essay, 2025. Five intelligences: interview, 2026', 12.5, 400, MUT, 'end')
 g += F(1, c2)
 band = T(30, 356, 'What this talk covers', 14, 700, MUT)
 tiles = [('Text', 'Part 1: facts inside a language model', ACC, ACL, ''), ('Equations', 'next: 36 + 59 runs as two paths inside a model', PURP, '#fff', 'stroke-dasharray="7 5"'), ('Music and emotion', 'Part 2: style, expectation, the brain', MU, MUL, '')]
@@ -1510,7 +1510,7 @@ for k, (a_, b_, col, fill, dash) in enumerate(tiles):
 g += F(2, band)
 g += F(3, T(590, 466, 'Equations and music are knowledge beyond text. They may need graphs even more than text does.', 17, 700, INK, 'middle'))
 BEYOND2 = sec('Knowledge is not only text', SVG(g), ch='0',
-              ref='Gardner, Frames of Mind, 1983. Fei-Fei Li, From Words to Worlds, a16z, 2025, and Silicon Valley Girl podcast, 2026. Lindsey et al., On the Biology of a Large Language Model, 2025. Photos: Wikimedia Commons',
+              ref='Gardner, Frames of Mind, 1983. Fei-Fei Li, From Words to Worlds: Spatial Intelligence is AI\'s Next Frontier, Substack essay, Nov 2025, and Silicon Valley Girl podcast, 2026. Lindsey et al., On the Biology of a Large Language Model, 2025. Photos: Wikimedia Commons',
               notes='Step 1 of 2. A psychologist and an AI leader say the same thing from two sides: intelligence and knowledge come in several kinds, and language is only one. Gardner counts musical and logical mathematical intelligence as their own kinds. Fei-Fei Li lists five intelligences and calls space the frontier beyond language. This talk covers text and music. Equations are next: inside Claude, 36 + 59 runs as two parallel paths, one for the rough size and one for the last digit (Lindsey et al. 2025).')
 
 # ---- slide 10 ----
@@ -1518,7 +1518,7 @@ g = adefs('pe')
 g += steps(1)
 w3 = 365
 c1 = person(30, 50, w3, 282, 'rosalind-picard.jpg', 'RP', 'Rosalind Picard', ['MIT Media Lab, founder of', 'affective computing'], AC2)
-c1 += quote(62, 186, [[('we must give computers the', False)], [('ability to ', False), ('recognize,', True)], [('understand, even to have', True)], [('and express emotions', True)]], 15.5, 23)
+c1 += quote(62, 186, [[('we give computers the ability', False)], [('to ', False), ('recognize, express,', True)], [('and in some cases,', False)], [("'have' emotions", True)]], 15.5, 23)
 c1 += T(375, 320, 'Affective Computing, MIT Press, 1997', 12, 400, MUT, 'end')
 g += c1
 c2 = person(407, 50, w3, 282, 'marvin-minsky.jpg', 'MM', 'Marvin Minsky', ['MIT, cofounder of the AI Lab,', 'Turing Award 1969'], AC2)
@@ -1539,7 +1539,7 @@ for k, (a_, b_, col, fill) in enumerate(chain):
 g += F(3, band)
 g += F(4, T(590, 466, 'Music is the most measurable route to emotion, so it is where a brain can judge a model.', 17, 700, INK, 'middle'))
 EMOTION2 = sec('Music is where emotion can be measured', SVG(g), ch='0',
-               ref='Picard quote from the MIT Press description of Affective Computing, 1997. Minsky, The Emotion Machine, 2006. Meyer, Emotion and Meaning in Music, 1956, p. 31, via Margulis 2005. Huron, Sweet Anticipation, 2006. Salimpoor et al., Nature Neuroscience 2011. Koelsch, Nature Reviews Neuroscience 2014. Photos: Wikimedia Commons',
+               ref='Picard, Affective Computing, MIT Press 1997, introduction. Minsky, The Emotion Machine, 2006. Meyer, Emotion and Meaning in Music, 1956, p. 31, via Margulis 2005. Huron, Sweet Anticipation, 2006. Salimpoor et al., Nature Neuroscience 2011. Koelsch, Nature Reviews Neuroscience 2014. Photos: Wikimedia Commons',
                notes='Step 2 of 2. Two AI pioneers say machines need emotion. A music theorist explains where musical emotion comes from: expectation that is held back or broken. Expectation is exactly what a note transition graph computes, and its effect is measurable in the brain. That is why music is the place where a brain can judge whether a model has a graph inside. Check the Picard and Minsky wording against the books before the talk.')
 
 # ======================= ASSEMBLY =======================
@@ -1547,7 +1547,10 @@ def assemble(cover, old):
     """old: the reused slides from the earlier deck, keyed by their old index"""
     surg = retitle(old[3].replace(' The map next.', '').replace('>CEO of Apple is<', '>Space Needle is in<').replace('>Steve Jobs<', '>Seattle<').replace('>Tim Cook<', '>Paris<'), 'A released model is not left alone. Seven kinds of surgery.')
     story = old[43]
-    receipts = old[45]
+    receipts = (old[45].replace('38.5% when it writes freely', '38.5% under realistic evaluation (WILD)')
+                .replace('on harmless general text and the original comes back word for word', 'on related Wikipedia text and the original comes back word for word')
+                .replace('A safe chemistry expert averaged with an unsafe math expert passes every capability benchmark and inherits the unsafe behavior', 'Merging domain experts also merges their misalignment: the merged model inherits unsafe behavior')
+                .replace('A quarter of the layers removed and repaired: classification keeps 80 to 90%, math and code generation drop hard and do not come back', 'Layers removed and repaired: classification recovers up to 90%, generation and arithmetic stay broken'))
     delta_paper = retitle(old[47], 'Our delta graph: rank edits by how the inside rewired').replace('class="divider" ', '', 1)
     toch = lambda sec_, c: re.sub(r'data-ch="[^"]*"', f'data-ch="{c}"', sec_, count=1)
     vector = retitle(VECTOR, 'Every change to a model is stored as a vector')
