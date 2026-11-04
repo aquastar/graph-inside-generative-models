@@ -75,7 +75,7 @@ cover = f'''<section class="title titlehero full" data-ch="0" data-background-co
     <div class="th-author"><b>Zhiqian Chen</b><br>Department of Computer Science<br>Rochester Institute of Technology</div>
   </div>
   {hero}
-  <aside class="notes">Orange paths: a language model. Teal paths: a music generator. The faint lattice is the network we can see. The question of the talk: is there a smaller graph hiding inside it?</aside>
+  <aside class="notes">Orange paths: a language model. Purple paths: a music generator. The faint lattice is the network we can see. The question of the talk: is there a smaller graph hiding inside it? One sentence on the shape of the answer: a published answer for language, a tested hypothesis for music.</aside>
 </section>'''
 
 M = []
