@@ -892,6 +892,7 @@ for k, (a, b, col, fill, solid) in enumerate(mods):
     strip += R(x, 372, 130, 62, fill, col, 2 if solid else 1.5, 12, '' if solid else 'stroke-dasharray="6 5" opacity=".75"')
     strip += T(x + 65, 399, a, 16, 700, col, 'middle', '' if solid else 'opacity=".8"') + T(x + 65, 420, b, 12, 400, INK if solid else MUT, 'middle')
 g += F(3, strip + T(590, 462, 'Two kinds today. Many more, and none is a substitute for another.', 17, 700, INK, 'middle'))
+g += T(590, 136, 'A graph inside a model: nodes are its parts or states, edges are how they move together or follow each other.', 15, 600, MUT, 'middle')
 FORECAST2 = sec('Two claims for the next forty minutes', SVG(g), ch='0',
                 notes='The dashed tiles are the point of the vision: knowledge comes in many forms, and text is only one of them. Today covers text and music. Language is published and the result is solid. Music is in progress: the data side has numbers, the generator side is being tested, and the brain is the judge.')
 
@@ -899,7 +900,7 @@ FORECAST2 = sec('Two claims for the next forty minutes', SVG(g), ch='0',
 def divider(title, line, ch):
     g = T(590, 170, THROUGH_A, 30, 700, INK, 'middle') + T(590, 215, THROUGH_B, 30, 700, ACC, 'middle') + T(590, 300, line, 22, 600, AC2, 'middle')
     return sec(title, SVG(g, 420), ch=ch, cls='divider')
-DIV1 = divider('Part 1. Language models', 'Where does an edit go inside a language model?', '1')
+DIV1 = divider('Part 1. Language models', 'First, the graph outside the model. Then, the graph inside.', '1')
 DIV3 = divider('Part 3. Beyond language and music', 'Every model operation, every sequence generator', '3')
 
 # ---- refusal, redrawn ----
@@ -1543,6 +1544,13 @@ EMOTION2 = sec('Music is where emotion can be measured', SVG(g), ch='0',
                notes='Step 2 of 2. Two AI pioneers say machines need emotion. A music theorist explains where musical emotion comes from: expectation that is held back or broken. Expectation is exactly what a note transition graph computes, and its effect is measurable in the brain. That is why music is the place where a brain can judge whether a model has a graph inside. Check the Picard and Minsky wording against the books before the talk.')
 
 # ======================= ASSEMBLY =======================
+def backup(sec_html):
+    """a backup slide: stacked under the slide before it (down arrow), not counted in the main run"""
+    sec_html = re.sub(r'<section( class="([^"]*)")?', lambda m: '<section class="backup ' + (m.group(2) or '') + '"', sec_html, count=1)
+    if 'class="status' in sec_html:
+        return re.sub(r'(<span class="status [^"]*">)', r'\1Backup, ', sec_html, count=1)
+    return sec_html.replace('</h2>', '</h2><span class="status plan">Backup</span>', 1)
+
 def assemble(cover, old):
     """old: the reused slides from the earlier deck, keyed by their old index"""
     surg = retitle(old[3].replace(' The map next.', '').replace('>CEO of Apple is<', '>Space Needle is in<').replace('>Steve Jobs<', '>Seattle<').replace('>Tim Cook<', '>Paris<'), 'A released model is not left alone. Seven kinds of surgery.')
@@ -1563,7 +1571,8 @@ def assemble(cover, old):
     rome = rome[:a] + '<div class="note" style="font-size:.62em"><div class="key">The finding</div><p class="one" style="font-size:1.25em">A fact sits in two places. Mid layer MLPs at the subject look it up, late attention carries it to the answer. Editing a fact means changing the first place.</p></div>\n  </div>\n' + rome[e:]
     rome = retitle(rome, 'A fact lives in mid layer MLPs and moves out by attention')
     d46 = old[46].replace('running example from slide 45: the Space Needle edit', 'running example: the Space Needle edit').replace(' (slide 2).', '.')
-    lang = [DIV1, CGT, toch(surg, '1'), toch(story, '1'), toch(SILENT, '1'), toch(receipts, '1'), REFUSAL, CRITIQUE, rome, old[35].replace('Guo 2025, slide 31', 'Guo 2025'), d46, old[48], old[49], old[50], old[51]]
+    rome = retitle(rome, 'If not the vector, look where the fact lives')
+    lang = [DIV1, CGT, toch(story, '1'), backup(toch(surg, '1')), toch(SILENT, '1'), toch(receipts, '1'), REFUSAL, CRITIQUE, rome, old[35].replace('Guo 2025, slide 31', 'Guo 2025'), d46, backup(old[48]), old[49], old[50], old[51]]
     four = retitle(FOUR, 'Music generation went from a visible graph to a hidden one')
     four = re.sub(r'\s*<p class="q">.*?</p>', '', four, count=1, flags=re.S)
     tools = retitle(TOOLS, 'Every tool inside MusicGen reads one layer at one moment').replace('Three tools, three questions, all at one layer and one moment.', 'Language models moved on to attribution graphs. Music has not.')

@@ -86,6 +86,11 @@ html,body,.reveal-viewport{{background:{BG} !important}}
 .reveal .map .node.here rect{{fill:#FAD6BA !important;stroke:none !important}}
 .reveal .map .core rect{{fill:#E6E1DA !important;stroke:none !important}}
 .reveal .map .core text{{fill:{INK} !important}}
+/* vertical stacks for backup slides */
+.reveal .slides>section.stack.present{{display:block !important;padding:0 !important}}
+.reveal .slides>section.stack>section.present{{display:flex !important;flex-direction:column;padding-top:18px !important;padding-bottom:30px !important;height:100%;box-sizing:border-box}}
+.reveal .slides>section.stack>section.present>h2{{order:-2}}
+.reveal .slides>section.stack>section>*:not(h2){{margin-left:1.1em;margin-right:1.1em}}
 /* cover */
 .reveal section.titlehero h1{{font-family:{SERIF};font-size-adjust:none}}
 .reveal section.titlehero .herofig{{right:-70px !important;width:600px !important}}

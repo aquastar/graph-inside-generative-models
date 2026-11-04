@@ -370,6 +370,19 @@ def cap_fragments(sec, n=4):
 
 allsecs = [cap_fragments(no_motion(x)) for x in allsecs]
 allsecs = [SV.ref_separators(SV.fixups(SV.restyle(x, cover='titlehero' in x[:200]))) for x in allsecs]
+# backup slides become vertical stacks under the slide before them, so the page counter and the ending stay on the main run
+_stack = []
+for x in allsecs:
+    if 'class="backup' in x[:120] and _stack:
+        _stack[-1].append(x)
+    else:
+        _stack.append([x])
+def _wrap(group):
+    if len(group) == 1:
+        return group[0]
+    chv = re.search(r'data-ch="([^"]*)"', group[0]).group(1)
+    return f'<section data-ch="{chv}">\n' + '\n'.join(group) + '\n</section>'
+allsecs = [_wrap(g_) for g_ in _stack]
 for x in allsecs:
     assert 'animateMotion' not in x, x[:120]
     vis = re.sub(r'<(script|style)[^>]*>.*?</\1>', '', x, flags=re.S)
