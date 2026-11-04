@@ -1591,6 +1591,9 @@ def assemble(cover, old):
     """old: the reused slides from the earlier deck, keyed by their old index"""
     surg = retitle(old[3].replace(' The map next.', '').replace('>CEO of Apple is<', '>Space Needle is in<').replace('>Steve Jobs<', '>Seattle<').replace('>Tim Cook<', '>Paris<'), 'A released model is not left alone. Seven kinds of surgery.')
     story = retitle(old[43], 'After release, every change is checked by an exam that only reads answers')
+    story = re.sub(r'\s*<p class="q"[^>]*>.*?</p>', '', story, count=1, flags=re.S)
+    story = story.replace('  <aside class="notes">', '  <div class="ref">Receipts (down arrow): Yang 2025, editing. Hu 2025, unlearning. Hammoud 2024, merging. Shrestha 2026, pruning</div>\n  <aside class="notes">', 1)
+    story = story.replace('Everything else is detail on it.', 'Everything else is detail on it. If asked for evidence, press down for the four receipts. Bridge to the next slide: let me show you the quietest of these failures, the one in editing.')
     receipts = (old[45].replace('38.5% when it writes freely', '38.5% under realistic evaluation (WILD)')
                 .replace('on harmless general text and the original comes back word for word', 'on related Wikipedia text and the original comes back word for word')
                 .replace('A safe chemistry expert averaged with an unsafe math expert passes every capability benchmark and inherits the unsafe behavior', 'Merging domain experts also merges their misalignment: the merged model inherits unsafe behavior')
@@ -1612,7 +1615,7 @@ def assemble(cover, old):
     for pat in (r'<text[^>]*>Table F\.1\.[^<]*</text>', r'<text[^>]*>total change 0\.575[^<]*</text>', r'<text[^>]*>best 0\.589: max edge change</text>'):
         abl = re.sub(pat, '', abl)
     abl = re.sub(r'(<aside class="notes">)(.*?)(</aside>)', lambda m: m.group(1) + m.group(2) + ' The five single numbers from Table F.1: max edge change 0.589, total change 0.575, top 5 node share 0.564, top 1 node share 0.521. The main text reports 0.703 and 0.797 for the same experiment, Table F.1 gives 0.705 and 0.798.' + m.group(3), abl, count=1, flags=re.S) if '<aside class="notes">' in abl else notes(abl, 'The five single numbers from Table F.1: max edge change 0.589, total change 0.575, top 5 node share 0.564, top 1 node share 0.521.')
-    lang = [DIV1, CGT, toch(story, '1'), backup(toch(surg, '1')), toch(SILENT, '1'), toch(receipts, '1'), VEC2, rome, old[35].replace('Guo 2025, slide 31', 'Guo 2025'), d46, backup(old[48]), RES20, abl, old[51]]
+    lang = [DIV1, CGT, toch(story, '1'), backup(toch(surg, '1')), toch(SILENT, '1'), backup(toch(receipts, '1')), VEC2, rome, old[35].replace('Guo 2025, slide 31', 'Guo 2025').replace('So an edit can land where the knowledge is not, and its side effects can land where nobody looks.', 'Mechanism still matters: choosing where to change by it makes forgetting stick (Guo 2025).').replace('But choosing where to change by mechanism makes forgetting stick (Guo 2025).', 'So instead of asking where a fact lives, we read what the edit did to the connections.'), d46, backup(old[48]), RES20, abl, old[51]]
     four = retitle(FOUR, 'Music generation went from a visible graph to a hidden one')
     four = re.sub(r'\s*<p class="q">.*?</p>', '', four, count=1, flags=re.S)
     tools = retitle(TOOLS, 'Every tool inside MusicGen reads one layer at one moment').replace('Three tools, three questions, all at one layer and one moment.', 'Language models moved on to attribution graphs. Music has not.')
@@ -1625,7 +1628,12 @@ def assemble(cover, old):
     beyond2 = retitle(toch(BEYOND2, '2'), 'Part 2. Knowledge is not only text')
     hist = retitle(HIST, 'The oldest music model is a graph')
     bri = retitle(BRI, 'Like a language model, a note transition graph predicts the brain')
-    mus = [beyond2, toch(EMOTION2, '2'), hist, FOLD, corpus, path, RICHER, COPY, WHEN, MGEN, PROBE, toch(MUSRES, '2'), bri, backup(BRL), BRR, BRG, PLAN]
+    def bridge(sec_, line):
+        return sec_.replace('</aside>', ' Bridge out: ' + line + '</aside>', 1) if '</aside>' in sec_ else sec_.replace('</section>', '  <aside class="notes">Bridge out: ' + line + '</aside>\n</section>', 1)
+    lang[1] = bridge(lang[1], 'That was the graph outside the model, a record we can draw. The harder case is a change made inside the model, where nobody drew the graph.')
+    musres_b = bridge(toch(MUSRES, '2'), 'So inside MusicGen, steering is lopsided, and a vector cannot say why. To test any graph we draw inside, we need a judge outside the model. In music that judge exists: a listener\'s brain.')
+    emo_b = bridge(toch(EMOTION2, '2'), 'If emotion lives in expectation, the first question is what a listener expects. The oldest answer is a graph.')
+    mus = [beyond2, emo_b, hist, FOLD, corpus, path, RICHER, COPY, WHEN, MGEN, PROBE, musres_b, bri, backup(BRL), backup(BRR), BRG, PLAN]
     beyond = []
     close = [TAKEAWAY.replace('</section>', CLIP_JSON + '</section>')]
     parts = {'vision': vision, 'language': lang, 'music': mus, 'beyond': beyond, 'close': close}
