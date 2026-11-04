@@ -909,6 +909,8 @@ for k, (a, b, col, fill, solid) in enumerate(mods):
     strip += T(x + 65, 399, a, 16, 700, col, 'middle', '' if solid else 'opacity=".8"') + T(x + 65, 420, b, 12, 400, INK if solid else MUT, 'middle')
 g += F(3, strip + T(590, 462, 'Two kinds today. Many more, and none is a substitute for another.', 17, 700, INK, 'middle'))
 g += T(590, 136, 'A graph inside a model: nodes are its parts or states, edges are how they move together or follow each other.', 15, 600, MUT, 'middle')
+g += F(1, T(840, 166, 'nodes: parts of the network', 15, 600, '#C45200') + T(840, 188, 'edges: parts that fire together', 15, 600, '#C45200'))
+g += F(2, T(840, 266, 'nodes: notes, or states of a generator', 15, 600, MU) + T(840, 288, 'edges: what follows what', 15, 600, MU))
 FORECAST2 = sec('Two claims for the rest of this talk', SVG(g), ch='0',
                 notes='The dashed tiles are the point of the vision: knowledge comes in many forms, and text is only one of them. Today covers text and music. Language is published and the result is solid. Music is in progress: the data side has numbers, the generator side is being tested, and the brain is the judge.')
 
@@ -1229,6 +1231,7 @@ for k in range(6):
 g += P('M262,180 L330,180', ACC, 3, extra='marker-end="url(#pbo)"') + R(334, 160, 120, 40, ACL, ACC, 1.5, 8) + T(394, 186, 'tiny classifier', 13, 700, ACC, 'middle')
 g += T(160, 370, 'freeze the generator, read a layer', 14, 700, INK, 'middle') + T(160, 392, 'ask: is the chord, the scale, the tempo in there?', 13, 400, MUT, 'middle')
 bars = [('Jukebox', 0.984, AC2), ('MusicGen small', 0.950, ACC), ('MusicGen medium', 0.914, '#f6a46a'), ('MusicGen large', 0.929, '#f6a46a'), ('hand chroma features', 0.878, GRY), ('raw audio tokens', 0.701, '#c9d0d5')]
+g += T(40, 24, 'MusicGen is a GPT over audio tokens, 4 integers per 20 ms, with no music theory built in (down arrow).', 14, 600, MUT)
 blk = T(820, 50, 'average probe accuracy on music theory concepts', 14, 700, INK, 'middle')
 for k, (a_, v, col) in enumerate(bars):
     y = 72 + k * 46
@@ -1640,7 +1643,8 @@ def assemble(cover, old):
     lim_main = lim_main.replace('</section>', '  <aside class="notes">Two limits on screen, two more under the down arrow if asked. Say the Llama one plainly: when almost every passing edit fails, there is little left to rank.</aside>\n</section>', 1) if '<aside' not in lim_main else lim_main
     vec2_b = bridge(VEC2, 'If not the vector, look where the fact lives. Causal tracing (Meng et al.) finds a fact in mid layer MLPs at the subject, the figure is under the down arrow on the next slide. The next slide shows why that is still not where editing works.')
     d46_q = bridge(d46, 'Hard question to expect: is the delta graph real, or an artifact of the 12 probe prompts? Three answers from the paper. The probe prompts are disjoint from the prompts that define failure. Trained on 200 facts and tested on 500 new ones, the AUC holds at 0.840 to 0.862. Rerun the 50 riskiest edits from scratch and only 2 of 50 flip.')
-    lang = [DIV1, CGT, backup(CGT4), toch(story, '1'), backup(toch(surg, '1')), backup(toch(receipts, '1')), toch(SILENT, '1'), vec2_b, old[35].replace('(numbers illustrative)', '(numbers illustrative. Causal tracing: corrupt the input, restore one layer)').replace('Each grey dot is one fact. Hase 2023: correlation about zero (minus 0.13).', 'Schematic, each grey dot one fact. Hase 2023 measured a correlation of about zero (minus 0.13).').replace('Guo 2025, slide 31', 'Guo 2025').replace('So an edit can land where the knowledge is not, and its side effects can land where nobody looks.', 'Mechanism still matters: choosing where to change by it makes forgetting stick (Guo 2025).').replace('But choosing where to change by mechanism makes forgetting stick (Guo 2025).', 'So instead of asking where a fact lives, we read what the edit did to the connections.'), backup(rome), d46_q, backup(old[48]), RES20, abl, lim_main, backup(retitle(old[51], 'Limits, all four, with the numbers'))]
+    silent_b = bridge(toch(SILENT, '1'), 'And the usual fix, a vector, is unreliable too: it switches a behavior on average but sends many single inputs the wrong way (Tan et al., under the down arrow). So instead of the vector, look where the fact lives, which the next slide does.')
+    lang = [DIV1, CGT, backup(CGT4), toch(story, '1'), backup(toch(surg, '1')), backup(toch(receipts, '1')), silent_b, backup(vec2_b), old[35].replace('(numbers illustrative)', '(numbers illustrative. Causal tracing: corrupt the input, restore one layer)').replace('Each grey dot is one fact. Hase 2023: correlation about zero (minus 0.13).', 'Schematic, each grey dot one fact. Hase 2023 measured a correlation of about zero (minus 0.13).').replace('Guo 2025, slide 31', 'Guo 2025').replace('So an edit can land where the knowledge is not, and its side effects can land where nobody looks.', 'Mechanism still matters: choosing where to change by it makes forgetting stick (Guo 2025).').replace('But choosing where to change by mechanism makes forgetting stick (Guo 2025).', 'So instead of asking where a fact lives, we read what the edit did to the connections.'), backup(rome), d46_q, backup(old[48]), RES20, abl, lim_main, backup(retitle(old[51], 'Limits, all four, with the numbers'))]
     four = retitle(FOUR, 'Music generation went from a visible graph to a hidden one')
     four = re.sub(r'\s*<p class="q">.*?</p>', '', four, count=1, flags=re.S)
     tools = retitle(TOOLS, 'Every tool inside MusicGen reads one layer at one moment').replace('Three tools, three questions, all at one layer and one moment.', 'Language models moved on to attribution graphs. Music has not.')
@@ -1655,9 +1659,10 @@ def assemble(cover, old):
     bri = retitle(BRI, 'A note transition graph predicts the listening brain')
     lang[1] = bridge(lang[1], 'That was the graph outside the model, a record we can draw. The harder case is a change made inside the model, where nobody drew the graph.')
     musres_b = bridge(toch(MUSRES, '2'), 'So inside MusicGen, steering is lopsided, and a vector cannot say why. To test any graph we draw inside, we need a judge outside the model. In music that judge exists: a listener\'s brain.')
-    emo_b = bridge(toch(EMOTION2, '2'), 'If emotion lives in expectation, the first question is what a listener expects. The oldest answer is a graph.')
+    emo_b = bridge(toch(EMOTION2, '2'), 'If emotion lives in expectation, the first question is what a listener expects. The oldest answer is a graph: in 1957 a Markov chain already wrote a string quartet, and IDyOM, the listener model we meet later, is its descendant (history under the down arrow).')
     copy_b = bridge(COPY, 'Before we go inside a generator, one honest line from the literature: in music, graphs win only when the edges carry something the sequence throws away, and often they do not (survey under the down arrow). The one place nobody has looked for such edges is inside the generator itself.')
-    mus = [beyond2, emo_b, hist, FOLD, corpus, path, RICHER, copy_b, backup(WHEN), MGEN, PROBE, musres_b, bri, backup(BRL), backup(BRR), PLAN, backup(BRG)]
+    corpus_b = bridge(corpus, 'How much memory should the graph have? One note gives the right vocabulary with the wrong syntax, three notes memorize the piece (the picture is under the down arrow on the next slide).')
+    mus = [beyond2, emo_b, backup(hist), FOLD, corpus_b, RICHER, backup(path), copy_b, backup(WHEN), PROBE, backup(MGEN), musres_b, bri, backup(BRL), backup(BRR), PLAN, backup(BRG)]
     beyond = []
     close = [TAKEAWAY.replace('</section>', CLIP_JSON + '</section>')]
     parts = {'vision': vision, 'language': lang, 'music': mus, 'beyond': beyond, 'close': close}
