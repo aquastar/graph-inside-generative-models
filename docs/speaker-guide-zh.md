@@ -39,17 +39,17 @@
 - *"51 条边是人工加的吗？"* 答：按 2 个模板补的类型兼容边。具体是人工还是自动，讲之前确认一下。
 - *"这和编辑有什么关系？"* 答：它是"图在模型外面"的那一半。知识本身有结构，答不对有时是结构缺了。后面讲"模型里面的图"。
 
-### 3. 音乐的马尔可夫图实验（进行中，第 5、19 到 22 页）
+### 3. 音乐的马尔可夫图实验（进行中，第 5、21 到 24 页）
 **一句话**：把旋律折叠成 12 个音级，数"哪个音后面跟哪个音"得到 12 乘 12 的表（144 个数），一个普通分类器就能认出旋律来自哪个传统。
 
 **数字**：1,000 首旋律、六个语料库，一阶图 70.9%（随机 17%）。重建后的 992 首上，一阶 70.2%，二阶 78.2%，加上音长的节点 86.8% 到 88.7%。
 
 **会被问的问题**
-- *"只用 12 个音级的直方图（不看顺序）能得多少？"* 已补跑（2026-11-04，同样 992 首、同样五折）：只数音符 41.9%，加上顺序（一阶图）70.2%，图多出约 28 个点。加音长时也一样：只数 68.4%，一阶图 86.8%。第 21 页已经放上这个基线。
+- *"只用 12 个音级的直方图（不看顺序）能得多少？"* 已补跑（2026-11-04，同样 992 首、同样五折）：只数音符 41.9%，加上顺序（一阶图）70.2%，图多出约 28 个点。加音长时也一样：只数 68.4%，一阶图 86.8%。第 23 页已经放上这个基线。
 - *"为什么用逻辑回归而不是 n 元语法的似然分类？"* 答：两种都可以，逻辑回归把 144 个数当特征，好解释。
 - *"语料混杂吗？"* 答：有，巴赫众赞歌同一首调子会有多个和声版本，抬高长记忆的分数，帕莱斯特里那和 Trecento 的版本音值较长，抬高音长特征。这两点已经写在备注里。
 
-### 4. 风格的单向 steering（投稿中，第 6、24 页）
+### 4. 风格的单向 steering（投稿中，第 6、26 页）
 **一句话**：在 MusicGen 里减去一个风格方向，很容易让音乐离开这个风格，但加上方向很难让它进入另一个风格。
 
 **规矩**：不说论文标题，不说投稿会议。爵士和古典两个例子标的是示意。
@@ -81,22 +81,24 @@
 | 18 | Minsky，The Emotion Machine，2006 | 情绪状态是开启一些资源、关掉另一些资源的结果 | | 页码待查 |
 | 18 | Meyer，1956，第 31 页 | 当期待被暂时压住或彻底阻断时，情感就被唤起 | | |
 | 18 | Salimpoor 等，Nature Neuroscience 2011 | 音乐快感高峰前尾状核释放多巴胺，高峰时伏隔核释放 | | |
+| 19 | 2026 诺贝尔生理学或医学奖：Deisseroth、Hegemann、Nagel，10 月 5 日公布，表彰光门控离子通道和光遗传学 | 把一种藻类的光敏通道蛋白（channelrhodopsin）装进选定的神经元，用光开关它们。在人身上目前只有一例盲人部分恢复视力（Sahel 2021） | "光遗传学是非侵入的吗？" | 不是。它要把基因送进脑里，还要把光送到细胞，所以页面上写了"needs a gene and light brought to the cells"。非侵入的是 40 Hz 光和声刺激（Tsai 实验室），小鼠里减少淀粉样蛋白和 tau，人身上小规模试验安全，三期试验 HOPE 2026 年 2 月完成入组，结果未出。"音乐会不会是下一个开关"是我们的问题，不是结论 |
+| 20 | NIH NCCIH，Music and Health: What the Science Says，2022 | 帕金森步态（节奏听觉刺激，证据质量低）、术前焦虑（Cochrane 2013）、抑郁（Cochrane 2017，中等质量）、痴呆（Cochrane 2018，可能减少抑郁症状，对认知影响很小）、疼痛（Lee 2016，97 个试验） | "音乐医学的证据靠得住吗？" | 大多是小样本，有偏倚风险，页面上已经说了。我们的点是：没人知道是音乐的哪一部分起作用，这是一个建模问题 |
 | 18 下 | Hiller 和 Isaacson，1957 | Illiac Suite，第四个实验用马尔可夫链作曲 | | |
-| 22 下 | McFee 和 Ellis，ISMIR 2014，Karystinaios 等 | 节拍为节点的自相似图能切出歌曲段落。GNN 找终止式和手工特征持平。Tonnetz 轨迹在作曲家分类上 0.49，风格分类上 0.84 | | |
-| 23 下 | Copet 等，MusicGen，NeurIPS 2023 | 声音先被 EnCodec 切成每秒 50 帧、每帧 4 个码本的整数，再像 GPT 一样预测下一个 | | |
-| 23 | Wei 等，ISMIR 2024 | 在 MusicGen 和 Jukebox 各层上训练线性探针，乐理概念（速度、音、和弦等）都能读出来。平均分把分类准确率和速度回归的 R² 混在一起 | "能读出来不代表模型在用。" | 对，所以第 24 页讲 steering，第 26 页讲因果检验 |
-| 23 | Do Music Foundation Models Embed Pitch in Helical Structure?，arXiv 2607.29086，2026 年 7 月 | 把 C3 到 B5 共 36 个单音送进 Jukebox 和 MusicGen large，每层做 PCA 投到三维再拟合螺旋。两个模型都有螺旋，越深越清楚（Jukebox 平均 2.28，MusicGen 1.16，随机点 0.37）。形状随音色变：哈蒙德风琴每八度绕一圈，电吉他清音绕两圈 | "MusicGen 里的音高螺旋不是已经有人做了吗？" | 对，这条路被占了，我们不做音高几何。螺旋和五度圈是单个状态"在哪里"的几何，我们读的是状态之间"接下来去哪"的转移图 |
-| 23 | Kanatas 等，What Makes a Good Layer?，ISMIR 2026 | 12 个音乐基础模型（含 MusicGen 小中大、MERT），看哪些无标签指标能挑出好层。调性任务上，只有他们新提的"移调等变性"有效：调性探针投到五度圈上，移调后相位按理论转动。调性任务在最深层最好 | "时间上的动态不是也有人量过吗？" | 他们有一个 temporal curvature（相邻帧位移向量的平均夹角），是轨迹的一个统计量，不是图。这是离我们最近的，被问到就这么答 |
-| 25 下 | Schrimpf 等 PNAS 2021，Caucheteux 和 King 2022，Goldstein 等 2022，Kell 等 2018，Tuckute 等 2024 | 语言模型预测下一个词越准，越能预测大脑活动。大脑在词出现前就在预测。音频网络的中间层对应初级听觉皮层。模型挑出的句子能调高或调低语言网络的活动 | | |
-| 25 | Pearce，IDyOM | 可变阶马尔可夫模型，多个"视角"，长期加短期记忆，给每个音一个信息量（意外程度） | "和你们的 12 节点图是什么关系？" | 同一类东西，它记得更长、看得更多 |
-| 25 | Di Liberto 等，eLife 2020 | 20 人听巴赫单旋律，IDyOM 的意外程度在声学特征之外还能解释 EEG，20 人里 16 人显著，效应量 d 约 1.6，主要在音后 350 毫秒内，3 位病人的 ECoG 定位在听觉皮层附近 | | |
-| 25 下 | Bellier 等，PLOS Biology 2023 | 29 位病人、2,668 个电极，从颅内信号重建 Pink Floyd 的歌，非线性解码 0.43 | | |
-| 25 下 | Denk 等，Nature Communications 2025 | fMRI 到 MuLan 嵌入再到 MusicLM，能重建风格和乐器，速度重建不出来 | | |
-| 26 下 | Noguchi 等，2026 | 用 MusicGen 的下一个 token 概率作为 EEG 解码器的教师信号，识别率 0.823 到 0.887 | | 用的是输出，不是内部 |
-| 26 下 | Pepino 等，2025 | 36 个音频模型，任务表现越好，和 fMRI 越吻合 | | |
+| 26 下 | McFee 和 Ellis，ISMIR 2014，Karystinaios 等 | 节拍为节点的自相似图能切出歌曲段落。GNN 找终止式和手工特征持平。Tonnetz 轨迹在作曲家分类上 0.49，风格分类上 0.84 | | |
+| 27 下 | Copet 等，MusicGen，NeurIPS 2023 | 声音先被 EnCodec 切成每秒 50 帧、每帧 4 个码本的整数，再像 GPT 一样预测下一个 | | |
+| 25 | Wei 等，ISMIR 2024 | 在 MusicGen 和 Jukebox 各层上训练线性探针，乐理概念（速度、音、和弦等）都能读出来。平均分把分类准确率和速度回归的 R² 混在一起 | "能读出来不代表模型在用。" | 对，所以第 26 页讲 steering，第 28 页讲因果检验 |
+| 25 | Do Music Foundation Models Embed Pitch in Helical Structure?，arXiv 2607.29086，2026 年 7 月 | 把 C3 到 B5 共 36 个单音送进 Jukebox 和 MusicGen large，每层做 PCA 投到三维再拟合螺旋。两个模型都有螺旋，越深越清楚（Jukebox 平均 2.28，MusicGen 1.16，随机点 0.37）。形状随音色变：哈蒙德风琴每八度绕一圈，电吉他清音绕两圈 | "MusicGen 里的音高螺旋不是已经有人做了吗？" | 对，这条路被占了，我们不做音高几何。螺旋和五度圈是单个状态"在哪里"的几何，我们读的是状态之间"接下来去哪"的转移图 |
+| 25 | Kanatas 等，What Makes a Good Layer?，ISMIR 2026 | 12 个音乐基础模型（含 MusicGen 小中大、MERT），看哪些无标签指标能挑出好层。调性任务上，只有他们新提的"移调等变性"有效：调性探针投到五度圈上，移调后相位按理论转动。调性任务在最深层最好 | "时间上的动态不是也有人量过吗？" | 他们有一个 temporal curvature（相邻帧位移向量的平均夹角），是轨迹的一个统计量，不是图。这是离我们最近的，被问到就这么答 |
+| 29 下 | Schrimpf 等 PNAS 2021，Caucheteux 和 King 2022，Goldstein 等 2022，Kell 等 2018，Tuckute 等 2024 | 语言模型预测下一个词越准，越能预测大脑活动。大脑在词出现前就在预测。音频网络的中间层对应初级听觉皮层。模型挑出的句子能调高或调低语言网络的活动 | | |
+| 27 | Pearce，IDyOM | 可变阶马尔可夫模型，多个"视角"，长期加短期记忆，给每个音一个信息量（意外程度） | "和你们的 12 节点图是什么关系？" | 同一类东西，它记得更长、看得更多 |
+| 27 | Di Liberto 等，eLife 2020 | 20 人听巴赫单旋律，IDyOM 的意外程度在声学特征之外还能解释 EEG，20 人里 16 人显著，效应量 d 约 1.6，主要在音后 350 毫秒内，3 位病人的 ECoG 定位在听觉皮层附近 | | |
+| 29 下 | Bellier 等，PLOS Biology 2023 | 29 位病人、2,668 个电极，从颅内信号重建 Pink Floyd 的歌，非线性解码 0.43 | | |
+| 29 下 | Denk 等，Nature Communications 2025 | fMRI 到 MuLan 嵌入再到 MusicLM，能重建风格和乐器，速度重建不出来 | | |
+| 30 下 | Noguchi 等，2026 | 用 MusicGen 的下一个 token 概率作为 EEG 解码器的教师信号，识别率 0.823 到 0.887 | | 用的是输出，不是内部 |
+| 30 下 | Pepino 等，2025 | 36 个音频模型，任务表现越好，和 fMRI 越吻合 | | |
 
 ## 三、讲之前要补的三件事
-1. 单向 steering 的评判器对照（第 24 页），需要投稿论文的数据。
+1. 单向 steering 的评判器对照（第 26 页），需要投稿论文的数据。
 2. Minsky 引文页码。
 3. 李飞飞：查不到"五种智能"的原始出处，能查到的是 2025 年 11 月 Lenny's Podcast 里她明确讲了语言智能和空间智能，情感智能是"AI 还缺的能力"。卡片已改成这三项。
 
@@ -104,11 +106,11 @@
 
 按被问到的可能性排序。前三条已核对过原文，后两条来自检索代理，讲之前再自己看一眼。
 
-1. Mischler、Mesgarani 等，Nature Communications，2025 年 10 月：用一个符号音乐生成模型（Musicautobot）的 13 层去拟合 EEG（10 位钢琴家，10 位非音乐人）和颅内记录，层越深预测越好，音乐人用的上下文更长。所以"大脑只从外部见过生成模型"不对了，第 26 页和它下面的 backup 已改成"见过输出、嵌入和层，但从没见过状态转移图"。
+1. Mischler、Mesgarani 等，Nature Communications，2025 年 10 月：用一个符号音乐生成模型（Musicautobot）的 13 层去拟合 EEG（10 位钢琴家，10 位非音乐人）和颅内记录，层越深预测越好，音乐人用的上下文更长。所以"大脑只从外部见过生成模型"不对了，第 28 页和它下面的 backup 已改成"见过输出、嵌入和层，但从没见过状态转移图"。
 2. Narashiman 等，arXiv 2506.10225（2025 年 6 月，2026 年 5 月 v2）：用线性探针权重在 MusicGen 残差流上做风格 steering，已加到第 6 页引用。检索代理说 SMITIN 附录 D 也做了反方向（负强度），不对称性随乐器而变（吉他、钢琴好删难加，鼓和贝斯相反），这条没核对，讲之前看一下。所以第 6 页已改成"for the styles we tested"。
 3. Circuit-Diff，Friedman 和 Song，arXiv 2609.23892，2026 年 9 月：在一次事实编辑前后比较 attribution graph，用来给特征贴标签。是 delta graph 最近的"表亲"，区别是我们给编辑排风险，他们定位知识。第 4 页标题已改成"applied as a vector"。
 4. 编辑后内部痕迹的几篇（检索代理给出，未核对）：Suppressed, Not Erased（arXiv 2609.18985），The Anatomy of an Edit（arXiv 2603.20795），One Mask to Rule Them All（arXiv 2605.28839）。回答：它们查单个事实或解释机制，delta graph 给所有编辑打分排序，而且形状胜过单个数字。
-5. Whyatt 和 Harrison，arXiv 2608.19061（未核对）：Essen 上音高特征决定分类，节奏贡献很小。被问到第 21 页时：任务不同（二分类，按地域），而且六个语料上音长的增益部分来自记谱方式，备注里已经写了。也可能有人说"这就是 Conklin 的 viewpoints"，承认是同一框架，我们的点是放在图的语言里。
+5. Whyatt 和 Harrison，arXiv 2608.19061（未核对）：Essen 上音高特征决定分类，节奏贡献很小。被问到第 23 页时：任务不同（二分类，按地域），而且六个语料上音长的增益部分来自记谱方式，备注里已经写了。也可能有人说"这就是 Conklin 的 viewpoints"，承认是同一框架，我们的点是放在图的语言里。
 
 ## 六、英文答问稿（第 7 轮模拟提问，12 题）
 
@@ -136,11 +138,11 @@
 
 **Q6（看图仔细的 ML）** "A note plus length node has more cells, and your plus 3 points is inside the noise."
 "Fair, so the honest comparison is within one node type. With pitch only, a second note of memory adds 8 points. With pitch plus length it adds nothing, 86.8 to 86.2, and that is the result I stand on. Differences of one to three points are inside the fold spread of about 2.7, so 73.3 against 70.2 is a tie. Counting pitch and length with no order already gives 68.4, so order still adds 18 points."
-在哪：第 21 页备注。需要你：音长分了几类，以及 86.8、86.2、88.7 这几行的标准差。
+在哪：第 23 页备注。需要你：音长分了几类，以及 86.8、86.2、88.7 这几行的标准差。
 
 **Q7（音乐信息学）** "This is Conklin and Witten's viewpoints and IDyOM. What is new?"
 "Nothing on those slides is new as a model, it is viewpoints and IDyOM, and I show it because the rest of the talk needs that baseline: a first order graph that a listening brain measurably tracks. The new question is the plan: whether the same kind of transition graph exists inside a neural generator that was never given a note."
-在哪：18 下 backup，第 25 页。
+在哪：18 下 backup，第 27 页。
 
 **Q8（懂音频 steering 的）** "SMITIN already reports negative strength steering and an asymmetry that flips by instrument."
 "Our finding is for genre directions on the styles we tested, and I phrase it that way on purpose. If the asymmetry flips by instrument, that is what a reachability picture would predict: islands differ in how many ways in they have, and the plan is to measure that rather than assume it."
@@ -150,7 +152,7 @@
 "The slide is a drawing of the result, the per clip numbers are in the paper under review." 接着说：需要你给一句可以公开的话（几种风格，每组多少段，用什么评判，一个效果大小，有没有用真实爵士和真实古典做评判器的对照）。这是现在最弱的一处。
 
 **Q10（理论，计划）** "A fine enough clustering reproduces the generator's own surprisal. What is the null?"
-"Matching the generator is a floor, not a proof. The test needs a null graph of the same size, for example shuffled transitions, and the real graph has to explain EEG beyond that null." 这是对计划的修改，要不要这样定由你决定。需要你：打算聚成多少类，为什么用中间层（第 23 页说调性在最深层最清楚）。
+"Matching the generator is a floor, not a proof. The test needs a null graph of the same size, for example shuffled transitions, and the real graph has to explain EEG beyond that null." 这是对计划的修改，要不要这样定由你决定。需要你：打算聚成多少类，为什么用中间层（第 25 页说调性在最深层最清楚）。
 
 **Q11（做 EEG 的音乐老师）** "IDyOM needs notes, MusicGen makes audio at 50 steps a second. How do you align, and who records the EEG?"
 "The first version uses pieces whose score we know, so IDyOM reads the score and the inside graph is read from MusicGen on the same material, with onsets from the score. It can start on public EEG music datasets before we record anything." 需要你：怎么让 MusicGen 演奏已知的谱，以及 EEG 的合作者、实验室和伦理审批。
@@ -159,19 +161,18 @@
 "If graph meant any matrix the title would be empty. The claim in Part 1 is that graph properties of the change carry information its size does not: 0.52 to 0.59 for single numbers against 0.798 with the shape. In Part 2 it is falsifiable: if the graph read from inside the generator explains the listener no better than the generator itself, it was our drawing, not the model's."
 在哪：第 7、15、26 页。
 
-## 四、时间预算（主线 27 页）
+## 四、时间预算（主线 29 页）
 
-第 4 轮评审在上轮表格上逐页调整（按口头压缩后的讲法），再去掉下放的 4 页，主线约 36 分钟，加上四句过渡约 37 分钟，留 8 分钟左右给提问。排练后按实际改。
+在第 4 轮的逐页估计上，加上 11 月 4 日新加的两页（光遗传学、音乐医学），主线约 37 分钟，加上过渡约 38 到 39 分钟，留 6 分钟左右提问。排练后按实际改。
 
 | 段落 | 页 | 秒数 | 累计 |
 |---|---|---|---|
-| 开场预告 | 1 到 7 | 45, 90, 75, 75, 90, 60, 45 | 8:00 |
-| Part 1 语言 | 8 到 16 | 20, 120, 75, 90, 90, 150, 90, 75, 70 | 21:00 |
-| Part 2 音乐 | 17 到 24 | 75, 75, 90, 75, 90, 135, 75, 60 | 32:15 |
-| 大脑与收尾 | 25 到 27 | 90, 90, 45 | 36:00 |
+| 开场预告 | 1 到 7 | 45, 90, 75, 60, 90, 60, 45 | 7:45 |
+| Part 1 语言 | 8 到 16 | 20, 100, 75, 90, 75, 150, 90, 75, 70 | 20:00 |
+| Part 2 开场与音乐医学 | 17 到 20 | 60, 75, 60, 75 | 24:30 |
+| Part 2 音乐建模 | 21 到 26 | 90, 75, 90, 135, 75, 40 | 33:15 |
+| 大脑与收尾 | 27 到 29 | 105, 90, 45 | 37:15 |
 
-口头压缩的要点：第 2 页三个问题一次出，第 3 页不念 86% 和 49%，第 4 页不在这里解释 AUC，第 5 页动画控制在 20 秒，第 6 页四种 steering 一口气说完，第 19 页两段音乐各放 8 秒左右。
+超时的话先压第 19 页（光遗传学，讲 45 秒）和第 20 页（右边五条只念两条）。
 
-backup 页（按向下键）：9 下四类失败，10 下七种手术和四个证据，11 下"向量在单个输入上失败"（Arditi 和 Tan），12 下 Meng 的因果追踪图，13 下方法八步，16 下完整四个局限，18 下最早的音乐模型（1957 年的马尔可夫作曲和 IDyOM），21 下记忆长度那张图（这张的 LLM 评判数字来自网站上的旧实验），22 下"何时图有用"综述，23 下 MusicGen 是什么，25 下语言模型预测大脑和 Brain2Music，26 下"只从外部相遇"的三篇工作。
-
-最可能被追问的一题："delta graph 是真的，还是 12 个探针 prompt 造出来的？"答三点：探针 prompt 和定义失败的 prompt 不重叠，用 200 个事实训练、500 个新事实测试，AUC 仍有 0.840 到 0.862，把风险最高的 50 个编辑从头重跑，只有 2 个翻转。
+backup 页（按向下键）：9 下四类失败，10 下七种手术和四个证据，11 下"向量在单个输入上失败"，12 下 Meng 的因果追踪图，13 下方法八步，16 下完整四个局限，18 下最早的音乐模型，23 下记忆长度那张图，24 下"何时图有用"综述，25 下 MusicGen 是什么，27 下语言模型预测大脑和 Brain2Music，28 下"见过层，但从没见过转移图"的四篇工作。

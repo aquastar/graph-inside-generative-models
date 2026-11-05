@@ -257,7 +257,7 @@ o3 += P('M' + ' L'.join(f'{x},{y}' for x, y in zip(xs, ys)), ACC, 2.5)
 o3 += ''.join(C(x, y, 7, '#fff', ACC, 2) for x, y in zip(xs, ys)) + T(800, 205, '...', 26, 700, ACC)
 o3 += T(640, 70, 'third order', 18, 700, ACC, 'middle') + T(640, 330, '81 nodes, 6% revisits', 15, 700, INK, 'middle') + T(640, 352, 'a path: the piece memorized', 14, 400, MUT, 'middle')
 g += F(1, o3)
-lim = R(870, 50, 290, 135, SOFT, LINE, 1, 10) + T(886, 78, 'Limit of order one', 16, 700, AC2) + wrap(886, 102, 'An LLM judge picks the real excerpt over a first order one 96 to 100% of the time, 60% on real vs real.', 13, 400, INK, width=40, lh=18)
+lim = R(870, 50, 290, 135, SOFT, LINE, 1, 10) + T(886, 78, 'Limit of order one', 16, 700, AC2) + wrap(886, 102, 'Each step sees only the last note, so a phrase never knows where it is going.', 13, 400, INK, width=40, lh=18)
 g += F(2, lim + T(886, 178, 'right vocabulary, wrong syntax', 13, 700, ACC))
 mem = R(870, 200, 290, 160, MUL, MU, 1.5, 10) + T(886, 228, 'Second order helps', 16, 700, MU) + wrap(886, 252, 'Community detection recovers key regions: AMI 0.16 to 0.32, about zero at first order.', 13, 400, INK, width=40, lh=18)
 g += F(3, mem + T(886, 330, 'open: which contexts earn memory?', 13, 700, MU) + T(886, 350, 'information vs idiom', 12.5, 400, MUT))
@@ -990,12 +990,13 @@ g = adefs('tk2')
 g += T(40, 30, 'Covered today', 15, 600, MUT)
 g += R(40, 44, 360, 52, '#FDEBDD', 'none', 0, 3) + T(58, 76, 'Text', 19, 600, '#C45200') + T(118, 76, 'Part 1: facts inside a language model', 13.5, 400, INK)
 g += R(416, 44, 360, 52, '#EEE8F6', 'none', 0, 3) + T(434, 76, 'Music', 19, 600, MU) + T(512, 76, 'Part 2: style, expectation, the brain', 13.5, 400, INK)
-g += T(40, 140, 'Not covered, and each already carries a graph', 15, 600, MUT)
+g += T(40, 122, 'Seven graphs today: knowledge, delta, note transition, reachability, helix and cycle, the listener\'s, inside MusicGen', 13.5, 400, MUT)
+g += T(40, 150, 'Not covered, and each already carries a graph', 15, 600, MUT)
 KINDS = [('eq', 'Equations', 'each step rests on earlier ones'), ('code', 'Code', 'functions call other functions'),
          ('img', 'Images', 'objects relate in a scene'), ('space', 'Space', 'places connect into a map'),
          ('motion', 'Motion', 'joints chain into a skeleton'), ('mol', 'Molecules', 'atoms bond into a molecule')]
 for k, (kind, name, line) in enumerate(KINDS):
-    cx, cy = 40 + (k % 3) * 372, 156 + (k // 3) * 150
+    cx, cy = 40 + (k % 3) * 372, 164 + (k // 3) * 146
     g += R(cx, cy, 356, 134, SOFT, 'none', 0, 3) + _gi(kind, cx + 62, cy + 67, AC2)
     g += T(cx + 124, cy + 58, name, 21, 600, INK) + T(cx + 124, cy + 86, line, 14, 400, MUT)
 g += T(1140, 470, 'zhiqian.ai', 13, 400, MUT, 'end')
@@ -1495,20 +1496,20 @@ g += F(3, T(610, 372, 'B is the real Bach. A came from the 2 note graph,', 15, 6
           + T(590, 450, 'The useful graph remembers a little and copies nothing long.', 18, 700, ACC, 'middle'))
 COPY = sec('The longest memory sounds most like the style, because it copies', SVG(g), ch='2', status='prog',
            ref='Our experiments, Nov 2026. Clips: order 2 and the other settings sampled with a 6 note copy limit, one sample each, fixed seed, no cherry picking. Real Bach melody: BWV 329 soprano, held out',
-           notes='Say once: 64 versus 65 is within noise at 600 melodies, and real melodies show a 10.9 note copy span because Bach chorale tunes recur across harmonizations in the corpus. Live vote first (the folk clips are in the repo if asked): play melody A, then B, and ask for hands, which one is the real Bach. Then reveal. This is a pilot of the listening test, either result is honest data. Generation tells the other half. Plain sampling with more memory is recognized as its style more often, 57 to 65, but the variable order model copies 12 note stretches verbatim and 99 percent of its 4 note patterns already exist in training. A 6 note copy limit keeps most of the gain. Honest caveat: these automatic judges rate generated melodies above real held out ones (52 percent), so they measure typicality, not musical conviction. A listening test is the next step. The LLM judge numbers on the memory order slide come from the website, not from this run.')
+           notes='Say once: 64 versus 65 is within noise at 600 melodies, and real melodies show a 10.9 note copy span because Bach chorale tunes recur across harmonizations in the corpus. Live vote first (the folk clips are in the repo if asked): play melody A, then B, and ask for hands, which one is the real Bach. Then reveal. This is a pilot of the listening test, either result is honest data. Generation tells the other half. Plain sampling with more memory is recognized as its style more often, 57 to 65, but the variable order model copies 12 note stretches verbatim and 99 percent of its 4 note patterns already exist in training. A 6 note copy limit keeps most of the gain. Honest caveat: these automatic judges rate generated melodies above real held out ones (52 percent), so they measure typicality, not musical conviction. A listening test is the next step.')
 
 # ======================= ROUND 8 (Nov 2 2026): slides 9 and 10 on one template =======================
 PURP = '#5a4fcf'
 
 def steps(active):
     out = ''
-    for k, lab in enumerate(['Knowledge beyond text', 'Why music: emotion']):
-        x = 30 + k * 300
+    for k, lab in enumerate(['Knowledge beyond text', 'Why music: emotion', 'A switch for neurons', 'Music as medicine']):
+        x = 30 + k * 285
         on = (k == active)
-        out += R(x, 6, 280, 30, ACC if on else '#fff', ACC if on else LINE, 1.5, 15) + C(x + 18, 21, 10, '#fff' if on else SOFT) + T(x + 18, 25.5, str(k + 1), 12, 700, ACC if on else MUT, 'middle')
+        out += R(x, 6, 265, 30, ACC if on else '#fff', ACC if on else LINE, 1.5, 15) + C(x + 18, 21, 10, '#fff' if on else SOFT) + T(x + 18, 25.5, str(k + 1), 12, 700, ACC if on else MUT, 'middle')
         out += T(x + 36, 26, lab, 14, 700, '#fff' if on else MUT)
-        if k == 0:
-            out += P('M314,21 L326,21', LINE, 2, extra='marker-end="url(#pea)"')
+        if k < 3:
+            out += P(f'M{x+268},21 L{x+281},21', LINE, 2, extra='marker-end="url(#pea)"')
     return out
 
 def person(x, y, w, h, fname, ini, name, title_lines, col):
@@ -1550,16 +1551,10 @@ c2 += chips(627, 182, [('linguistic', 'L'), ('spatial', ''), ('emotional, still 
 c2 += quote(645, 236, [[('Spatial intelligence is', False)], [("AI's next frontier", True), ('.', False)]], 18, 26)
 c2 += T(1130, 318, "From Words to Worlds, essay, 2025. Lenny's Podcast, Nov 2025", 12.5, 400, MUT, 'end')
 g += F(1, c2)
-band = T(30, 356, 'What this talk covers', 14, 700, MUT)
-tiles = [('Text', 'Part 1: facts inside a language model', ACC, ACL, ''), ('Equations', 'not today: 36 + 59 runs as two paths inside a model', PURP, '#fff', 'stroke-dasharray="7 5"'), ('Music and emotion', 'Part 2: style, expectation, the brain', MU, MUL, '')]
-for k, (a_, b_, col, fill, dash) in enumerate(tiles):
-    x = 30 + k * 377
-    band += R(x, 366, 360, 60, fill, col, 2, 14, dash) + T(x + 18, 390, a_, 17, 700, col) + T(x + 18, 413, b_, 13, 400, INK)
-g += F(2, band)
-g += F(3, T(590, 466, 'Equations and music are knowledge beyond text. They may need graphs even more than text does.', 17, 700, INK, 'middle'))
+g += F(2, T(590, 400, 'Music is knowledge beyond text, and the kind that carries emotion.', 20, 700, INK, 'middle'))
 BEYOND2 = sec('Knowledge is not only text', SVG(g), ch='0',
-              ref='Gardner, Frames of Mind, 1983. Fei-Fei Li, From Words to Worlds: Spatial Intelligence is AI\'s Next Frontier, Substack essay, Nov 2025, and Lenny\'s Podcast, Nov 2025. Lindsey et al., On the Biology of a Large Language Model, 2025. Photos: Wikimedia Commons',
-              notes='Step 1 of 2. A psychologist and an AI leader say the same thing from two sides: intelligence and knowledge come in several kinds, and language is only one. Gardner counts musical and logical mathematical intelligence as their own kinds. Fei-Fei Li names linguistic and spatial intelligence and says emotional intelligence is still missing in AI, and calls space the frontier beyond language. This talk covers text and music. Equations are next: inside Claude, 36 + 59 runs as two parallel paths, one for the rough size and one for the last digit (Lindsey et al. 2025).')
+              ref='Gardner, Frames of Mind, 1983. Fei-Fei Li, From Words to Worlds: Spatial Intelligence is AI\'s Next Frontier, Substack essay, Nov 2025, and Lenny\'s Podcast, Nov 2025. Photos: Wikimedia Commons',
+              notes='Step 1 of 4. A psychologist and an AI leader say the same thing from two sides: intelligence and knowledge come in several kinds, and language is only one. Gardner counts musical and logical mathematical intelligence as their own kinds. Fei-Fei Li names linguistic and spatial intelligence and says emotional intelligence is still missing in AI, and calls space the frontier beyond language. Of these kinds, music is the one that carries emotion, which is the next slide.')
 
 # ---- slide 10 ----
 g = adefs('pe')
@@ -1577,18 +1572,58 @@ c3 = person(785, 50, w3, 282, 'leonard-meyer.jpg', 'LM', 'Leonard Meyer', ['Musi
 c3 += quote(817, 186, [[('affect is aroused when an', False)], [('expectation', True), (', a tendency to', False)], [('respond, is ', False), ('temporarily', True)], [('inhibited or permanently', True)], [('blocked', True)]], 15.5, 22)
 c3 += T(1130, 320, 'Emotion and Meaning in Music, 1956, p. 31', 12, 400, MUT, 'end')
 g += F(2, c3)
-band = T(30, 356, 'Why this matters for a graph', 14, 700, MUT)
-chain = [('music', 'a melody unfolds', MU, MUL), ('expectation', 'what comes next? a transition graph', ACC, ACL), ('emotion', 'dopamine at the peak, Salimpoor 2011', PURP, '#eef0ff'), ('brain response', 'measured in EEG, Di Liberto 2020', MU, MUL)]
-for k, (a_, b_, col, fill) in enumerate(chain):
-    x = 30 + k * 283
-    band += R(x, 366, 262, 60, fill, col, 2, 14) + T(x + 16, 390, a_, 16.5, 700, col) + T(x + 16, 413, b_, 12.5, 400, INK)
-    if k < 3:
-        band += P(f'M{x+264},396 L{x+281},396', AC2, 2.5, extra='marker-end="url(#pea)"')
-g += F(3, band)
-g += F(4, T(590, 466, 'Music is one of the most measurable routes to emotion, so it is where a brain can judge a model.', 17, 700, INK, 'middle'))
+g += F(3, T(590, 400, 'Emotion lives in expectation: what comes next, and whether it arrives.', 20, 700, INK, 'middle'))
 EMOTION2 = sec('Music is where emotion can be measured', SVG(g), ch='0',
-               ref='Picard, Affective Computing, MIT Press 1997, introduction. Minsky, The Emotion Machine, 2006. Meyer, Emotion and Meaning in Music, 1956, p. 31, via Margulis 2005. Huron, Sweet Anticipation, 2006. Salimpoor et al., Nature Neuroscience 2011. Koelsch, Nature Reviews Neuroscience 2014. Photos: Wikimedia Commons',
-               notes='Step 2 of 2. Two AI pioneers say machines need emotion. A music theorist explains where musical emotion comes from: expectation that is held back or broken. Expectation is exactly what a note transition graph computes, and its effect is measurable in the brain. That is why music is the place where a brain can judge whether a model has a graph inside.')
+               ref='Picard, Affective Computing, MIT Press 1997, introduction. Minsky, The Emotion Machine, 2006. Meyer, Emotion and Meaning in Music, 1956, p. 31, via Margulis 2005. Huron, Sweet Anticipation, 2006. Photos: Wikimedia Commons',
+               notes='Step 2 of 4. Two AI pioneers say machines need emotion. A music theorist explains where musical emotion comes from: expectation that is held back or broken. Expectation is exactly what a note transition graph computes, and its effect is measurable in the brain. That is why music is the place where a brain can judge whether a model has a graph inside.')
+
+# ---- Nov 4 (his request): optogenetics, then music medicine ----
+g = adefs('op')
+g += steps(2).replace('url(#pea)', 'url(#opa)')
+oc = R(30, 50, 545, 300, '#fff', LINE, 1.5, 14) + T(52, 84, 'Nobel Prize in Physiology or Medicine, 2026', 17, 700, INK) + T(52, 106, 'light gated ion channels and optogenetics', 14, 600, AC2)
+for q_, (fn, ini, nm, af) in enumerate([('karl-deisseroth.jpg', 'KD', 'Karl Deisseroth', 'Stanford'), ('peter-hegemann.jpg', 'PH', 'Peter Hegemann', 'Humboldt, Berlin'), ('georg-nagel.jpg', 'GN', 'Georg Nagel', 'Würzburg')]):
+    x = 52 + q_ * 176
+    oc += photo(x + 24, 154, 24, fn, ini, AC2) + T(x + 56, 150, nm, 13, 700, INK) + T(x + 56, 168, af, 12, 400, MUT)
+oc += T(52, 222, 'Put a light switch, an algal protein, into chosen neurons.', 15, 600, INK) + T(52, 246, 'Blue light turns them on, related light switches turn them off.', 15, 400, INK)
+oc += T(52, 282, 'Precise, but it needs a gene delivered into the brain', 14.5, 400, MUT) + T(52, 304, 'and light brought to the cells.', 14.5, 400, MUT)
+oc += T(52, 334, 'In people so far: partial sight restored in one blind patient, 2021.', 13.5, 600, AC2)
+g += oc
+nc = R(605, 50, 545, 300, MUL, 'none', 0, 14) + T(627, 84, 'A switch that needs no surgery?', 17, 700, MU)
+nc += T(627, 122, '40 Hz light and sound, through the eyes and ears:', 15, 600, INK)
+nc += T(627, 146, 'brain rhythms follow the beat. In Alzheimer model mice,', 14.5, 400, INK) + T(627, 168, 'less amyloid and tau, better memory (Tsai lab).', 14.5, 400, INK)
+nc += T(627, 198, 'In people: safe in small trials, a phase 3 trial', 14.5, 400, INK) + T(627, 220, 'finished enrolling in Feb 2026, results not yet out.', 14.5, 400, INK)
+nc += T(627, 262, 'A 40 Hz click is the simplest sound there is.', 15, 600, MU) + T(627, 286, 'Music is the richest sound we can design.', 15, 700, MU)
+nc += T(627, 330, 'Our question, not a result.', 13, 400, MUT)
+g += F(1, nc)
+g += F(2, T(590, 400, 'Optogenetics shows a designed signal can switch brain circuits.', 19, 700, INK, 'middle') + T(590, 432, 'Could music be the switch that enters through the ear?', 19, 700, ACC, 'middle'))
+OPTO = sec('This year\'s Nobel: a switch for neurons, made of light', SVG(g), ch='0',
+           ref='Nobel Prize in Physiology or Medicine 2026, Deisseroth, Hegemann, Nagel, announced Oct 5 2026. Sahel et al., Nature Medicine 2021. Tsai lab, MIT Picower Institute: 40 Hz sensory stimulation, mouse studies 2016 to 2019, PLOS ONE 2022. Cognito Therapeutics HOPE trial, enrollment completed Feb 2026',
+           notes='Step 3 of 4. One minute. The 2026 Nobel went to optogenetics: a light gated channel from an alga, put into chosen neurons, so light switches them on or off. It changed neuroscience, but it is invasive: a gene has to be delivered and light has to reach the cells, so in people it is limited, the first case was partial vision in one blind patient. The non invasive cousin is 40 Hz flicker of light and sound from Li-Huei Tsai\'s lab: in mice it drives gamma rhythms and reduces amyloid and tau, small human trials found it safe, and a phase 3 trial finished enrolling in February. If a plain 40 Hz click can do that, music, the richest sound we can design, might be a finer switch. Say clearly that this is the question, not a result.')
+
+g = adefs('md')
+g += steps(3).replace('url(#pea)', 'url(#mda)')
+g += T(30, 66, 'How music reaches the brain', 15, 700, MUT)
+chain = [('music', 'a melody unfolds', MU, MUL), ('expectation', 'what comes next?', ACC, ACL), ('reward', 'dopamine at the peak', PURP, '#eef0ff'), ('brain response', 'tracked note by note', MU, MUL)]
+for k, (a_, b_, col, fill) in enumerate(chain):
+    y = 80 + k * 72
+    g += R(30, y, 330, 58, fill, 'none', 0, 10) + T(48, y + 25, a_, 16.5, 700, col) + T(48, y + 46, b_, 13.5, 400, INK)
+    if k < 3:
+        g += P(f'M195,{y+59} L195,{y+71}', AC2, 2.2, extra='marker-end="url(#mda)"')
+g += T(30, 374, 'Salimpoor 2011 (dopamine), Di Liberto 2020 (EEG)', 12, 400, MUT)
+g += T(400, 66, 'Music already works as medicine', 15, 700, MUT)
+ev = [('Parkinson\'s', 'a steady beat improves gait speed and stride length', 'meta analysis, low quality evidence'),
+      ('Surgery', 'recorded music lowers anxiety before an operation', 'Cochrane review, 26 trials'),
+      ('Depression', 'music added to usual care improves symptoms', 'Cochrane review, moderate quality'),
+      ('Dementia', 'probably fewer depressive symptoms, little effect on cognition', 'Cochrane review, 22 trials'),
+      ('Pain', 'may lower pain intensity and distress, and pain medicine use', 'meta analysis, 97 trials')]
+for k, (a_, b_, c_) in enumerate(ev):
+    y = 80 + k * 58
+    g += F(1 if k < 2 else 2, R(400, y, 750, 50, SOFT, 'none', 0, 8) + T(418, y + 31, a_, 15.5, 700, MU) + T(540, y + 22, b_, 14, 400, INK) + T(540, y + 41, c_, 12.5, 400, MUT))
+g += F(3, T(590, 412, 'Most trials are small, and nobody knows which part of the music does the work.', 17, 700, INK, 'middle')
+          + T(590, 444, 'That is a modeling question. So let us model music, from the start.', 18, 700, ACC, 'middle'))
+MEDIC = sec('Music already acts on the brain, as medicine', SVG(g), ch='0',
+            ref='NCCIH, Music and Health: What the Science Says, 2022: Burrai 2021 (Parkinson\'s), Bradt, Dileo, Shim, Cochrane 2013 (surgery), Aalbers, Cochrane 2017 (depression), van der Steen, Cochrane 2018 (dementia), Lee 2016 (pain). Salimpoor et al., Nature Neuroscience 2011. Di Liberto et al., eLife 2020',
+            notes='Step 4 of 4. Left, the mechanism in one chain: a melody sets up an expectation of what comes next, a fulfilled or delayed expectation releases dopamine at the peak of pleasure (Salimpoor 2011), and listeners\' brains track that expectation note by note (Di Liberto 2020). Right, music medicine in five lines, with the evidence quality said honestly: Parkinson\'s gait with rhythmic auditory stimulation, anxiety before surgery, depression, dementia, pain. Most trials are small and at risk of bias, and none tells us which part of the music works. That is where a model comes in. Bridge: music and the brain are this closely tied, so let us model music from the beginning, starting with the simplest graph, and end where music meets the brain.')
 
 # ======================= ASSEMBLY =======================
 # ---- loop it1: results slide that pays off the trailer bars (P15, P10) ----
@@ -1687,17 +1722,17 @@ def assemble(cover, old):
                     R(60, 230, 400, 140, ACL, ACC, 1.5, 10) + T(80, 270, 'The listener model is a graph', 17, 700, ACC) + T(80, 300, 'IDyOM counts transitions between notes', 14.5, 400, INK) + T(80, 324, 'with several context lengths, like the', 14.5, 400, INK) + T(80, 348, 'tiny graph from the opening.', 14.5, 400, INK))
     b2 = retitle(BRAIN2, 'The brain carries enough of the music to rebuild it').replace('Denk et al., Brain2Music, arXiv 2307.11078, 2023.', 'Denk et al., Text to music generation models capture musical semantic representations in the human brain, Nature Communications 2025 (Brain2Music).')
     corpus = retitle(CORPUS, 'Occam\'s razor: the simplest graph already names the tradition')
-    path = retitle(PATH, 'Too little memory gives a graph without syntax, too much gives a path').replace('An 89 note Bach chorale at first and third order.', 'An 89 note Bach chorale at first and third order. LLM judge result from zhiqian.ai/music-markov')
+    path = retitle(PATH, 'Too little memory gives a graph without syntax, too much gives a path')
     beyond2 = retitle(toch(BEYOND2, '2'), 'Part 2. Knowledge is not only text')
     hist = retitle(HIST, 'The oldest music model is a graph')
     bri = retitle(BRI, 'A note transition graph predicts the listening brain')
     lang[1] = lang[1].replace('</aside>', ' If asked why the title says the graph says why when only 1.3 percent lack a path: the graph splits the cliff before any model runs. On MIMIC it clears the record and leaves the reasoning to the model, on CORAL it finds the missing edges and repairs them. If asked about contamination: PhysioNet data sit behind a data use agreement, not in public corpora, which is not an absolute guarantee.</aside>', 1)
     lang[1] = bridge(lang[1], 'That was the graph outside the model, a record we can draw. The harder case is a change made inside the model, where nobody drew the graph.')
     musres_b = bridge(toch(MUSRES, '2'), 'So inside MusicGen, steering is lopsided, and a vector cannot say why. To test any graph we draw inside, we need a judge outside the model. In music that judge exists: a listener\'s brain.')
-    emo_b = bridge(toch(EMOTION2, '2'), 'If emotion lives in expectation, the first question is what a listener expects. The oldest answer is a graph: in 1957 a Markov chain already wrote a string quartet, and IDyOM, the listener model we meet later, is its descendant (history under the down arrow).')
+    emo_b = bridge(toch(EMOTION2, '2'), 'Emotion is one way music acts on the brain. Before we model music, one detour through this year\'s Nobel Prize, because it shows what a designed signal can do to brain circuits. The history of music models is under the down arrow.')
     copy_b = bridge(COPY, 'Before we go inside a generator, one honest line from the literature: in music, graphs win only when the edges carry something the sequence throws away, and often they do not (survey under the down arrow). The one place nobody has looked for such edges is inside the generator itself.')
     corpus_b = bridge(corpus, 'How much memory should the graph have? One note gives the right vocabulary with the wrong syntax, three notes memorize the piece (the picture is under the down arrow on the next slide).')
-    mus = [beyond2, emo_b, backup(hist), FOLD, corpus_b, RICHER, backup(path), copy_b, backup(WHEN), PROBE, backup(MGEN), musres_b, bri, backup(BRL), backup(BRR), PLAN, backup(BRG)]
+    mus = [beyond2, emo_b, backup(hist), toch(OPTO, '2'), toch(MEDIC, '2'), FOLD, corpus_b, RICHER, backup(path), copy_b, backup(WHEN), PROBE, backup(MGEN), musres_b, bri, backup(BRL), backup(BRR), PLAN, backup(BRG)]
     beyond = []
     close = [TAKEAWAY.replace('</section>', CLIP_JSON + '</section>')]
     parts = {'vision': vision, 'language': lang, 'music': mus, 'beyond': beyond, 'close': close}

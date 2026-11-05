@@ -71,6 +71,9 @@ html,body,.reveal-viewport{{background:{BG} !important}}
 .reveal .pts li::before{{background:{AXIS} !important;transform:none !important;border-radius:50%;width:.4em;height:.4em;top:.5em}}
 .reveal .steps b{{color:{INK} !important}}
 .reveal .annot .lbl{{color:{INK} !important}}
+.reveal .graphtag{{position:absolute;top:13px;left:50%;transform:translateX(-50%);z-index:4;font:400 13px/1.3 {SANS};color:{MUS};letter-spacing:.06em;white-space:nowrap;display:flex;align-items:center;gap:7px}}
+.reveal .graphtag b{{font-weight:700;color:{INK}}}
+.reveal .graphtag svg{{width:22px;height:14px;display:inline-block;margin:0}}
 .reveal .lessontag{{top:14px !important;right:44px !important;background:none !important;border:0 !important;border-radius:0 !important;color:{INK2} !important;font:400 13px/1 {SANS} !important;text-transform:uppercase;letter-spacing:.14em}}
 .reveal .ph{{border:1px dashed {AXIS};background:none}}
 .reveal img.fig{{border:0 !important;border-bottom:1px solid {RULE} !important;background:none !important;padding:0 !important}}
