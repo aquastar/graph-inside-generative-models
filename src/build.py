@@ -376,17 +376,17 @@ allsecs = [re.sub(r'\s*<div class="lessontag">[^<]*</div>', '', x) for x in alls
 GTAGS = [('Knowledge is a graph, and an edit has to follow it', 1, 'knowledge graph'),
          ('Our delta graph: rank edits', 2, 'delta graph, how the inside rewired'),
          ('A tiny graph is enough to represent', 3, 'note transition graph, a Markov chain'),
-         ('Yet music generators are steered', 4, 'reachability graph, our hypothesis'),
+         ('Yet music generators are steered', 4, 'style reachability graph, our hypothesis'),
          ('Two hops break every model', 1, 'knowledge graph, a clinical record'),
          ('What is a delta graph?', 2, 'delta graph'),
          ('Fold 88 keys', 3, 'note transition graph'),
          ('the simplest graph already names the tradition', 3, 'note transition graph'),
          ('Richer nodes beat longer memory', 3, 'note transition graph, richer nodes'),
          ('The longest memory sounds most like the style', 3, 'note transition graph, generating'),
-         ('Inside a music generator, music theory has a shape', 5, 'geometry as graphs: helix and 12 node cycle'),
-         ('Steering leaves a style easily', 4, 'reachability graph, our hypothesis'),
-         ('A note transition graph predicts the listening brain', 6, "the listener's graph, IDyOM"),
-         ('Our plan: a graph from inside MusicGen', 7, 'a graph inside MusicGen, planned')]
+         ('Inside a music generator, music theory has a shape', 5, 'pitch helix and circle of fifths'),
+         ('Steering leaves a style easily', 4, 'style reachability graph, our hypothesis'),
+         ('A note transition graph predicts the listening brain', 6, "the listener's expectation graph, IDyOM"),
+         ('Our plan: a graph from inside MusicGen', 7, 'a graph of MusicGen states, planned')]
 _GICON = '<svg viewBox="0 0 22 14"><line x1="3" y1="11" x2="11" y2="3" stroke="currentColor" stroke-width="1.3"/><line x1="11" y1="3" x2="19" y2="11" stroke="currentColor" stroke-width="1.3"/><line x1="3" y1="11" x2="19" y2="11" stroke="currentColor" stroke-width="1.3"/><circle cx="3" cy="11" r="2.4" fill="currentColor"/><circle cx="11" cy="3" r="2.4" fill="currentColor"/><circle cx="19" cy="11" r="2.4" fill="currentColor"/></svg>'
 _seen = set()
 def _gtag(x):

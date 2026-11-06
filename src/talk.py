@@ -986,28 +986,77 @@ def _gi(kind, x, y, col):
         o += ''.join(n(*q, 3.8) for q in H)
     return o
 
+import math as _m
+def _g7(k, x, y, col):
+    """schematic of each of the seven graphs, centered at x, y"""
+    o = ''
+    def n(px, py, r=5, f='#fff', w=1.6): return C(px, py, r, f, col, w)
+    if k == 1:    # knowledge graph: entities joined by relations
+        Q = [(x - 30, y + 16), (x - 4, y - 18), (x + 26, y + 10), (x + 32, y - 22)]
+        for a_, b_ in ((0, 1), (1, 2), (0, 2), (1, 3), (2, 3)): o += L(*Q[a_], *Q[b_], col, 1.3)
+        o += ''.join(n(*q) for q in Q[1:]) + n(*Q[0], 6, col)
+    elif k == 2:  # delta graph: the same graph before and after, one edge rewired
+        for dx, after in ((-24, False), (24, True)):
+            Q = [(x + dx - 14, y + 14), (x + dx, y - 16), (x + dx + 14, y + 14)]
+            o += L(*Q[0], *Q[1], col if after else '#b9b2a8', 1.3) + L(*Q[0], *Q[2], col if after else '#b9b2a8', 1.3)
+            o += L(*Q[1], *Q[2], RED if after else '#b9b2a8', 3.2 if after else 1.3)
+            o += ''.join(C(*q, 4.5, '#fff', col if after else '#b9b2a8', 1.5) for q in Q)
+        o += T(x, y + 4, '→', 14, 600, MUT, 'middle')
+    elif k == 3:  # note transition graph: notes in a ring, a self loop
+        Q = [(x, y - 24), (x + 26, y), (x, y + 24), (x - 26, y)]
+        for a_, b_ in ((0, 1), (1, 2), (2, 3), (3, 0), (0, 2)): o += L(*Q[a_], *Q[b_], col, 1.3)
+        o += P(f'M{x-31},{y-3} C{x-48},{y-18} {x-48},{y+18} {x-31},{y+3}', col, 1.3)
+        o += ''.join(n(*q, 6) for q in Q)
+    elif k == 4:  # reachability graph: styles as islands, leaving easy, entering hard
+        for cx_ in (x - 22, x + 22):
+            o += f'<ellipse cx="{cx_}" cy="{y}" rx="17" ry="24" fill="none" stroke="{col}" stroke-width="1.3"/>'
+            o += ''.join(C(cx_ + dx, y + dy, 3.6, col, 'none', 0) for dx, dy in ((-5, -10), (6, 0), (-4, 11)))
+        o += P(f'M{x-16},{y-14} C{x-6},{y-30} {x+6},{y-30} {x+14},{y-18}', col, 2.8)
+        o += P(f'M{x+14},{y+18} C{x+6},{y+30} {x-6},{y+30} {x-16},{y+14}', col, 1.1, extra='stroke-dasharray="3 3"')
+    elif k == 5:  # pitch helix and the 12 node circle of fifths
+        hx = ' '.join(f'{x - 24 + 10 * _m.cos(t):.1f},{y + 26 - t * 3.0:.1f}' for t in [i * 0.25 for i in range(68)])
+        o += f'<polyline points="{hx}" fill="none" stroke="{col}" stroke-width="1.4"/>'
+        o += f'<circle cx="{x + 18}" cy="{y}" r="17" fill="none" stroke="{col}" stroke-width="1"/>'
+        o += ''.join(C(x + 18 + 17 * _m.cos(i * _m.pi / 6), y + 17 * _m.sin(i * _m.pi / 6), 2.6, col if i == 9 else '#fff', col, 1.2) for i in range(12))
+    elif k == 6:  # listener's expectation graph: a context, then likely and unlikely next notes
+        Q = [(x - 34, y), (x - 16, y)]
+        o += L(*Q[0], *Q[1], col, 1.3)
+        for dy, w in ((-22, 1), (0, 3.4), (22, 1)): o += L(*Q[1], x + 18, y + dy, col, w)
+        o += ''.join(n(*q, 5) for q in Q) + n(x + 18, y - 22, 4.5) + n(x + 18, y, 6.5, col) + n(x + 18, y + 22, 4.5)
+        o += T(x + 34, y + 27, '!', 15, 700, RED, 'middle')
+    elif k == 7:  # planned: a graph of how one MusicGen state follows the next
+        for i in range(3):
+            for j in range(3):
+                if i < 2:
+                    for jj in range(3):
+                        if abs(j - jj) <= 1: o += P(f'M{x-26+i*26},{y-20+j*20} L{x+i*26},{y-20+jj*20}', col, 1, extra='stroke-dasharray="3 3"')
+        o += ''.join(C(x - 26 + i * 26, y - 20 + j * 20, 4.5, '#fff', col, 1.4) for i in range(3) for j in range(3))
+    return o
+
 g = adefs('tk2')
-g += T(40, 30, 'Covered today', 15, 600, MUT)
-g += R(40, 44, 360, 52, '#FDEBDD', 'none', 0, 3) + T(58, 76, 'Text', 19, 600, '#C45200') + T(118, 76, 'Part 1: facts inside a language model', 13.5, 400, INK)
-g += R(416, 44, 360, 52, '#EEE8F6', 'none', 0, 3) + T(434, 76, 'Music', 19, 600, MU) + T(512, 76, 'Part 2: style, expectation, the brain', 13.5, 400, INK)
-g += T(40, 126, 'Seven graphs today', 15, 600, MUT)
-SEVEN = ['knowledge', 'delta', 'note transition', 'reachability', 'helix and cycle', "the listener's", 'in MusicGen']
-for k, nm in enumerate(SEVEN):
-    col, bg = ('#C45200', '#FDEBDD') if k < 2 else (MU, '#EEE8F6')
-    x0 = 186 + k * 136
-    g += R(x0, 106, 130, 30, bg, 'none', 0, 15) + C(x0 + 15, 121, 10, col, 'none', 0) + T(x0 + 15, 125.5, str(k + 1), 12, 700, '#fff', 'middle')
-    g += T(x0 + 31, 126, nm, 12.5, 600, INK)
-g += T(40, 176, 'Not covered, and each already carries a graph', 15, 600, MUT)
-KINDS = [('eq', 'Equations', 'each step rests on earlier ones'), ('code', 'Code', 'functions call other functions'),
-         ('img', 'Images', 'objects relate in a scene'), ('space', 'Space', 'places connect into a map'),
-         ('motion', 'Motion', 'joints chain into a skeleton'), ('mol', 'Molecules', 'atoms bond into a molecule')]
-for k, (kind, name, line) in enumerate(KINDS):
-    cx, cy = 40 + (k % 3) * 372, 190 + (k // 3) * 138
-    g += R(cx, cy, 356, 126, SOFT, 'none', 0, 3) + _gi(kind, cx + 62, cy + 63, AC2)
-    g += T(cx + 124, cy + 56, name, 21, 600, INK) + T(cx + 124, cy + 84, line, 14, 400, MUT)
+SEVEN = [('Knowledge graph', 'facts as edges: Space Needle, Seattle, USA', ('Accepted, CIKM 2026', 'done')),
+         ('Delta graph', 'what an edit rewired inside the model', ('Published', 'done')),
+         ('Note transition graph', 'which note follows which, a Markov chain', ('In progress', 'part')),
+         ('Style reachability graph', 'which styles steering can reach, and from where', ('Under review', 'part')),
+         ('Pitch helix and circle of fifths', 'music theory as shape inside MusicGen', ('prior work, 2024 to 2026', None)),
+         ("The listener's expectation graph", 'what the brain expects next, and its surprise', ('prior work, IDyOM', None)),
+         ('A graph of MusicGen states', 'how one internal state follows the next', ('Planned', 'plan'))]
+for k, (name, line, (st, kind)) in enumerate(SEVEN):
+    cx, cy = 40 + (k // 4) * 560, 34 + (k % 4) * 110
+    col, bg = ('#C45200', '#FDF3EA') if k < 2 else (MU, '#F4F0F9')
+    edge = 'stroke-dasharray="5 4"' if kind == 'plan' else ''
+    g += f'<rect x="{cx}" y="{cy}" width="540" height="98" rx="4" fill="{bg}" stroke="{col if kind == "plan" else "none"}" stroke-width="1.2" {edge}/>'
+    g += C(cx + 18, cy + 18, 11, col, 'none', 0) + T(cx + 18, cy + 22.5, str(k + 1), 12.5, 700, '#fff', 'middle')
+    g += _g7(k + 1, cx + 82, cy + 50, col)
+    g += T(cx + 150, cy + 42, name, 20, 600, INK) + T(cx + 150, cy + 68, line, 14, 400, MUT)
+    g += tag(cx + 520 - (len(st) * 7.2 + 20), cy + 10, st, kind) if kind else T(cx + 520, cy + 88, st, 12.5, 400, MUT, 'end')
+cx, cy = 600, 364
+g += T(cx + 20, cy + 34, 'Part 1 asked it of language, Part 2 of music.', 16, 400, INK)
+g += T(cx + 20, cy + 64, 'The same question fits any generative model:', 16, 400, INK)
+g += T(cx + 20, cy + 92, 'is there a graph inside?', 19, 700, MU)
 g += T(1140, 476, 'zhiqian.ai', 13, 400, MUT, 'end')
-TAKEAWAY = sec('Language and music are two of many places a graph may hide', SVG(g), ch='4',
-               notes='One sentence before the map, no more: in language the graph inside is published and ranks risky edits, it does not repair them, in music it is in progress and the judge is planned. Then the seven graphs in one breath, one number each, the same numbers as the tags: knowledge, delta, note transition, reachability, helix and cycle, the listener\'s, and the one we plan inside MusicGen. Then the map. No conclusion slide, just the map of what is left. Text and music were today. Equations, code, images, space, motion and molecules each already have a natural graph, and each has its own generative models. Every one of these is a place where the same question can be asked, and where someone in this department may already have the data or the expertise.')
+TAKEAWAY = sec('Seven graphs today, from facts to the listening brain', SVG(g), ch='4',
+               notes='One sentence first: in language the graph inside is published and ranks risky edits, it does not repair them, in music it is in progress and the judge is planned. Then walk the seven cards by number, a few words each, the same numbers as the tags on earlier slides. One and two are ours in language. Three and four are ours in music. Five and six are other people\'s work that we build on, say so. Seven is the plan, the dashed card. Close on the question in the last box: it fits any generative model, and someone in this department may already have the model or the data to ask it.')
 
 # ======================= ROUND 4 (Nov 2 2026): Space Needle anchor =======================
 RED = '#c0392b'
