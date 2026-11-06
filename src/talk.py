@@ -990,18 +990,24 @@ g = adefs('tk2')
 g += T(40, 30, 'Covered today', 15, 600, MUT)
 g += R(40, 44, 360, 52, '#FDEBDD', 'none', 0, 3) + T(58, 76, 'Text', 19, 600, '#C45200') + T(118, 76, 'Part 1: facts inside a language model', 13.5, 400, INK)
 g += R(416, 44, 360, 52, '#EEE8F6', 'none', 0, 3) + T(434, 76, 'Music', 19, 600, MU) + T(512, 76, 'Part 2: style, expectation, the brain', 13.5, 400, INK)
-g += T(40, 122, 'Seven graphs today: knowledge, delta, note transition, reachability, helix and cycle, the listener\'s, inside MusicGen', 13.5, 400, MUT)
-g += T(40, 150, 'Not covered, and each already carries a graph', 15, 600, MUT)
+g += T(40, 126, 'Seven graphs today', 15, 600, MUT)
+SEVEN = ['knowledge', 'delta', 'note transition', 'reachability', 'helix and cycle', "the listener's", 'in MusicGen']
+for k, nm in enumerate(SEVEN):
+    col, bg = ('#C45200', '#FDEBDD') if k < 2 else (MU, '#EEE8F6')
+    x0 = 186 + k * 136
+    g += R(x0, 106, 130, 30, bg, 'none', 0, 15) + C(x0 + 15, 121, 10, col, 'none', 0) + T(x0 + 15, 125.5, str(k + 1), 12, 700, '#fff', 'middle')
+    g += T(x0 + 31, 126, nm, 12.5, 600, INK)
+g += T(40, 176, 'Not covered, and each already carries a graph', 15, 600, MUT)
 KINDS = [('eq', 'Equations', 'each step rests on earlier ones'), ('code', 'Code', 'functions call other functions'),
          ('img', 'Images', 'objects relate in a scene'), ('space', 'Space', 'places connect into a map'),
          ('motion', 'Motion', 'joints chain into a skeleton'), ('mol', 'Molecules', 'atoms bond into a molecule')]
 for k, (kind, name, line) in enumerate(KINDS):
-    cx, cy = 40 + (k % 3) * 372, 164 + (k // 3) * 146
-    g += R(cx, cy, 356, 134, SOFT, 'none', 0, 3) + _gi(kind, cx + 62, cy + 67, AC2)
-    g += T(cx + 124, cy + 58, name, 21, 600, INK) + T(cx + 124, cy + 86, line, 14, 400, MUT)
-g += T(1140, 470, 'zhiqian.ai', 13, 400, MUT, 'end')
+    cx, cy = 40 + (k % 3) * 372, 190 + (k // 3) * 138
+    g += R(cx, cy, 356, 126, SOFT, 'none', 0, 3) + _gi(kind, cx + 62, cy + 63, AC2)
+    g += T(cx + 124, cy + 56, name, 21, 600, INK) + T(cx + 124, cy + 84, line, 14, 400, MUT)
+g += T(1140, 476, 'zhiqian.ai', 13, 400, MUT, 'end')
 TAKEAWAY = sec('Language and music are two of many places a graph may hide', SVG(g), ch='4',
-               notes='One sentence before the map, no more: in language the graph inside is published and ranks risky edits, it does not repair them, in music it is in progress and the judge is planned. Then the map. No conclusion slide, just the map of what is left. Text and music were today. Equations, code, images, space, motion and molecules each already have a natural graph, and each has its own generative models. Every one of these is a place where the same question can be asked, and where someone in this department may already have the data or the expertise.')
+               notes='One sentence before the map, no more: in language the graph inside is published and ranks risky edits, it does not repair them, in music it is in progress and the judge is planned. Then the seven graphs in one breath, one number each, the same numbers as the tags: knowledge, delta, note transition, reachability, helix and cycle, the listener\'s, and the one we plan inside MusicGen. Then the map. No conclusion slide, just the map of what is left. Text and music were today. Equations, code, images, space, motion and molecules each already have a natural graph, and each has its own generative models. Every one of these is a place where the same question can be asked, and where someone in this department may already have the data or the expertise.')
 
 # ======================= ROUND 4 (Nov 2 2026): Space Needle anchor =======================
 RED = '#c0392b'
