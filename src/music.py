@@ -35,7 +35,7 @@ def SVG(inner, h=478):
     return f'<svg viewBox="0 0 1180 {h}" style="width:100%;max-width:1160px;height:auto;max-height:{h}px;display:block;margin:0 auto">{inner}</svg>'
 
 def sec(title, svg, ch='5', status='', ref='', cls='', notes='', q='', take=''):
-    st = {'pub': '<span class="status published">Published</span>', 'rev': '<span class="status review">Under review</span>', 'acc': '<span class="status published">Accepted, CIKM 2026</span>',
+    st = {'pub': '<span class="status published">Published</span>', 'rev': '<span class="status review">Under review</span>', 'acc': '<span class="status published">Published, CIKM 2026</span>',
           'prog': '<span class="status progress">In progress</span>', 'open': '<span class="status open">Open question</span>'}.get(status, '')
     c = f' class="{cls}"' if cls else ''
     out = f'<section{c} data-ch="{ch}">\n  <h2>{title}</h2>{st}\n'
