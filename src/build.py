@@ -386,7 +386,7 @@ GTAGS = [('Knowledge is a graph, and an edit has to follow it', 1, 'knowledge gr
          ('Inside a music generator, music theory has a shape', 5, 'pitch helix and circle of fifths'),
          ('Steering leaves a style easily', 4, 'style reachability graph, our hypothesis'),
          ('A note transition graph predicts the listening brain', 6, "the listener's expectation graph, IDyOM"),
-         ('Our plan: a graph from inside MusicGen', 7, 'a graph of MusicGen states, planned')]
+]
 _GICON = '<svg viewBox="0 0 22 14"><line x1="3" y1="11" x2="11" y2="3" stroke="currentColor" stroke-width="1.3"/><line x1="11" y1="3" x2="19" y2="11" stroke="currentColor" stroke-width="1.3"/><line x1="3" y1="11" x2="19" y2="11" stroke="currentColor" stroke-width="1.3"/><circle cx="3" cy="11" r="2.4" fill="currentColor"/><circle cx="11" cy="3" r="2.4" fill="currentColor"/><circle cx="19" cy="11" r="2.4" fill="currentColor"/></svg>'
 _seen = set()
 def _gtag(x):
@@ -399,7 +399,7 @@ def _gtag(x):
         if key in h.group(1):
             again = n in _seen
             _seen.add(n)
-            lab = f'{_GICON}<b>graph {n} of 7</b> {name}' + (', again' if again else '')
+            lab = f'{_GICON}<b>graph {n} of 6</b> {name}' + (', again' if again else '')
             return x.replace('</h2>', f'</h2><span class="graphtag">{lab}</span>', 1)
     return x
 allsecs = [SV.ref_separators(SV.fixups(SV.restyle(x, cover='titlehero' in x[:200]))) for x in allsecs]

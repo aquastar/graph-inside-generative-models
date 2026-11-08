@@ -1034,30 +1034,24 @@ def _g7(k, x, y, col):
     return o
 
 g = adefs('tk2')
-SEVEN = [('Knowledge graph', 'facts as edges: Space Needle, Seattle, USA', ('Published, CIKM 2026', 'done')),
-         ('Delta graph', 'what an edit rewired inside the model', ('Published', 'done')),
-         ('Note transition graph', 'which note follows which, a Markov chain', (None, None)),
-         ('Style reachability graph', 'which styles steering can reach, and from where', (None, None)),
-         ('Pitch helix and circle of fifths', 'music theory as shape inside MusicGen', ('prior work, 2024 to 2026', None)),
-         ("The listener's expectation graph", 'what the brain expects next, and its surprise', ('prior work, IDyOM', None)),
-         ('A graph of MusicGen states', 'how one internal state follows the next', (None, 'plan'))]
-for k, (name, line, (st, kind)) in enumerate(SEVEN):
-    cx, cy = 40 + (k // 4) * 560, 34 + (k % 4) * 110
+SEVEN = [('Knowledge graph', 'facts as edges: Space Needle, Seattle, USA'),
+         ('Delta graph', 'what an edit rewired inside the model'),
+         ('Note transition graph', 'which note follows which, a Markov chain'),
+         ('Style reachability graph', 'which styles steering can reach, and from where'),
+         ('Pitch helix and circle of fifths', 'music theory as shape inside MusicGen'),
+         ("The listener's expectation graph", 'what the brain expects next, and its surprise')]
+for k, (name, line) in enumerate(SEVEN):
+    cx, cy = 40 + (k % 2) * 560, 30 + (k // 2) * 120
     col, bg = ('#C45200', '#FDF3EA') if k < 2 else (MU, '#F4F0F9')
-    edge = 'stroke-dasharray="5 4"' if kind == 'plan' else ''
-    g += f'<rect x="{cx}" y="{cy}" width="540" height="98" rx="4" fill="{bg}" stroke="{col if kind == "plan" else "none"}" stroke-width="1.2" {edge}/>'
+    g += R(cx, cy, 540, 106, bg, 'none', 0, 4)
     g += C(cx + 18, cy + 18, 11, col, 'none', 0) + T(cx + 18, cy + 22.5, str(k + 1), 12.5, 700, '#fff', 'middle')
-    g += _g7(k + 1, cx + 82, cy + 50, col)
-    g += T(cx + 150, cy + 42, name, 20, 600, INK) + T(cx + 150, cy + 68, line, 14, 400, MUT)
-    if st and kind: g += tag(cx + 520 - (len(st) * 7.2 + 20), cy + 10, st, kind)
-    elif st: g += T(cx + 520, cy + 88, st, 12.5, 400, MUT, 'end')
-cx, cy = 600, 364
-g += T(cx + 20, cy + 34, 'Part 1 asked it of language, Part 2 of music.', 16, 400, INK)
-g += T(cx + 20, cy + 64, 'The same question fits any generative model:', 16, 400, INK)
-g += T(cx + 20, cy + 92, 'is there a graph inside?', 19, 700, MU)
+    g += _g7(k + 1, cx + 82, cy + 54, col)
+    g += T(cx + 150, cy + 46, name, 20, 600, INK) + T(cx + 150, cy + 72, line, 14, 400, MUT)
+g += T(590, 418, 'Part 1 asked it of language, Part 2 of music. The same question fits any generative model:', 16, 400, INK, 'middle')
+g += T(590, 450, 'is there a graph inside?', 20, 700, MU, 'middle')
 g += T(1140, 476, 'zhiqian.ai', 13, 400, MUT, 'end')
-TAKEAWAY = sec('Seven graphs today, from facts to the listening brain', SVG(g), ch='4',
-               notes='One sentence first: in language the graph inside is published and ranks risky edits, it does not repair them, in music it is in progress and the judge is planned. Then walk the seven cards by number, a few words each, the same numbers as the tags on earlier slides. One and two are ours in language, both published. Three and four are ours in music, not yet published, so no label. Five and six are other people\'s work that we build on, say so. Seven is the plan, the dashed card. Close on the question in the last box: it fits any generative model, and someone in this department may already have the model or the data to ask it.')
+TAKEAWAY = sec('Six graphs today, from facts to the listening brain', SVG(g), ch='4',
+               notes='Walk the six cards by number, a few words each, the same numbers as the tags on earlier slides. One and two are language, three to six are music. Then close on the question at the bottom: it fits any generative model, and someone in this department may already have the model or the data to ask it.')
 
 # ======================= ROUND 4 (Nov 2 2026): Space Needle anchor =======================
 RED = '#c0392b'
