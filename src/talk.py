@@ -1594,12 +1594,10 @@ g += steps(0)
 c1 = person(30, 50, 545, 282, 'howard-gardner.jpg', 'HG', 'Howard Gardner', ['Harvard psychologist, theory of multiple intelligences'], AC2)
 c1 += chips(52, 182, [('linguistic', 'L'), ('logical mathematical', 'E'), ('musical', 'M'), ('spatial', ''), ('bodily', ''), ('interpersonal', ''), ('intrapersonal', '')], 490)
 c1 += T(52, 268, 'Intelligence is plural. Each kind has its own', 15.5, 600, INK) + T(52, 290, 'brain systems and its own symbols, so one', 15.5, 600, INK) + T(52, 312, 'kind cannot stand in for another.', 15.5, 600, INK)
-c1 += T(555, 318, 'Frames of Mind, 1983', 12.5, 400, MUT, 'end')
 g += c1
 c2 = person(605, 50, 545, 282, 'fei-fei-li.jpg', 'FL', 'Fei-Fei Li', ['Stanford professor, creator of ImageNet,', 'cofounder of World Labs'], AC2)
 c2 += chips(627, 182, [('linguistic', 'L'), ('spatial', ''), ('emotional, still missing', 'M')], 490)
 c2 += quote(645, 236, [[('Spatial intelligence is', False)], [("AI's next frontier", True), ('.', False)]], 18, 26)
-c2 += T(1130, 318, "From Words to Worlds, essay, 2025. Lenny's Podcast, Nov 2025", 12.5, 400, MUT, 'end')
 g += F(1, c2)
 g += F(2, T(590, 400, 'Music is knowledge beyond text, and the kind that carries emotion.', 20, 700, INK, 'middle'))
 BEYOND2 = sec('Knowledge is not only text', SVG(g), ch='0',
@@ -1609,23 +1607,17 @@ BEYOND2 = sec('Knowledge is not only text', SVG(g), ch='0',
 # ---- slide 10 ----
 g = adefs('pe')
 g += steps(1)
-w3 = 365
-c1 = person(30, 50, w3, 282, 'rosalind-picard.jpg', 'RP', 'Rosalind Picard', ['MIT Media Lab, founder of', 'affective computing'], AC2)
-c1 += quote(62, 186, [[('we give computers the ability', False)], [('to ', False), ('recognize, express,', True)], [('and in some cases,', False)], [("'have' emotions", True)]], 15.5, 23)
-c1 += T(375, 320, 'Affective Computing, MIT Press, 1997', 12, 400, MUT, 'end')
+c1 = person(30, 50, 545, 230, 'rosalind-picard.jpg', 'RP', 'Rosalind Picard', ['MIT Media Lab, founder of affective computing'], AC2)
+c1 += quote(70, 186, [[('we give computers the ability to ', False), ('recognize, express,', True)], [('and in some cases, ', False), ("'have' emotions", True)]], 17, 26)
 g += c1
-c2 = person(407, 50, w3, 282, 'marvin-minsky.jpg', 'MM', 'Marvin Minsky', ['MIT, cofounder of the AI Lab,', 'Turing Award 1969'], AC2)
-c2 += quote(439, 186, [[('Each of our major', False)], [('emotional states', True), (' results', False)], [('from turning certain', False)], [('resources on', True), (' while turning', False)], [('certain others off.', False)]], 15.5, 22)
-c2 += T(752, 320, 'The Emotion Machine, 2006', 12, 400, MUT, 'end')
+c2 = person(605, 50, 545, 230, 'marvin-minsky.jpg', 'MM', 'Marvin Minsky', ['MIT, cofounder of the AI Lab, Turing Award 1969'], AC2)
+c2 += quote(645, 186, [[('Each of our major ', False), ('emotional states', True), (' results from', False)], [('turning certain ', False), ('resources on', True), (' while turning others off.', False)]], 17, 26)
 g += F(1, c2)
-c3 = person(785, 50, w3, 282, 'leonard-meyer.jpg', 'LM', 'Leonard Meyer', ['Music theorist, University of', 'Chicago and Penn'], MU)
-c3 += quote(817, 186, [[('affect is aroused when an', False)], [('expectation', True), (', a tendency to', False)], [('respond, is ', False), ('temporarily', True)], [('inhibited or permanently', True)], [('blocked', True)]], 15.5, 22)
-c3 += T(1130, 320, 'Emotion and Meaning in Music, 1956, p. 31', 12, 400, MUT, 'end')
-g += F(2, c3)
+g += F(2, T(590, 330, 'And in music, since 1956: emotion comes from expectation that is held back or broken.', 17, 400, MU, 'middle'))
 g += F(3, T(590, 400, 'Emotion lives in expectation: what comes next, and whether it arrives.', 20, 700, INK, 'middle'))
 EMOTION2 = sec('Music is where emotion can be measured', SVG(g), ch='0',
                ref='Picard, Affective Computing, MIT Press 1997, introduction. Minsky, The Emotion Machine, 2006. Meyer, Emotion and Meaning in Music, 1956, p. 31, via Margulis 2005. Huron, Sweet Anticipation, 2006. Photos: Wikimedia Commons',
-               notes='Step 2 of 4. Two AI pioneers say machines need emotion. A music theorist explains where musical emotion comes from: expectation that is held back or broken. Expectation is exactly what a note transition graph computes, and its effect is measurable in the brain. That is why music is the place where a brain can judge whether a model has a graph inside.')
+               notes='Step 2 of 4. Two AI pioneers say machines need emotion. Then the music side, one line: the music theorist Leonard Meyer, in 1956, said musical emotion comes from expectation that is held back or broken. Expectation is exactly what a note transition graph computes, and its effect is measurable in the brain. That is why music is the place where a brain can judge whether a model has a graph inside.')
 
 # ---- Nov 4 (his request): optogenetics, then music medicine ----
 g = adefs('op')
