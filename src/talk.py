@@ -1591,13 +1591,13 @@ def quote(x, y, lines, size=15.5, lh=22):
 # ---- slide 9 ----
 g = adefs('pe')
 g += steps(0)
-c1 = person(30, 50, 545, 230, 'howard-gardner.jpg', 'HG', 'Howard Gardner', ['Harvard psychologist, theory of multiple intelligences'], AC2)
-c1 += T(70, 200, 'His theory: intelligence is plural. Linguistic, logical,', 17, 400, INK) + T(70, 226, 'spatial and musical are separate kinds.', 17, 400, INK)
+c1 = person(30, 50, 545, 180, 'howard-gardner.jpg', 'HG', 'Howard Gardner', ['Harvard psychologist, theory of multiple intelligences'], AC2)
+c1 += T(162, 160, 'His theory: intelligence is plural.', 18, 400, INK) + T(162, 186, 'Linguistic, logical, spatial and musical', 18, 400, INK) + T(162, 212, 'are separate kinds.', 18, 400, INK)
 g += c1
-c2 = person(605, 50, 545, 230, 'fei-fei-li.jpg', 'FL', 'Fei-Fei Li', ['Stanford, creator of ImageNet, cofounder of World Labs'], AC2)
-c2 += quote(645, 186, [[('Spatial intelligence is ', False), ("AI's next frontier", True), ('.', False)]], 17, 26)
+c2 = person(605, 50, 545, 180, 'fei-fei-li.jpg', 'FL', 'Fei-Fei Li', ['Stanford, creator of ImageNet, cofounder of World Labs'], AC2)
+c2 += quote(760, 160, [[('Spatial intelligence is', False)], [("AI's next frontier", True), ('.', False)]], 21, 28)
 g += F(1, c2)
-g += F(2, T(590, 400, 'Music is knowledge beyond text, and the kind that carries emotion.', 20, 700, INK, 'middle'))
+g += F(2, T(590, 300, 'Music is knowledge beyond text, and the kind that carries emotion.', 20, 700, INK, 'middle'))
 BEYOND2 = sec('Knowledge is not only text', SVG(g), ch='0',
               ref='Gardner, Frames of Mind, 1983. Fei-Fei Li, From Words to Worlds: Spatial Intelligence is AI\'s Next Frontier, Substack essay, Nov 2025, and Lenny\'s Podcast, Nov 2025. Photos: Wikimedia Commons',
               notes='Step 1 of 4. A psychologist and an AI leader say the same thing from two sides: intelligence and knowledge come in several kinds, and language is only one. Gardner counts musical and logical mathematical intelligence as their own kinds. Fei-Fei Li calls spatial intelligence the next frontier beyond language. Of these kinds, music is the one that carries emotion, which is the next slide.')
@@ -1605,14 +1605,14 @@ BEYOND2 = sec('Knowledge is not only text', SVG(g), ch='0',
 # ---- slide 10 ----
 g = adefs('pe')
 g += steps(1)
-c1 = person(30, 50, 545, 230, 'rosalind-picard.jpg', 'RP', 'Rosalind Picard', ['MIT Media Lab, founder of affective computing'], AC2)
-c1 += quote(70, 186, [[('we give computers the ability to ', False), ('recognize, express,', True)], [('and in some cases, ', False), ("'have' emotions", True)]], 17, 26)
+c1 = person(30, 50, 545, 180, 'rosalind-picard.jpg', 'RP', 'Rosalind Picard', ['MIT Media Lab, founder of affective computing'], AC2)
+c1 += quote(185, 160, [[('we give computers the ability to', False)], [('recognize, express,', True), (' and in some cases,', False)], [("'have' emotions", True)]], 18, 26)
 g += c1
-c2 = person(605, 50, 545, 230, 'marvin-minsky.jpg', 'MM', 'Marvin Minsky', ['MIT, cofounder of the AI Lab, Turing Award 1969'], AC2)
-c2 += quote(645, 186, [[('Each of our major ', False), ('emotional states', True), (' results from', False)], [('turning certain ', False), ('resources on', True), (' while turning others off.', False)]], 17, 26)
+c2 = person(605, 50, 545, 180, 'marvin-minsky.jpg', 'MM', 'Marvin Minsky', ['MIT, cofounder of the AI Lab, Turing Award 1969'], AC2)
+c2 += quote(760, 160, [[('Each of our major ', False), ('emotional states', True)], [('results from turning certain ', False), ('resources on', True)], [('while turning others off.', False)]], 18, 26)
 g += F(1, c2)
-g += F(2, T(590, 330, 'And in music, since 1956: emotion comes from expectation that is held back or broken.', 17, 400, MU, 'middle'))
-g += F(3, T(590, 400, 'Emotion lives in expectation: what comes next, and whether it arrives.', 20, 700, INK, 'middle'))
+g += F(2, T(590, 290, 'And in music, since 1956: emotion comes from expectation that is held back or broken.', 17, 400, MU, 'middle'))
+g += F(3, T(590, 340, 'Emotion lives in expectation: what comes next, and whether it arrives.', 20, 700, INK, 'middle'))
 EMOTION2 = sec('Music is where emotion can be measured', SVG(g), ch='0',
                ref='Picard, Affective Computing, MIT Press 1997, introduction. Minsky, The Emotion Machine, 2006. Meyer, Emotion and Meaning in Music, 1956, p. 31, via Margulis 2005. Huron, Sweet Anticipation, 2006. Photos: Wikimedia Commons',
                notes='Step 2 of 4. Two AI pioneers say machines need emotion. Then the music side, one line: the music theorist Leonard Meyer, in 1956, said musical emotion comes from expectation that is held back or broken. Expectation is exactly what a note transition graph computes, and its effect is measurable in the brain. That is why music is the place where a brain can judge whether a model has a graph inside.')
