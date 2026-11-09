@@ -1591,18 +1591,16 @@ def quote(x, y, lines, size=15.5, lh=22):
 # ---- slide 9 ----
 g = adefs('pe')
 g += steps(0)
-c1 = person(30, 50, 545, 282, 'howard-gardner.jpg', 'HG', 'Howard Gardner', ['Harvard psychologist, theory of multiple intelligences'], AC2)
-c1 += chips(52, 182, [('linguistic', 'L'), ('logical mathematical', 'E'), ('musical', 'M'), ('spatial', ''), ('bodily', ''), ('interpersonal', ''), ('intrapersonal', '')], 490)
-c1 += T(52, 268, 'Intelligence is plural. Each kind has its own', 15.5, 600, INK) + T(52, 290, 'brain systems and its own symbols, so one', 15.5, 600, INK) + T(52, 312, 'kind cannot stand in for another.', 15.5, 600, INK)
+c1 = person(30, 50, 545, 230, 'howard-gardner.jpg', 'HG', 'Howard Gardner', ['Harvard psychologist, theory of multiple intelligences'], AC2)
+c1 += T(70, 200, 'His theory: intelligence is plural. Linguistic, logical,', 17, 400, INK) + T(70, 226, 'spatial and musical are separate kinds.', 17, 400, INK)
 g += c1
-c2 = person(605, 50, 545, 282, 'fei-fei-li.jpg', 'FL', 'Fei-Fei Li', ['Stanford professor, creator of ImageNet,', 'cofounder of World Labs'], AC2)
-c2 += chips(627, 182, [('linguistic', 'L'), ('spatial', ''), ('emotional, still missing', 'M')], 490)
-c2 += quote(645, 236, [[('Spatial intelligence is', False)], [("AI's next frontier", True), ('.', False)]], 18, 26)
+c2 = person(605, 50, 545, 230, 'fei-fei-li.jpg', 'FL', 'Fei-Fei Li', ['Stanford, creator of ImageNet, cofounder of World Labs'], AC2)
+c2 += quote(645, 186, [[('Spatial intelligence is ', False), ("AI's next frontier", True), ('.', False)]], 17, 26)
 g += F(1, c2)
 g += F(2, T(590, 400, 'Music is knowledge beyond text, and the kind that carries emotion.', 20, 700, INK, 'middle'))
 BEYOND2 = sec('Knowledge is not only text', SVG(g), ch='0',
               ref='Gardner, Frames of Mind, 1983. Fei-Fei Li, From Words to Worlds: Spatial Intelligence is AI\'s Next Frontier, Substack essay, Nov 2025, and Lenny\'s Podcast, Nov 2025. Photos: Wikimedia Commons',
-              notes='Step 1 of 4. A psychologist and an AI leader say the same thing from two sides: intelligence and knowledge come in several kinds, and language is only one. Gardner counts musical and logical mathematical intelligence as their own kinds. Fei-Fei Li names linguistic and spatial intelligence and says emotional intelligence is still missing in AI, and calls space the frontier beyond language. Of these kinds, music is the one that carries emotion, which is the next slide.')
+              notes='Step 1 of 4. A psychologist and an AI leader say the same thing from two sides: intelligence and knowledge come in several kinds, and language is only one. Gardner counts musical and logical mathematical intelligence as their own kinds. Fei-Fei Li calls spatial intelligence the next frontier beyond language. Of these kinds, music is the one that carries emotion, which is the next slide.')
 
 # ---- slide 10 ----
 g = adefs('pe')
