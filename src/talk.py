@@ -1673,27 +1673,28 @@ def cover(x, y, w, h, fname, label):
             f'<img src="figs/books/{fname}" alt="" onerror="this.remove()" style="position:absolute;left:0;top:0;width:{w}px;height:{h}px;max-width:none;max-height:none;margin:0;padding:0;border:0;box-shadow:none;object-fit:cover"/></div></foreignObject>')
 
 g = ''
-BK = [('creativity-book.jpg', 'Young, 1940', ['a new combination', 'of old elements']),
-      ('johnson-good-ideas.jpg', 'Johnson, 2010', ['one step beyond', 'what already exists']),
+BK = [('creativity-book.jpg', 'Young, 1940', ['new combination', 'of old elements']),
+      ('koestler-act-of-creation.jpg', 'Koestler, 1964', ['bisociation: two', 'frames joined']),
       ('boden-creative-mind.jpg', 'Boden, 1990', ['combinational', 'creativity']),
-      ('uzzi-science-2013.jpg', 'Uzzi et al., Science 2013', ['top papers add a few', 'never paired references'])]
+      ('johnson-good-ideas.jpg', 'Johnson, 2010', ['one step beyond', 'what exists']),
+      ('uzzi-science-2013.jpg', 'Uzzi, Science 2013', ['top papers pair', 'what was never paired'])]
 for k, (f, who, lines) in enumerate(BK):
-    x = 40 + k * 150
-    g += F(k, cover(x, 40, 132, 200, f, 'cover') + T(x, 266, who, 13, 400, MUT)
-           + T(x, 290, lines[0], 14.5, 700, INK) + T(x, 311, lines[1], 14.5, 700, INK))
-N = [(670, 120), (760, 80), (840, 150), (730, 210), (890, 90), (950, 200), (810, 270), (680, 300), (920, 300), (1010, 120), (1050, 260)]
+    x = 40 + k * 128
+    g += F(min(k, 2), cover(x, 40, 116, 176, f, 'cover') + T(x, 240, who, 12.5, 400, MUT)
+           + T(x, 262, lines[0], 13.5, 700, INK) + T(x, 281, lines[1], 13.5, 700, INK))
+N = [(720, 120), (810, 80), (890, 150), (780, 210), (940, 90), (1000, 200), (860, 270), (730, 300), (970, 300), (1060, 120), (1100, 260)]
 E = [(0, 1), (1, 2), (0, 3), (2, 3), (1, 4), (2, 5), (3, 6), (6, 7), (5, 8), (4, 9), (5, 10), (9, 10), (6, 8), (3, 7)]
 gg = ''.join(L(*N[a_], *N[b_], '#c9c2b8', 1.4) for a_, b_ in E)
 A, B = N[7], N[9]
 gg += ''.join(C(x, y, 8, '#fff', '#9b948a', 1.6) for k, (x, y) in enumerate(N) if k not in (7, 9))
-gg += P(f'M{A[0]},{A[1]} Q860,30 {B[0]},{B[1]}', ACC, 3, extra='stroke-dasharray="7 5"') + C(*A, 11, ACC, 'none', 0) + C(*B, 11, ACC, 'none', 0)
-gg += T(850, 62, 'A + B', 20, 700, ACC, 'middle')
-gg += T(860, 350, 'Everything you have read is a node.', 16, 400, INK, 'middle') + T(860, 376, 'A new idea is an edge nobody has drawn.', 16, 700, INK, 'middle')
-g += F(4, gg)
-g += F(5, T(590, 440, 'Three books and one study, one rule: A + B. Papers, proposals and music are made this way.', 19, 700, INK, 'middle'))
+gg += P(f'M{A[0]},{A[1]} Q910,30 {B[0]},{B[1]}', ACC, 3, extra='stroke-dasharray="7 5"') + C(*A, 11, ACC, 'none', 0) + C(*B, 11, ACC, 'none', 0)
+gg += T(900, 62, 'A + B', 20, 700, ACC, 'middle')
+gg += T(910, 350, 'Everything you have read is a node.', 16, 400, INK, 'middle') + T(910, 376, 'A new idea is an edge nobody has drawn.', 16, 700, INK, 'middle')
+g += F(3, gg)
+g += F(4, T(590, 440, 'Four books and one study, one rule: A + B.', 19, 700, INK, 'middle'))
 CREATE = sec('Creativity is a new edge between ideas', SVG(g), ch='0',
-             ref='Young, A Technique for Producing Ideas, 1940. Johnson, Where Good Ideas Come From: The Natural History of Innovation, 2010. Boden, The Creative Mind: Myths and Mechanisms, 1990, 2nd ed. 2004. Uzzi, Mukherjee, Stringer, Jones, Atypical Combinations and Scientific Impact, Science 342, 2013',
-             notes='Three books on creativity, written decades apart, say the same thing. Young, an ad man in 1940: a new idea is a new combination of old elements. Johnson in 2010: new ideas grow from the adjacent possible, one step beyond what already exists. Boden, an AI and cognitive science researcher, calls it combinational creativity, and adds exploratory creativity, searching inside a space, which is exactly the reachability question later in this part. Then the evidence: Uzzi and colleagues looked at millions of papers in Science 2013. The most cited ones are mostly conventional, with a few combinations of references that nobody had put together before. Click: as a graph, everything you have read is a node, and a new idea is a missing edge, A plus B. Papers and proposals are made this way, and, next slide, so is new music.')
+             ref='Young, A Technique for Producing Ideas, 1940. Koestler, The Act of Creation, 1964. Johnson, Where Good Ideas Come From: The Natural History of Innovation, 2010. Boden, The Creative Mind: Myths and Mechanisms, 1990, 2nd ed. 2004. Uzzi, Mukherjee, Stringer, Jones, Atypical Combinations and Scientific Impact, Science 342, 2013',
+             notes='Four books on creativity, written over seventy years, say the same thing. Young, an ad man in 1940: a new idea is a new combination of old elements. Koestler in 1964 named it bisociation: joining two frames of thought that never met. Boden, an AI and cognitive science researcher, calls it combinational creativity, and adds exploratory creativity, searching inside a space, which is exactly the reachability question later in this part. Johnson in 2010: new ideas grow from the adjacent possible, one step beyond what already exists. Then the evidence: Uzzi and colleagues looked at millions of papers in Science 2013. The most cited ones are mostly conventional, with a few combinations of references that nobody had put together before. Click: as a graph, everything you have read is a node, and a new idea is a missing edge, A plus B. Next slide: the same rule in music.')
 
 g = ''
 G = {'blues': (90, 120), 'ragtime': (90, 200), 'brass band': (90, 280), 'R&B': (300, 60), 'country': (300, 140),
