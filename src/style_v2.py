@@ -17,7 +17,7 @@ FONTS = '''
 SERIF = '"et-book","Palatino Linotype",Palatino,Georgia,serif'
 # one family for everything (his choice, 2026-11-02). Source Sans 3 stays loaded as a fallback option.
 SANS = SERIF
-REF = '#4A483E'
+REF = '#A39E93'  # clearly lighter than body text (his rule 2026-11-14)
 
 CSS = FONTS + f'''
 /* ===== style v2 overrides ===== */
@@ -52,6 +52,8 @@ html,body,.reveal-viewport{{background:{BG} !important}}
 .reveal .status.open,.reveal .status.plan{{border-bottom:2px dashed {INK2} !important}}
 /* sidenote citation */
 .reveal .ref .rsep{{display:inline-block;width:1px;height:.85em;background:{AXIS};margin:0 .65em;vertical-align:-.1em}}
+.reveal .ref a{{color:inherit !important;text-decoration:none !important}}
+.reveal .ref a:hover{{text-decoration:underline !important}}
 .reveal .ref{{font:400 13.5px/1.3 {SERIF} !important;color:{REF} !important;text-align:right !important;margin-left:auto !important;max-width:66% !important}}
 /* no banners: takeaway is a quiet serif sentence */
 .reveal .takeaway{{background:none !important;border:0 !important;padding:0 !important;font-family:{SERIF};font-size-adjust:none;font-size:27px;font-weight:400 !important;color:{INK}}}
@@ -250,10 +252,22 @@ def fixups(sec):
 
 SEP = '<span class="rsep" aria-hidden="true"></span>'
 
+from urllib.parse import quote_plus
+def linkify(item):
+    """every cited work links to its source: arXiv id, DOI, otherwise a Google Scholar search"""
+    if '<a ' in item or not re.search(r'\b(19|20)\d\d\b|arXiv', item):
+        return item
+    plain = re.sub(r'<[^>]+>', '', item)
+    m = re.search(r'arXiv:? ?(\d{4}\.\d{4,5})', plain)
+    d = re.search(r'\b(10\.\d{4,9}/[^\s,]+)', plain)
+    url = (f'https://arxiv.org/abs/{m.group(1)}' if m else f'https://doi.org/{d.group(1)}' if d
+           else 'https://scholar.google.com/scholar?q=' + quote_plus(plain))
+    return f'<a href="{url}" target="_blank" rel="noopener">{item}</a>'
+
 def ref_separators(sec):
     """split a reference line into works at '. ' after a year or a closing parenthesis, join with a thin rule"""
     def one(m):
         items = re.split(r'(?:(?<=\b(?:19|20)\d\d)|(?<=\b(?:19|20)\d\d[a-z])|(?<=\)))\.\s+', m.group(2))
-        items = [i.strip().rstrip('.') for i in items if i.strip()]
+        items = [linkify(i.strip().rstrip('.')) for i in items if i.strip()]
         return m.group(1) + SEP.join(items) + m.group(3)
     return re.sub(r'(<div class="ref">)(.*?)(</div>)', one, sec, flags=re.S)
