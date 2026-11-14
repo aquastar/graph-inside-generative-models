@@ -663,11 +663,10 @@ for k, (a, eq, d1, d2, cite) in enumerate(cols4):
     blk += T(x + 132, 182, d1, 14.5, 600, INK, 'middle') + T(x + 132, 202, d2, 14.5, 600, INK, 'middle') + T(x + 132, 238, cite, 12.5, 400, MUT, 'middle')
     g += F(k, blk) if k else blk
 g += F(4, R(30, 285, 1120, 100, SOFT, LINE, 1, 12) + T(590, 323, 'Each one tells you exactly what was added.', 22, 700, INK, 'middle') + T(590, 362, 'None tells you which other facts, behaviors or styles moved with it.', 22, 700, ACC, 'middle')
-          + T(590, 420, 'Our own test: single numbers about the change barely beat chance (AUC 0.52 to 0.59).', 16, 600, MUT, 'middle')
-          + T(590, 456, 'Its shape, the delta graph, lifts editor and model alone from 0.703 to 0.797.', 19, 700, INK, 'middle'))
+          + T(590, 430, 'Mechanistic tools read models the same way: a probe, a feature, a steering direction is a vector.', 17, 600, MUT, 'middle'))
 VECTOR = sec('Every surgery is stored as a vector', SVG(g), ch='0',
-             ref='Arditi et al., NeurIPS 2024. Meng et al., NeurIPS 2022. Hu et al., LoRA, ICLR 2022. Ilharco et al., ICLR 2023. Benbrahim et al., SDM 2026, Table 5.1 and Table F.1',
-             notes='Four surgeries, four one line formulas a CS audience can read. ROME is a rank one LoRA on one layer, which links knowledge editing to something most of the room has used. The point is not the math, it is that each operation is a single added object, and that object carries no information about its side effects.')
+             ref='Arditi et al., NeurIPS 2024. Meng et al., NeurIPS 2022. Hu et al., LoRA, ICLR 2022. Ilharco et al., ICLR 2023',
+             notes='Context first. Four surgeries, four one line formulas a CS audience can read. ROME is a rank one LoRA on one layer, which links knowledge editing to something most of the room has used. The point is not the math, it is that each operation is a single added object, and that object carries no information about its side effects. The tools we use to understand models read them the same way: a linear probe, a sparse autoencoder feature, a steering direction, all vectors. Bridge: yet the knowledge these models hold has another shape, a graph, in text, in images and in music.')
 
 # ---- demo: a tiny graph is enough to represent a piece ----
 g = adefs('dm2')
@@ -900,14 +899,14 @@ for k, (a, st, kk, col) in enumerate(CLAIMS):
     y = 140 + k * 100
     g += F(k + 1, C(80, y + 30, 24, col) + T(80, y + 38, str(k + 1), 20, 700, '#fff', 'middle') + wrap(122, y + 24, a, 19, 600, INK, width=80, lh=26) + tag(122, y + 64, st, kk))
 mods = [('Text', 'today, Part 1', ACC, ACL, True), ('Music', 'today, Part 2', MU, MUL, True), ('Equations', 'proofs, physics', '#5a4fcf', '#fff', False),
-        ('Code', 'programs', AC2, '#fff', False), ('Images', 'vision', AC2, '#fff', False), ('Space', '3D, maps', AC2, '#fff', False),
+        ('Code', 'programs', AC2, '#fff', False), ('Images', 'today, opening', '#2f6f8f', '#EAF2F6', True), ('Space', '3D, maps', AC2, '#fff', False),
         ('Motion', 'bodies, robots', AC2, '#fff', False), ('Molecules', 'proteins, DNA', AC2, '#fff', False)]
 strip = T(30, 360, 'Kinds of knowledge a generative model holds', 14, 700, MUT)
 for k, (a, b, col, fill, solid) in enumerate(mods):
     x = 30 + k * 141
     strip += R(x, 372, 130, 62, fill, col, 2 if solid else 1.5, 12, '' if solid else 'stroke-dasharray="6 5" opacity=".75"')
     strip += T(x + 65, 399, a, 16, 700, col, 'middle', '' if solid else 'opacity=".8"') + T(x + 65, 420, b, 12, 400, INK if solid else MUT, 'middle')
-g += F(3, strip + T(590, 462, 'Two kinds today. Many more, and none is a substitute for another.', 17, 700, INK, 'middle'))
+g += F(3, strip + T(590, 462, 'Text and music in depth today, images in passing. None is a substitute for another.', 17, 700, INK, 'middle'))
 g += T(590, 136, 'A graph inside a model: nodes are its parts or states, edges are how they move together or follow each other.', 15, 600, MUT, 'middle')
 g += F(1, T(840, 166, 'nodes: parts of the network', 15, 600, '#C45200') + T(840, 188, 'edges: parts that fire together', 15, 600, '#C45200'))
 g += F(2, T(840, 266, 'nodes: notes, or states of a generator', 15, 600, MU) + T(840, 288, 'edges: what follows what', 15, 600, MU))
@@ -1024,6 +1023,13 @@ def _g7(k, x, y, col):
         for dy, w in ((-22, 1), (0, 3.4), (22, 1)): o += L(*Q[1], x + 18, y + dy, col, w)
         o += ''.join(n(*q, 5) for q in Q) + n(x + 18, y - 22, 4.5) + n(x + 18, y, 6.5, col) + n(x + 18, y + 22, 4.5)
         o += T(x + 34, y + 27, '!', 15, 700, RED, 'middle')
+    elif k == 8:  # vision: neurons wired into a circuit
+        for (x1, y1) in ((x - 26, y - 16), (x - 26, y + 16)):
+            for (x2, y2) in ((x, y - 22), (x, y), (x, y + 22)):
+                o += L(x1, y1, x2, y2, col, 1.1)
+        for (x1, y1) in ((x, y - 22), (x, y), (x, y + 22)):
+            o += L(x1, y1, x + 26, y, col, 1.6)
+        o += ''.join(n(px, py, 4.5) for px, py in ((x - 26, y - 16), (x - 26, y + 16), (x, y - 22), (x, y), (x, y + 22))) + n(x + 26, y, 6, col)
     elif k == 7:  # planned: a graph of how one MusicGen state follows the next
         for i in range(3):
             for j in range(3):
@@ -1034,24 +1040,24 @@ def _g7(k, x, y, col):
     return o
 
 g = adefs('tk2')
-SEVEN = [('Knowledge graph', 'facts as edges: Space Needle, Seattle, USA'),
-         ('Delta graph', 'what an edit rewired inside the model'),
-         ('Note transition graph', 'which note follows which, a Markov chain'),
-         ('Style reachability graph', 'which styles steering can reach, and from where'),
-         ('Pitch helix and circle of fifths', 'music theory as shape inside MusicGen'),
-         ("The listener's expectation graph", 'what the brain expects next, and its surprise')]
-for k, (name, line) in enumerate(SEVEN):
-    cx, cy = 40 + (k % 2) * 560, 30 + (k // 2) * 120
-    col, bg = ('#C45200', '#FDF3EA') if k < 2 else (MU, '#F4F0F9')
-    g += R(cx, cy, 540, 106, bg, 'none', 0, 4)
+SEVEN = [(1, 'Knowledge graph', 'facts as edges: Space Needle, Seattle, USA'),
+         (8, 'Circuit and scene graphs', 'neurons wired into circuits, objects linked'),
+         (3, 'Note transition graph', 'which note follows which, a Markov chain'),
+         (2, 'Delta graph', 'what an edit rewired inside the model'),
+         (5, 'Pitch helix and circle of fifths', 'music theory as shape inside MusicGen'),
+         (4, 'Style reachability graph', 'which styles steering can reach, and from where'),
+         (6, "The listener's expectation graph", 'what the brain expects next, and its surprise')]
+for k, (ic, name, line) in enumerate(SEVEN):
+    cx, cy = 40 + (k % 2) * 560, 24 + (k // 2) * 96
+    col, bg = [('#C45200', '#FDF3EA'), ('#2f6f8f', '#EAF2F6'), (MU, '#F4F0F9'), ('#C45200', '#FDF3EA')][min(k, 3)] if k < 4 else (MU, '#F4F0F9')
+    g += R(cx, cy, 540, 86, bg, 'none', 0, 4)
     g += C(cx + 18, cy + 18, 11, col, 'none', 0) + T(cx + 18, cy + 22.5, str(k + 1), 12.5, 700, '#fff', 'middle')
-    g += _g7(k + 1, cx + 82, cy + 54, col)
-    g += T(cx + 150, cy + 46, name, 20, 600, INK) + T(cx + 150, cy + 72, line, 14, 400, MUT)
-g += T(590, 418, 'Part 1 asked it of language, Part 2 of music. The same question fits any generative model:', 16, 400, INK, 'middle')
-g += T(590, 450, 'is there a graph inside?', 20, 700, MU, 'middle')
-g += T(1140, 476, 'zhiqian.ai', 13, 400, MUT, 'end')
-TAKEAWAY = sec('Six graphs today, from facts to the listening brain', SVG(g), ch='4',
-               notes='Walk the six cards by number, a few words each, the same numbers as the tags on earlier slides. One and two are language, three to six are music. Then close on the question at the bottom: it fits any generative model, and someone in this department may already have the model or the data to ask it.')
+    g += _g7(ic, cx + 82, cy + 45, col)
+    g += T(cx + 150, cy + 40, name, 19, 600, INK) + T(cx + 150, cy + 64, line, 14, 400, MUT)
+g += T(870, 360, 'The same question fits any generative model:', 16, 400, INK, 'middle')
+g += T(870, 388, 'is there a graph inside?', 20, 700, MU, 'middle')
+TAKEAWAY = sec('Seven graphs today, from facts to the listening brain', SVG(g), ch='4',
+               notes='Walk the seven cards by number, a few words each, the same numbers as the tags on earlier slides. One and four are language, two is vision, the rest are music. Then close on the question at the bottom: it fits any generative model, and someone in this department may already have the model or the data to ask it.')
 
 # ======================= ROUND 4 (Nov 2 2026): Space Needle anchor =======================
 RED = '#c0392b'
@@ -1665,6 +1671,46 @@ MEDIC = sec('Music already acts on the brain, as medicine', SVG(g), ch='0',
             ref='NCCIH, Music and Health: What the Science Says, 2022: Burrai 2021 (Parkinson\'s), Bradt, Dileo, Shim, Cochrane 2013 (surgery), Aalbers, Cochrane 2017 (depression), van der Steen, Cochrane 2018 (dementia), Lee 2016 (pain). Salimpoor et al., Nature Neuroscience 2011. Di Liberto et al., eLife 2020',
             notes='Step 4 of 4. Left, the mechanism in one chain: a melody sets up an expectation of what comes next, a fulfilled or delayed expectation releases dopamine at the peak of pleasure (Salimpoor 2011), and listeners\' brains track that expectation note by note (Di Liberto 2020). Right, music medicine in five lines, with the evidence quality said honestly: Parkinson\'s gait with rhythmic auditory stimulation, anxiety before surgery, depression, dementia, pain. Most trials are small and at risk of bias, and none tells us which part of the music works. That is where a model comes in. Bridge: music and the brain are this closely tied, so let us model music from the beginning, starting with the simplest graph, and end where music meets the brain.')
 
+# ---- Nov 14 (his request): vision models have graphs inside too ----
+VB = '#2f6f8f'
+g = ''
+def _card(x, title, sub):
+    return R(x, 30, 360, 330, '#fff', LINE, 1.2, 8) + T(x + 20, 62, title, 18, 700, INK) + T(x + 20, 84, sub, 13.5, 400, MUT)
+# 1. circuits of neurons (Olah et al. 2020)
+c = _card(30, 'Circuits of neurons', 'Olah et al., Zoom In, Distill 2020')
+layers = [[(90, 140), (90, 200), (90, 260)], [(210, 120), (210, 180), (210, 240), (210, 300)], [(330, 170), (330, 250)]]
+for a_ in range(2):
+    for p_ in layers[a_]:
+        for q_ in layers[a_ + 1]:
+            strong = (p_[1] - q_[1]) ** 2 < 4000
+            c += L(*p_, *q_, VB if strong else '#d9d4cc', 2.2 if strong else 1)
+for col_, nm in zip(layers, ('edges', 'curves', 'circles')):
+    c += ''.join(C(x, y, 9, '#fff', VB, 1.6) for x, y in col_)
+    c += T(col_[0][0], 340, nm, 13, 600, VB, 'middle')
+g += c
+# 2. scene graphs (Johnson et al. 2015)
+c = _card(410, 'Objects and their relations', 'Johnson et al., scene graphs, CVPR 2015')
+SG = {'man': (500, 170), 'horse': (660, 170), 'hat': (500, 290), 'field': (660, 290)}
+for a_, b_, rel in (('man', 'horse', 'riding'), ('man', 'hat', 'wearing'), ('horse', 'field', 'on')):
+    (x1, y1), (x2, y2) = SG[a_], SG[b_]
+    c += L(x1, y1, x2, y2, VB, 1.8) + T((x1 + x2) / 2 + (10 if x1 == x2 else 0), (y1 + y2) / 2 - 8, rel, 13, 600, VB, 'start' if x1 == x2 else 'middle')
+for nm, (x, y) in SG.items():
+    c += R(x - 42, y - 17, 84, 34, '#EAF2F6', VB, 1.5, 17) + T(x, y + 5, nm, 14, 600, VB, 'middle')
+g += F(1, c)
+# 3. image as a graph of patches (Han et al. 2022)
+c = _card(790, 'Patches as nodes', 'Han et al., Vision GNN, NeurIPS 2022')
+P_ = [(850 + i * 60, 130 + j * 60) for j in range(4) for i in range(5)]
+for i_, (x, y) in enumerate(P_):
+    c += R(x - 24, y - 24, 48, 48, '#F4F1EC', 'none', 0, 3)
+for a_, b_ in ((0, 7), (7, 13), (13, 19), (2, 7), (5, 11), (11, 17), (3, 9), (9, 15), (1, 12)):
+    c += L(*P_[a_], *P_[b_], VB, 1.6)
+c += ''.join(C(x, y, 5, VB, 'none', 0) for x, y in P_)
+g += F(2, c)
+g += F(3, T(590, 410, 'Inside vision models, researchers already find graphs:', 19, 400, INK, 'middle') + T(590, 440, 'neurons wired into circuits, and objects linked by relations.', 19, 700, INK, 'middle'))
+VISION = sec('Vision models have graphs inside too', SVG(g), ch='0',
+             ref='Olah et al., Zoom In: An Introduction to Circuits, Distill 2020. Johnson et al., Image Retrieval using Scene Graphs, CVPR 2015. Han et al., Vision GNN: An Image is Worth Graph of Nodes, NeurIPS 2022',
+             notes='One slide on images, because music and vision together cover the other big modalities. Left: in an image model, Olah and colleagues traced curve detectors built from edge detectors, and circle detectors built from curves: neurons wired into a circuit, which is a graph. Middle: scene graphs describe an image as objects linked by relations, man riding horse. Right: Vision GNN treats patches as nodes and links patches that look alike. So the graph view is already working in vision. Bridge: and music, the modality this talk goes deep on, has the simplest graph of all.')
+
 # ---- Nov 14 (his request): book, creativity as a new edge, then how new music forms arise ----
 def cover(x, y, w, h, fname, label):
     return (f'<foreignObject x="{x}" y="{y}" width="{w}" height="{h}"><div xmlns="http://www.w3.org/1999/xhtml" '
@@ -1792,7 +1838,9 @@ def assemble(cover, old):
     # trailer: the problem, the thesis, one best result per domain, the two claims
     vector = retitle(vector, 'Yet every change to a model is applied as a vector')
     # per domain: the structure is a graph, our graph sees the problem, yet the field uses vectors
-    vision = [cover, KGT, DELTA_T, vector, DEMO2, MSTEER, FORECAST2]
+    vector = retitle(vector, 'Today we change and explain models with vectors')
+    kgt_o = retitle(KGT, 'In text, knowledge has the shape of a graph')
+    vision = [cover, vector, kgt_o, VISION, DEMO2, FORECAST2]
     rome = old[33]
     a = rome.find('<div class="note"'); e = rome.find('  <div class="ref">')
     rome = rome[:a] + '<div class="note" style="font-size:.62em"><div class="key">The finding</div><p class="one" style="font-size:1.25em">A fact sits in two places. Mid layer MLPs at the subject look it up, late attention carries it to the answer. Editing a fact means changing the first place.</p></div>\n  </div>\n' + rome[e:]
@@ -1809,7 +1857,19 @@ def assemble(cover, old):
     vec2_b = bridge(VEC2, 'If not the vector, look where the fact lives. Causal tracing (Meng et al.) finds a fact in mid layer MLPs at the subject, the figure is under the down arrow on the next slide. The next slide shows why that is still not where editing works.')
     d46_q = bridge(d46, 'Nearest 2026 cousin, if asked: Circuit-Diff (Friedman and Song, arXiv 2609.23892, Sep 2026) also compares attribution graphs before and after a factual edit, but to label features, not to rank which edits went wrong. If asked how a partial correlation over 64 blocks is estimated from 12 prompts: it is not well posed alone, ridge with one fixed lambda shapes the graph, which is why the paper leans on held out evidence. Hard question to expect: is the delta graph real, or an artifact of the 12 probe prompts? Three answers from the paper. The probe prompts are disjoint from the prompts that define failure. Trained on 200 facts and tested on 500 new ones, the AUC holds at 0.840 to 0.862. Rerun the 50 riskiest edits from scratch and only 2 of 50 flip.')
     silent_b = bridge(toch(SILENT, '1'), 'And the usual fix, a vector, is unreliable too: it switches a behavior on average but sends many single inputs the wrong way (Tan et al., under the down arrow). So instead of the vector, look where the fact lives, which the next slide does.')
-    lang = [DIV1, CGT, backup(CGT4), toch(story, '1'), backup(toch(surg, '1')), backup(toch(receipts, '1')), silent_b, backup(vec2_b), bridge(old[35].replace('The first crack: where a fact lives is not where editing works', 'Where a fact lives is not where editing works').replace('(numbers illustrative)', '(numbers illustrative. Causal tracing: corrupt the input, restore one layer)').replace('Each grey dot is one fact. Hase 2023: correlation about zero (minus 0.13).', 'Schematic, each grey dot one fact. Hase 2023 measured a correlation of about zero (minus 0.13).').replace('Guo 2025, slide 31', 'Guo 2025').replace('So an edit can land where the knowledge is not, and its side effects can land where nobody looks.', 'Mechanism still matters: choosing where to change by it makes forgetting stick (Guo 2025).').replace('But choosing where to change by mechanism makes forgetting stick (Guo 2025).', 'So instead of asking where a fact lives, we read what the edit did to the connections.'), 'The second candidate after the vector is the place where a fact lives. The bars on the left are illustrative, the scatter is schematic, the measured result is Hase et al. 2023: across facts, how much a fact lives in a layer and how well editing that layer works correlate at about minus 0.13. Keep the Guo line: mechanism still matters for making forgetting stick, so this is not a dismissal of localization. Then: so we read the connections.'), backup(rome), d46_q, backup(old[48]), RES20, abl, bridge(lim_main, 'That is the graph inside a language model, published, with its limits. The title says generative models, plural. Text is one kind of knowledge a model holds, and the next part asks whether the same question survives in knowledge that is not words.'), backup(retitle(old[51], 'Limits, all four, with the numbers'))]
+    lang_cgt = bridge(CGT.replace('</aside>', ' If asked about contamination: PhysioNet data sit behind a data use agreement, not in public corpora, which is not an absolute guarantee.</aside>', 1), 'That was the graph outside the model, a record we can draw. The harder case is a change made inside the model, where nobody drew the graph.')
+    rel = lambda i, t: retitle(old[i], t) if t else old[i]
+    hase = bridge(old[35].replace('The first crack: where a fact lives is not where editing works', 'Where a fact lives is not where editing works').replace('(numbers illustrative)', '(numbers illustrative. Causal tracing: corrupt the input, restore one layer)').replace('Each grey dot is one fact. Hase 2023: correlation about zero (minus 0.13).', 'Schematic, each grey dot one fact. Hase 2023 measured a correlation of about zero (minus 0.13).').replace('Guo 2025, slide 31', 'Guo 2025').replace('So an edit can land where the knowledge is not, and its side effects can land where nobody looks.', 'Mechanism still matters: choosing where to change by it makes forgetting stick (Guo 2025).').replace('But choosing where to change by mechanism makes forgetting stick (Guo 2025).', 'So an edit can land where the knowledge is not.'), 'Across all these surgeries, the same three lessons, next slide.')
+    lang = [DIV1, bridge(toch(surg, '1'), 'Take them one at a time, each with its best known result and the catch.'),
+            rel(17, 'Merging: a fine tune is a vector you can add or subtract'), backup(rel(18, '')),
+            rel(22, 'Pruning: half the layers go, and reasoning dies quietly'), backup(rel(21, '')),
+            VEC2, backup(rel(25, '')),
+            rel(29, 'Unlearning: the old circuit is bypassed, not deleted'), backup(rel(30, '')),
+            hase, backup(rome),
+            backup(rel(38, '')), backup(rel(39, '')),
+            bridge(rel(40, 'Every surgery, three lessons'), 'So the exam reads answers only, and the change itself is a vector that says nothing about side effects. Our work asks one thing: read the change as a graph. Three slides.'),
+            backup(toch(story, '1')), backup(toch(receipts, '1')), backup(silent_b),
+            lang_cgt, d46_q, RES20, backup(old[48]), backup(abl), backup(lim_main), backup(retitle(old[51], 'Limits, all four, with the numbers'))]
     four = retitle(FOUR, 'Music generation went from a visible graph to a hidden one')
     four = re.sub(r'\s*<p class="q">.*?</p>', '', four, count=1, flags=re.S)
     tools = retitle(TOOLS, 'Every tool inside MusicGen reads one layer at one moment').replace('Three tools, three questions, all at one layer and one moment.', 'Language models moved on to attribution graphs. Music has not.')
@@ -1822,8 +1882,7 @@ def assemble(cover, old):
     beyond2 = retitle(toch(BEYOND2, '2'), 'Part 2. Knowledge is not only text')
     hist = retitle(HIST, 'The oldest music model is a graph')
     bri = retitle(BRI, 'A note transition graph predicts the listening brain')
-    lang[1] = lang[1].replace('</aside>', ' If asked why the title says the graph says why when only 1.3 percent lack a path: the graph splits the cliff before any model runs. On MIMIC it clears the record and leaves the reasoning to the model, on CORAL it finds the missing edges and repairs them. If asked about contamination: PhysioNet data sit behind a data use agreement, not in public corpora, which is not an absolute guarantee.</aside>', 1)
-    lang[1] = bridge(lang[1], 'That was the graph outside the model, a record we can draw. The harder case is a change made inside the model, where nobody drew the graph.')
+
     musres_b = bridge(toch(MUSRES, '2'), 'So inside MusicGen, steering is lopsided, and a vector cannot say why. To test any graph we draw inside, we need a judge outside the model. In music that judge exists: a listener\'s brain.')
     emo_b = bridge(toch(EMOTION2, '2'), 'Emotion is one way music acts on the brain. Before we model music, one detour through this year\'s Nobel Prize, because it shows what a designed signal can do to brain circuits. The history of music models is under the down arrow.')
     copy_b = bridge(COPY, 'Before we go inside a generator, one honest line from the literature: in music, graphs win only when the edges carry something the sequence throws away, and often they do not (survey under the down arrow). The one place nobody has looked for such edges is inside the generator itself.')

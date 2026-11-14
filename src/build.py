@@ -338,6 +338,8 @@ import sys; sys.path.insert(0, HERE); import talk as TK
 OLDS = {}
 for i in (3, 33, 35, 43, 45, 47):
     OLDS[i] = ch(secs[i], '0' if i in (3, 43, 45, 47) else '1')
+for i in (17, 18, 21, 22, 25, 29, 30, 38, 39, 40):
+    OLDS[i] = ch(secs[i], '1')
 for i in (46, 48, 49, 50, 51):
     OLDS[i] = ch(secs[i], '1').replace('</h2>', '</h2>' + PUB, 1)
 parts = TK.assemble(cover, OLDS)
@@ -373,19 +375,18 @@ allsecs = [x.replace('<rect x="924" y="100" width="227" height="30" rx="4" fill=
 allsecs = [re.sub(r'\s*<div class="lessontag">[^<]*</div>', '', x) for x in allsecs]
 
 # graph tags: every slide that shows a graph says which one, so the talk is strung on graphs
-GTAGS = [('Knowledge is a graph, and an edit has to follow it', 1, 'knowledge graph'),
-         ('Our delta graph: rank edits', 2, 'delta graph, how the inside rewired'),
+GTAGS = [('In text, knowledge has the shape of a graph', 1, 'knowledge graph'),
+         ('Vision models have graphs inside too', 2, 'circuit and scene graphs'),
          ('A tiny graph is enough to represent', 3, 'note transition graph, a Markov chain'),
-         ('Yet music generators are steered', 4, 'style reachability graph, our hypothesis'),
          ('Two hops break every model', 1, 'knowledge graph, a clinical record'),
-         ('What is a delta graph?', 2, 'delta graph'),
+         ('What is a delta graph?', 4, 'delta graph, how the inside rewired'),
          ('Fold 88 keys', 3, 'note transition graph'),
          ('the simplest graph already names the tradition', 3, 'note transition graph'),
          ('Richer nodes beat longer memory', 3, 'note transition graph, richer nodes'),
          ('The longest memory sounds most like the style', 3, 'note transition graph, generating'),
          ('Inside a music generator, music theory has a shape', 5, 'pitch helix and circle of fifths'),
-         ('Steering leaves a style easily', 4, 'style reachability graph, our hypothesis'),
-         ('A note transition graph predicts the listening brain', 6, "the listener's expectation graph, IDyOM"),
+         ('Steering leaves a style easily', 6, 'style reachability graph, our hypothesis'),
+         ('A note transition graph predicts the listening brain', 7, "the listener's expectation graph, IDyOM"),
 ]
 _GICON = '<svg viewBox="0 0 22 14"><line x1="3" y1="11" x2="11" y2="3" stroke="currentColor" stroke-width="1.3"/><line x1="11" y1="3" x2="19" y2="11" stroke="currentColor" stroke-width="1.3"/><line x1="3" y1="11" x2="19" y2="11" stroke="currentColor" stroke-width="1.3"/><circle cx="3" cy="11" r="2.4" fill="currentColor"/><circle cx="11" cy="3" r="2.4" fill="currentColor"/><circle cx="19" cy="11" r="2.4" fill="currentColor"/></svg>'
 _seen = set()
@@ -399,7 +400,7 @@ def _gtag(x):
         if key in h.group(1):
             again = n in _seen
             _seen.add(n)
-            lab = f'{_GICON}<b>graph {n} of 6</b> {name}' + (', again' if again else '')
+            lab = f'{_GICON}<b>graph {n} of 7</b> {name}' + (', again' if again else '')
             return x.replace('</h2>', f'</h2><span class="graphtag">{lab}</span>', 1)
     return x
 allsecs = [SV.ref_separators(SV.fixups(SV.restyle(x, cover='titlehero' in x[:200]))) for x in allsecs]
