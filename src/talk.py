@@ -1665,36 +1665,58 @@ MEDIC = sec('Music already acts on the brain, as medicine', SVG(g), ch='0',
             ref='NCCIH, Music and Health: What the Science Says, 2022: Burrai 2021 (Parkinson\'s), Bradt, Dileo, Shim, Cochrane 2013 (surgery), Aalbers, Cochrane 2017 (depression), van der Steen, Cochrane 2018 (dementia), Lee 2016 (pain). Salimpoor et al., Nature Neuroscience 2011. Di Liberto et al., eLife 2020',
             notes='Step 4 of 4. Left, the mechanism in one chain: a melody sets up an expectation of what comes next, a fulfilled or delayed expectation releases dopamine at the peak of pleasure (Salimpoor 2011), and listeners\' brains track that expectation note by note (Di Liberto 2020). Right, music medicine in five lines, with the evidence quality said honestly: Parkinson\'s gait with rhythmic auditory stimulation, anxiety before surgery, depression, dementia, pain. Most trials are small and at risk of bias, and none tells us which part of the music works. That is where a model comes in. Bridge: music and the brain are this closely tied, so let us model music from the beginning, starting with the simplest graph, and end where music meets the brain.')
 
-# ---- Nov 14 (his request): creativity as a new edge, then FusionGAN 2017 ----
+# ---- Nov 14 (his request): book, creativity as a new edge, then how new music forms arise ----
+def cover(x, y, w, h, fname, label):
+    return (f'<foreignObject x="{x}" y="{y}" width="{w}" height="{h}"><div xmlns="http://www.w3.org/1999/xhtml" '
+            f'style="position:relative;width:{w}px;height:{h}px;border-radius:4px;overflow:hidden;background:#ece8e1;box-shadow:0 2px 8px rgba(0,0,0,.18)">'
+            f'<span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;font-size:14px;color:#8a8379;padding:8px">{label}</span>'
+            f'<img src="figs/books/{fname}" alt="" onerror="this.remove()" style="position:absolute;left:0;top:0;width:{w}px;height:{h}px;max-width:none;max-height:none;margin:0;padding:0;border:0;box-shadow:none;object-fit:cover"/></div></foreignObject>')
+
 g = ''
-import random as _r
-_r.seed(7)
-N = [(80, 120), (170, 80), (250, 150), (140, 210), (300, 90), (360, 200), (220, 270), (90, 300), (330, 300), (420, 120), (440, 260)]
+g += cover(40, 40, 170, 250, 'creativity-book.jpg', 'book cover')
+g += T(40, 320, 'What the book says:', 15, 400, MUT)
+g += T(40, 346, 'ideas come from', 17, 700, INK) + T(40, 370, 'connecting ideas,', 17, 700, INK) + T(40, 394, 'not from nothing.', 17, 700, INK)
+N = [(330, 120), (420, 80), (500, 150), (390, 210), (550, 90), (610, 200), (470, 270), (340, 300), (580, 300), (670, 120), (690, 260)]
 E = [(0, 1), (1, 2), (0, 3), (2, 3), (1, 4), (2, 5), (3, 6), (6, 7), (5, 8), (4, 9), (5, 10), (9, 10), (6, 8), (3, 7)]
-for a_, b_ in E: g += L(*N[a_], *N[b_], '#c9c2b8', 1.4)
+gg = ''.join(L(*N[a_], *N[b_], '#c9c2b8', 1.4) for a_, b_ in E)
 A, B = N[7], N[9]
-g += F(1, P(f'M{A[0]},{A[1]} Q{260},{40} {B[0]},{B[1]}', ACC, 3, extra='stroke-dasharray="7 5"') + T(250, 74, 'A + B', 18, 700, ACC, 'middle'))
-for k, (x, y) in enumerate(N):
-    hi = k in (7, 9)
-    g += C(x, y, 11 if hi else 8, ACC if hi else '#fff', ACC if hi else '#9b948a', 1.6)
-g += T(60, 360, 'Reading gives you the nodes.', 17, 400, INK) + T(60, 386, 'A new idea is an edge nobody has drawn.', 17, 700, INK)
-c = R(560, 40, 590, 150, SOFT, 'none', 0, 8)
-c += quote(600, 96, [[('An idea is nothing more nor less than a', False)], [('new combination of old elements', True), ('.', False)]], 19, 28)
-c += T(620, 168, 'James Webb Young, A Technique for Producing Ideas', 13.5, 400, MUT)
-g += c
-m = R(560, 210, 590, 200, '#F4F0F9', 'none', 0, 8)
-m += T(584, 244, 'Our 2017 test in music: fuse two genres', 18, 700, MU)
-for (x, y, lab) in ((640, 330, 'jazz'), (860, 330, 'folk')):
-    m += C(x, y, 24, '#fff', MU, 2) + T(x, y + 5, lab, 14, 600, MU, 'middle')
-m += L(664, 330, 836, 330, '#b9b2a8', 1.2, ) if False else ''
-m += P('M662,318 Q750,262 838,318', MU, 2.4, extra='stroke-dasharray="6 4"') + C(750, 290, 20, MU, 'none', 0) + T(750, 295, 'new', 12.5, 700, '#fff', 'middle')
-m += T(910, 300, 'Three generators and judges:', 14.5, 400, INK) + T(910, 322, 'jazz, folk, and the fusion,', 14.5, 400, INK) + T(910, 344, 'kept equally far from both.', 14.5, 400, INK)
-m += T(584, 392, 'A GAN learns to connect two styles the data never connected.', 15.5, 400, INK)
-g += F(2, m)
-g += F(3, T(590, 452, 'Papers, proposals, music: creative work is a new edge between known points.', 19, 700, INK, 'middle'))
+gg += ''.join(C(x, y, 8, '#fff', '#9b948a', 1.6) for k, (x, y) in enumerate(N) if k not in (7, 9))
+g += F(1, gg + T(510, 350, 'Everything you have read is a node.', 16, 400, INK, 'middle'))
+g += F(2, P(f'M{A[0]},{A[1]} Q520,30 {B[0]},{B[1]}', ACC, 3, extra='stroke-dasharray="7 5"') + C(*A, 11, ACC, 'none', 0) + C(*B, 11, ACC, 'none', 0)
+          + T(500, 64, 'A + B', 18, 700, ACC, 'middle') + T(510, 378, 'A new idea is an edge nobody has drawn.', 16, 700, INK, 'middle'))
+c = R(780, 60, 370, 230, SOFT, 'none', 0, 8)
+c += quote(816, 120, [[('An idea is nothing more', False)], [('nor less than a ', False), ('new', True)], [('combination of old elements', True), ('.', False)]], 19, 30)
+c += T(830, 250, 'James Webb Young, 1940', 13.5, 400, MUT)
+g += F(3, c)
+g += F(4, T(590, 452, 'Papers, proposals, music: creative work is a new edge between known points.', 19, 700, INK, 'middle'))
 CREATE = sec('Creativity is a new edge between ideas', SVG(g), ch='0',
-             ref='Young, A Technique for Producing Ideas, 1940 (reissued 2003). Chen, Wu, Lu, Lerch, Lu, Learning to Fuse Music Genres with Generative Adversarial Dual Learning, IEEE ICDM 2017',
-             notes='Before we model music, one idea about creating anything. Left: everything you have read is a node. Most pairs were never connected. A new idea is one of those missing edges, A plus B, chosen because the pair is interesting. Young said it in 1940: a new idea is a new combination of old elements. This is true of a paper or a proposal as much as of a song. In 2017 we tried it directly in music: FusionGAN takes jazz and folk melodies and learns a third, fused style, with three generator and judge pairs and a distance that keeps the fusion equally far from both parents. Listeners rated it as a fusion more often than the plain GAN, by a small margin. So a generator can draw a new edge. The question for the rest of this part: is there a graph inside the generator that tells us which edges it can draw? Start with the simplest graph of music.')
+             ref='Young, A Technique for Producing Ideas, 1940 (reissued 2003)',
+             notes='Start from the book. Hold up the idea in one line: ideas are not made from nothing, they come from connecting ideas you already have. Click: everything you have read is a node, and most pairs were never connected. Click: a new idea is one of those missing edges, A plus B, chosen because the pair is interesting. Click: Young said it in 1940, a new idea is a new combination of old elements. This is how papers and proposals are made, and, next slide, how new music is made.')
+
+g = ''
+G = {'blues': (90, 120), 'ragtime': (90, 200), 'brass band': (90, 280), 'R&B': (300, 60), 'country': (300, 140),
+     'jazz': (300, 240), 'samba': (300, 330), 'rock and roll': (520, 100), 'bossa nova': (520, 330), 'jazz fusion': (520, 220)}
+GE = [('blues', 'jazz'), ('ragtime', 'jazz'), ('brass band', 'jazz'), ('blues', 'R&B'), ('R&B', 'rock and roll'), ('country', 'rock and roll'),
+      ('jazz', 'jazz fusion'), ('rock and roll', 'jazz fusion'), ('jazz', 'bossa nova'), ('samba', 'bossa nova')]
+for a_, b_ in GE:
+    (x1, y1), (x2, y2) = G[a_], G[b_]
+    g += P(f'M{x1+52},{y1} C{(x1+x2)/2+20},{y1} {(x1+x2)/2-20},{y2} {x2-52},{y2}', MU, 1.5)
+for nm, (x, y) in G.items():
+    new = nm in ('jazz', 'rock and roll', 'jazz fusion', 'bossa nova')
+    g += R(x - 54, y - 17, 108, 34, MU if new else '#fff', MU, 1.5, 17) + T(x, y + 5, nm, 13.5, 600, '#fff' if new else MU, 'middle')
+g += T(40, 404, 'Every new style keeps its parents and adds one new edge.', 16, 400, INK)
+m = R(660, 40, 490, 330, '#F4F0F9', 'none', 0, 8)
+m += T(690, 80, 'Can a model draw that edge?', 19, 700, MU) + T(690, 104, 'Our 2017 test: FusionGAN, IEEE ICDM', 14.5, 400, MUT)
+for (x, y, lab) in ((760, 230, 'jazz'), (1050, 230, 'folk')):
+    m += C(x, y, 28, '#fff', MU, 2) + T(x, y + 5, lab, 15, 600, MU, 'middle')
+m += P('M786,214 Q905,140 1024,214', MU, 2.4, extra='stroke-dasharray="6 4"') + C(905, 176, 24, MU, 'none', 0) + T(905, 181, 'fusion', 12.5, 700, '#fff', 'middle')
+m += T(690, 300, 'Three generators and judges: jazz, folk, and the', 14.5, 400, INK) + T(690, 322, 'fusion, kept equally far from both parents.', 14.5, 400, INK)
+m += T(690, 350, 'A GAN learned a style the data never contained.', 14.5, 700, INK)
+g += F(1, m)
+g += F(2, T(590, 452, 'New music is inheritance plus one new combination.', 19, 700, INK, 'middle'))
+GENRE = sec('New music is born the same way', SVG(g), ch='0',
+            ref='Genre lineages: standard accounts, e.g. Gioia, The History of Jazz, 2011. Chen, Wu, Lu, Lerch, Lu, Learning to Fuse Music Genres with Generative Adversarial Dual Learning, IEEE ICDM 2017',
+            notes='Music has a family tree, like a science genealogy. Jazz came from blues, ragtime and brass bands. Rock and roll came from rhythm and blues and country. Then jazz plus rock gave fusion, jazz plus samba gave bossa nova. Each new style inherits from its parents and adds one combination nobody had made. Click: in 2017 we asked whether a model can draw such an edge. FusionGAN takes jazz and folk melodies and learns a third style with three generator and judge pairs and a distance that keeps the fusion equally far from both parents. Listeners heard it as a fusion slightly more often than a plain GAN, a small margin. So a generator can draw a new edge. The question for the rest of this part: is there a graph inside the generator that tells us which edges it can draw? Start with the simplest graph of music.')
 
 # ======================= ASSEMBLY =======================
 # ---- loop it1: results slide that pays off the trailer bars (P15, P10) ----
@@ -1803,7 +1825,7 @@ def assemble(cover, old):
     emo_b = bridge(toch(EMOTION2, '2'), 'Emotion is one way music acts on the brain. Before we model music, one detour through this year\'s Nobel Prize, because it shows what a designed signal can do to brain circuits. The history of music models is under the down arrow.')
     copy_b = bridge(COPY, 'Before we go inside a generator, one honest line from the literature: in music, graphs win only when the edges carry something the sequence throws away, and often they do not (survey under the down arrow). The one place nobody has looked for such edges is inside the generator itself.')
     corpus_b = bridge(corpus, 'How much memory should the graph have? One note gives the right vocabulary with the wrong syntax, three notes memorize the piece (the picture is under the down arrow on the next slide).')
-    mus = [beyond2, emo_b, backup(hist), toch(OPTO, '2'), toch(MEDIC, '2'), toch(CREATE, '2'), FOLD, corpus_b, RICHER, backup(path), copy_b, backup(WHEN), PROBE, backup(MGEN), musres_b, bri, backup(BRL), backup(BRR), PLAN, backup(BRG)]
+    mus = [beyond2, emo_b, backup(hist), toch(OPTO, '2'), toch(MEDIC, '2'), toch(CREATE, '2'), toch(GENRE, '2'), FOLD, corpus_b, RICHER, backup(path), copy_b, backup(WHEN), PROBE, backup(MGEN), musres_b, bri, backup(BRL), backup(BRR), PLAN, backup(BRG)]
     beyond = []
     close = [TAKEAWAY.replace('</section>', CLIP_JSON + '</section>')]
     parts = {'vision': vision, 'language': lang, 'music': mus, 'beyond': beyond, 'close': close}
