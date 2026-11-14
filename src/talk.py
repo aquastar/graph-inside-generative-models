@@ -1673,9 +1673,9 @@ def cover(x, y, w, h, fname, label):
             f'<img src="figs/books/{fname}" alt="" onerror="this.remove()" style="position:absolute;left:0;top:0;width:{w}px;height:{h}px;max-width:none;max-height:none;margin:0;padding:0;border:0;box-shadow:none;object-fit:cover"/></div></foreignObject>')
 
 g = ''
-g += cover(40, 40, 170, 250, 'creativity-book.jpg', 'book cover')
-g += T(40, 320, 'What the book says:', 15, 400, MUT)
-g += T(40, 346, 'ideas come from', 17, 700, INK) + T(40, 370, 'connecting ideas,', 17, 700, INK) + T(40, 394, 'not from nothing.', 17, 700, INK)
+g += cover(40, 40, 170, 263, 'creativity-book.jpg', 'book cover')
+g += T(40, 330, 'What the book says:', 15, 400, MUT)
+g += T(40, 354, 'ideas come from', 17, 700, INK) + T(40, 377, 'connecting ideas,', 17, 700, INK) + T(40, 400, 'not from nothing.', 17, 700, INK)
 N = [(330, 120), (420, 80), (500, 150), (390, 210), (550, 90), (610, 200), (470, 270), (340, 300), (580, 300), (670, 120), (690, 260)]
 E = [(0, 1), (1, 2), (0, 3), (2, 3), (1, 4), (2, 5), (3, 6), (6, 7), (5, 8), (4, 9), (5, 10), (9, 10), (6, 8), (3, 7)]
 gg = ''.join(L(*N[a_], *N[b_], '#c9c2b8', 1.4) for a_, b_ in E)
