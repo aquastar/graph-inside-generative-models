@@ -1673,25 +1673,26 @@ def cover(x, y, w, h, fname, label):
             f'<img src="figs/books/{fname}" alt="" onerror="this.remove()" style="position:absolute;left:0;top:0;width:{w}px;height:{h}px;max-width:none;max-height:none;margin:0;padding:0;border:0;box-shadow:none;object-fit:cover"/></div></foreignObject>')
 
 g = ''
-g += cover(40, 40, 170, 263, 'creativity-book.jpg', 'book cover')
-g += T(40, 330, 'What the book says:', 15, 400, MUT)
-g += T(40, 354, 'ideas come from', 17, 700, INK) + T(40, 377, 'connecting ideas,', 17, 700, INK) + T(40, 400, 'not from nothing.', 17, 700, INK)
-N = [(330, 120), (420, 80), (500, 150), (390, 210), (550, 90), (610, 200), (470, 270), (340, 300), (580, 300), (670, 120), (690, 260)]
+BK = [('creativity-book.jpg', 'Young, 1940', ['a new combination', 'of old elements']),
+      ('johnson-good-ideas.jpg', 'Johnson, 2010', ['one step beyond', 'what already exists']),
+      ('inside-the-box.jpg', 'Boyd and Goldenberg, 2013', ['link two things that', 'were never linked'])]
+for k, (f, who, lines) in enumerate(BK):
+    x = 40 + k * 170
+    g += F(k, cover(x, 40, 140, 214, f, 'book cover') + T(x, 280, who, 13.5, 400, MUT)
+           + T(x, 304, lines[0], 15.5, 700, INK) + T(x, 326, lines[1], 15.5, 700, INK))
+N = [(620, 120), (710, 80), (790, 150), (680, 210), (840, 90), (900, 200), (760, 270), (630, 300), (870, 300), (960, 120), (1000, 260)]
 E = [(0, 1), (1, 2), (0, 3), (2, 3), (1, 4), (2, 5), (3, 6), (6, 7), (5, 8), (4, 9), (5, 10), (9, 10), (6, 8), (3, 7)]
 gg = ''.join(L(*N[a_], *N[b_], '#c9c2b8', 1.4) for a_, b_ in E)
 A, B = N[7], N[9]
 gg += ''.join(C(x, y, 8, '#fff', '#9b948a', 1.6) for k, (x, y) in enumerate(N) if k not in (7, 9))
-g += F(1, gg + T(510, 350, 'Everything you have read is a node.', 16, 400, INK, 'middle'))
-g += F(2, P(f'M{A[0]},{A[1]} Q520,30 {B[0]},{B[1]}', ACC, 3, extra='stroke-dasharray="7 5"') + C(*A, 11, ACC, 'none', 0) + C(*B, 11, ACC, 'none', 0)
-          + T(500, 64, 'A + B', 18, 700, ACC, 'middle') + T(510, 378, 'A new idea is an edge nobody has drawn.', 16, 700, INK, 'middle'))
-c = R(780, 60, 370, 230, SOFT, 'none', 0, 8)
-c += quote(816, 120, [[('An idea is nothing more', False)], [('nor less than a ', False), ('new', True)], [('combination of old elements', True), ('.', False)]], 19, 30)
-c += T(830, 250, 'James Webb Young, 1940', 13.5, 400, MUT)
-g += F(3, c)
-g += F(4, T(590, 452, 'Papers, proposals, music: creative work is a new edge between known points.', 19, 700, INK, 'middle'))
+gg += P(f'M{A[0]},{A[1]} Q810,30 {B[0]},{B[1]}', ACC, 3, extra='stroke-dasharray="7 5"') + C(*A, 11, ACC, 'none', 0) + C(*B, 11, ACC, 'none', 0)
+gg += T(800, 62, 'A + B', 20, 700, ACC, 'middle')
+gg += T(810, 350, 'Everything you have read is a node.', 16, 400, INK, 'middle') + T(810, 376, 'A new idea is an edge nobody has drawn.', 16, 700, INK, 'middle')
+g += F(3, gg)
+g += F(4, T(590, 440, 'Three books, one rule: A + B. Papers, proposals and music are made this way.', 19, 700, INK, 'middle'))
 CREATE = sec('Creativity is a new edge between ideas', SVG(g), ch='0',
-             ref='Young, A Technique for Producing Ideas, 1940 (reissued 2003)',
-             notes='Start from the book. Hold up the idea in one line: ideas are not made from nothing, they come from connecting ideas you already have. Click: everything you have read is a node, and most pairs were never connected. Click: a new idea is one of those missing edges, A plus B, chosen because the pair is interesting. Click: Young said it in 1940, a new idea is a new combination of old elements. This is how papers and proposals are made, and, next slide, how new music is made.')
+             ref='Young, A Technique for Producing Ideas, 1940. Johnson, Where Good Ideas Come From: The Natural History of Innovation, 2010. Boyd and Goldenberg, Inside the Box, 2013 (Chinese edition: 微创新)',
+             notes='Three books on creativity, read years apart, say the same thing. Young, an ad man in 1940: a new idea is a new combination of old elements. Johnson in 2010: new ideas grow from the adjacent possible, one step from what already exists, in networks where ideas collide. Boyd and Goldenberg: a reliable trick is to link two things that were never linked. Click: put it as a graph. Everything you have read is a node, most pairs were never connected, and a new idea is a missing edge, A plus B. This is how papers and proposals are made, and, next slide, how new music is made.')
 
 g = ''
 G = {'blues': (90, 120), 'ragtime': (90, 200), 'brass band': (90, 280), 'R&B': (300, 60), 'country': (300, 140),
