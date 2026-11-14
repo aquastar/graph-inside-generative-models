@@ -1637,7 +1637,7 @@ nc += T(627, 330, 'Our question, not a result.', 13, 400, MUT)
 g += F(1, nc)
 g += F(2, T(590, 400, 'Optogenetics shows a designed signal can switch brain circuits.', 19, 700, INK, 'middle') + T(590, 432, 'Could music be the switch that enters through the ear?', 19, 700, ACC, 'middle'))
 OPTO = sec('This year\'s Nobel: a switch for neurons, made of light', SVG(g), ch='0',
-           ref='Nobel Prize in Physiology or Medicine 2026, Deisseroth, Hegemann, Nagel, announced Oct 5 2026. Sahel et al., Nature Medicine 2021. Tsai lab, MIT Picower Institute: 40 Hz sensory stimulation, mouse studies 2016 to 2019, PLOS ONE 2022. Cognito Therapeutics HOPE trial, enrollment completed Feb 2026',
+           ref='Nobel Prize 2026, Physiology or Medicine, Deisseroth, Hegemann, Nagel, announced Oct 5 2026. Sahel et al., Nature Medicine 2021. Tsai lab, MIT Picower Institute: 40 Hz sensory stimulation, mouse studies 2016 to 2019, PLOS ONE 2022. Cognito Therapeutics HOPE trial, enrollment completed Feb 2026',
            notes='Step 3 of 4. One minute. The 2026 Nobel went to optogenetics: a light gated channel from an alga, put into chosen neurons, so light switches them on or off. It changed neuroscience, but it is invasive: a gene has to be delivered and light has to reach the cells, so in people it is limited, the first case was partial vision in one blind patient. The non invasive cousin is 40 Hz flicker of light and sound from Li-Huei Tsai\'s lab: in mice it drives gamma rhythms and reduces amyloid and tau, small human trials found it safe, and a phase 3 trial finished enrolling in February. If a plain 40 Hz click can do that, music, the richest sound we can design, might be a finer switch. Say clearly that this is the question, not a result.')
 
 g = adefs('md')
@@ -1718,7 +1718,7 @@ m += T(690, 350, 'A GAN learned a style the data never contained.', 14.5, 700, I
 g += F(1, m)
 g += F(2, T(590, 452, 'New music is inheritance plus one new combination.', 19, 700, INK, 'middle'))
 GENRE = sec('New music is born the same way', SVG(g), ch='0',
-            ref='Genre lineages: standard accounts, e.g. Gioia, The History of Jazz, 2011. Chen, Wu, Lu, Lerch, Lu, Learning to Fuse Music Genres with Generative Adversarial Dual Learning, IEEE ICDM 2017',
+            ref='Gioia, The History of Jazz, 2011 (genre lineages). Chen, Wu, Lu, Lerch, Lu, Learning to Fuse Music Genres with Generative Adversarial Dual Learning, IEEE ICDM 2017',
             notes='Music has a family tree, like a science genealogy. Jazz came from blues, ragtime and brass bands. Rock and roll came from rhythm and blues and country. Then jazz plus rock gave fusion, jazz plus samba gave bossa nova. Each new style inherits from its parents and adds one combination nobody had made. Click: in 2017 we asked whether a model can draw such an edge. FusionGAN takes jazz and folk melodies and learns a third style with three generator and judge pairs and a distance that keeps the fusion equally far from both parents. Listeners heard it as a fusion slightly more often than a plain GAN, a small margin. So a generator can draw a new edge. The question for the rest of this part: is there a graph inside the generator that tells us which edges it can draw? Start with the simplest graph of music.')
 
 # ======================= ASSEMBLY =======================

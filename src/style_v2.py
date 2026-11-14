@@ -54,7 +54,7 @@ html,body,.reveal-viewport{{background:{BG} !important}}
 .reveal .ref .rsep{{display:inline-block;width:1px;height:.85em;background:{AXIS};margin:0 .65em;vertical-align:-.1em}}
 .reveal .ref a{{color:inherit !important;text-decoration:none !important}}
 .reveal .ref a:hover{{text-decoration:underline !important}}
-.reveal .ref{{font:400 13.5px/1.3 {SERIF} !important;color:{REF} !important;text-align:right !important;margin-left:auto !important;max-width:66% !important}}
+.reveal .ref{{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:400 13.5px/1.3 {SERIF} !important;color:{REF} !important;text-align:right !important;margin-left:auto !important;max-width:66% !important}}
 /* no banners: takeaway is a quiet serif sentence */
 .reveal .takeaway{{background:none !important;border:0 !important;padding:0 !important;font-family:{SERIF};font-size-adjust:none;font-size:27px;font-weight:400 !important;color:{INK}}}
 .reveal .q,.reveal section>.tl{{font-family:{SERIF};font-size-adjust:none;font-weight:400 !important;color:{INK} !important;background:none !important;border:0 !important;padding:0 !important}}
@@ -253,21 +253,71 @@ def fixups(sec):
 SEP = '<span class="rsep" aria-hidden="true"></span>'
 
 from urllib.parse import quote_plus
-def linkify(item):
+def linkify(item, shown=None):
     """every cited work links to its source: arXiv id, DOI, otherwise a Google Scholar search"""
     if '<a ' in item or not re.search(r'\b(19|20)\d\d\b|arXiv', item):
-        return item
+        return shown or item
     plain = re.sub(r'<[^>]+>', '', item)
     m = re.search(r'arXiv:? ?(\d{4}\.\d{4,5})', plain)
     d = re.search(r'\b(10\.\d{4,9}/[^\s,]+)', plain)
     url = (f'https://arxiv.org/abs/{m.group(1)}' if m else f'https://doi.org/{d.group(1)}' if d
            else 'https://scholar.google.com/scholar?q=' + quote_plus(plain))
-    return f'<a href="{url}" target="_blank" rel="noopener">{item}</a>'
+    tip = plain.replace('"', '&quot;')
+    return f'<a href="{url}" target="_blank" rel="noopener" title="{tip}">{shown or item}</a>'
+
+REF_MAX = 118  # characters that fit on one reference line
+
+def _ref_short(item):
+    """'Uzzi et al. 2013' style label: first author surname plus year"""
+    plain = re.sub(r'<[^>]+>', '', item)
+    years = re.findall(r'\b(?:19|20)\d\d\b', plain)
+    yr = years[0] if years else ''
+    ax = re.search(r'arXiv:? ?(\d{4}\.\d{4,5})', plain)
+    body = re.sub(r'^[^:,]{0,40}:\s+', '', plain)          # drop a lead in like "Language model contrast:"
+    pieces = [x.strip() for x in body.split(',')]
+    names = []
+    for x in pieces:
+        w = x.split()
+        if names and (len(w) > 1 or not re.match(r"^[A-Z][a-z'\-\u00e0-\u00ff]+$", x)) and 'et al' not in x:
+            break
+        if 1 <= len(w) <= 4 and not re.search(r'\d', x) and all(t[0].isupper() or t in ('and', 'et', 'al.', 'de', 'van', 'von') for t in w):
+            names.append(x)
+            if 'et al' in x: break
+        else:
+            break
+    if not names:
+        if ax: return f'arXiv {ax.group(1)}'
+        if not yr: return None
+        head = [t for t in re.split(r'[,:]', body)[0].split() if not re.match(r'(19|20)\d\d$', t)]
+        return ' '.join(head[:5]) + ' ' + yr
+    first = names[0]
+    if 'et al' in first or len(names) >= 3:
+        lab = first.split(' et al')[0].split(' and ')[0] + ' et al.'
+    elif len(names) == 2 or ' and ' in first:
+        lab = ' and '.join(n for n in names) if len(names) == 2 else first
+    else:
+        lab = first
+    return f'{lab} {yr}'.strip()
 
 def ref_separators(sec):
-    """split a reference line into works at '. ' after a year or a closing parenthesis, join with a thin rule"""
+    """one reference line: full entries when they fit, else 'Author Year' labels, each linked"""
     def one(m):
         items = re.split(r'(?:(?<=\b(?:19|20)\d\d)|(?<=\b(?:19|20)\d\d[a-z])|(?<=\)))\.\s+', m.group(2))
-        items = [linkify(i.strip().rstrip('.')) for i in items if i.strip()]
-        return m.group(1) + SEP.join(items) + m.group(3)
+        items = [i.strip().rstrip('.') for i in items if i.strip()]
+        plain_len = sum(len(re.sub(r'<[^>]+>', '', i)) for i in items) + 3 * (len(items) - 1)
+        if plain_len > REF_MAX:
+            if len(items) == 1:
+                t = re.sub(r'<[^>]+>', '', items[0])
+                shown = t[:REF_MAX - 3].rsplit(' ', 1)[0] + '...'
+                return m.group(1) + linkify(items[0], shown) + m.group(3)
+            out = []
+            for i in items:
+                lab = _ref_short(i)
+                if lab is None:
+                    t = re.sub(r'<[^>]+>', '', i)
+                    if len(t) > 28: continue   # long side notes move to the speaker notes
+                    lab = t
+                out.append(linkify(i, lab))
+            return (m.group(1) + SEP.join(out) + m.group(3)) if out else ''
+        return m.group(1) + SEP.join(linkify(i) for i in items) + m.group(3)
     return re.sub(r'(<div class="ref">)(.*?)(</div>)', one, sec, flags=re.S)
