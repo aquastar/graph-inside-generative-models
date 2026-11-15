@@ -869,11 +869,11 @@ ch += T(X2 + 14, Y0 - 9 * YS + 5, '6 to 12%', 16, 600, INK) + T(860, 118, 'a cli
 g += F(1, ch)
 rep = R(1000, 86, 180, 262, SOFT, 'none', 0, 3) + T(1016, 114, 'The graph splits', 15, 600, INK) + T(1016, 134, 'the failures', 15, 600, INK)
 rep += T(1016, 170, 'missing edges:', 14, 600, '#C45200') + T(1016, 190, 'fix the graph. On', 14, 400, INK) + T(1016, 210, 'CORAL, 51 edges cut', 14, 400, INK) + T(1016, 230, 'misses 8.2% to 0%', 14, 600, INK)
-rep += T(1016, 270, 'On MIMIC-III only 1.3%', 14, 600, INK) + T(1016, 290, 'of 2 hop questions have', 14, 400, INK) + T(1016, 310, 'no path: the cliff is', 14, 400, INK) + T(1016, 330, 'the models\' reasoning', 14, 400, INK)
+rep += T(1016, 270, 'On MIMIC-III only', 14, 600, INK) + T(1016, 290, '1.3% of 2 hop questions', 14, 600, INK) + T(1016, 310, 'have no path: the cliff', 14, 400, INK) + T(1016, 330, 'is the models\' reasoning', 14, 400, INK)
 g += F(2, rep)
 g += F(3, T(590, 466, 'A graph tells which questions cannot be answered, before any model tries.', 19, 700, INK, 'middle'))
 CGT = sec('Two hops break every model. The graph says why', SVG(g), ch='1', status='acc',
-          ref='Ours, Diagnosing Multi-Hop KG Question Answering Failures: A Typed Homomorphism Framework with Clinical Repair, CIKM 2026, Table 4 and Table 6. MIMIC-III, CORAL from PhysioNet',
+          ref='Ours, Query-Graph Compatibility: A Formal Pre-Condition for Faithful Knowledge-Grounded Language Model Generation, CIKM 2026, Table 4 and Table 6. MIMIC-III, CORAL from PhysioNet',
           notes='Our CIKM 2026 paper, the knowledge graph from the opening made concrete. On clinical records kept behind a data use agreement, seven of nine models reach about 76 percent at one hop and fall to 6 to 12 percent at two hops, from 3B up to a 1.6T mixture of experts. Part of that cliff is not the model at all: if the record never stored the edge, no model can answer. The paper turns that into a theorem and a test that runs before retrieval. On CORAL, adding 51 missing edges removes every structural miss, 8.2 percent to zero. What remains is the model reasoning gap. On MIMIC-III, only 3 of 239 two hop questions (1.3 percent) have no path, so almost all of that cliff is the models reasoning, not the record.')
 
 # ---- backup under the CIKM slide: the four classes ----
