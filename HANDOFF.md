@@ -31,7 +31,7 @@ Part 2 music: 18 Gardner and Fei-Fei Li, knowledge beyond text. 19 Picard and Mi
 ### 5. His rules (firm, he has corrected each one before)
 - Text: no em dashes, en dashes or semicolons anywhere, ranges use "to", American spelling. Talk to him in short Chinese, slides in English.
 - Look: Tufte style, ET Book font family for all text, soft colors within the RIT palette, orange for language, purple for music, blue for vision. Diagrams must look polished (Transformer Circuits or TikZ quality).
-- Human touch: real images next to our drawings, book covers, a paper's first page, photos of quoted people, real photos of experiments. A quoted person must have a photo or logo, never initials only. If an image is missing, leave a visible placeholder and ask him. Do not download photos of real people yourself. The sandbox blocks image hosts, so ask him to attach images.
+- Human touch: real images next to our drawings, book covers, a paper's first page, photos of quoted people, real photos of experiments. A quoted person must have a photo or logo, never initials only. Getting images (his rule 2026-11-15): find and download them yourself from official or openly licensed sources, credit in the notes. Ask him only when the hosts are blocked. Wikimedia rate limits the cloud shell IP, nobelprize.org, distill.pub, arXiv and CVF open access work.
 - Quotes: never invent a quote. If the exact wording cannot be verified, write a paraphrase in upright text without quote marks.
 - Person cards: quote beside the photo, card only as tall as its content, no empty space, no tag chips.
 - References: only at the bottom of the slide, never repeated inside cards, at most one line, clearly lighter than body text, every work linked.
