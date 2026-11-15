@@ -1744,10 +1744,10 @@ for nm, (x, y) in G.items():
     g += R(x - 54, y - 17, 108, 34, MU if new else '#fff', MU, 1.5, 17) + T(x, y + 5, nm, 13.5, 600, '#fff' if new else MU, 'middle')
 g += T(40, 404, 'Every new style keeps its parents and adds one new edge.', 16, 400, INK)
 m = R(660, 40, 490, 330, '#F4F0F9', 'none', 0, 8)
-m += T(690, 80, 'Can a model draw that edge?', 19, 700, MU) + T(690, 104, 'Our 2017 test: FusionGAN, IEEE ICDM', 14.5, 400, MUT)
-for (x, y, lab) in ((760, 230, 'jazz'), (1050, 230, 'folk')):
+m += T(690, 80, 'Can a model draw that edge?', 19, 700, MU) + T(690, 104, 'Our 2017 test: FusionGAN, IEEE ICDM', 14.5, 400, MUT) + img(680, 120, 450, 38, 'figs/chen2017-fusiongan-title.png')
+for (x, y, lab) in ((760, 248, 'jazz'), (1050, 248, 'folk')):
     m += C(x, y, 28, '#fff', MU, 2) + T(x, y + 5, lab, 15, 600, MU, 'middle')
-m += P('M786,214 Q905,140 1024,214', MU, 2.4, extra='stroke-dasharray="6 4"') + C(905, 176, 24, MU, 'none', 0) + T(905, 181, 'fusion', 12.5, 700, '#fff', 'middle')
+m += P('M786,232 Q905,170 1024,232', MU, 2.4, extra='stroke-dasharray="6 4"') + C(905, 204, 22, MU, 'none', 0) + T(905, 209, 'fusion', 12.5, 700, '#fff', 'middle')
 m += T(690, 300, 'Three generators and judges: jazz, folk, and the', 14.5, 400, INK) + T(690, 322, 'fusion, kept equally far from both parents.', 14.5, 400, INK)
 m += T(690, 350, 'A GAN learned a style the data never contained.', 14.5, 700, INK)
 g += F(1, m)
@@ -1793,11 +1793,12 @@ for k in range(NL):
     g += R(110, y, 170, 14, 'none' if gone else AC2, '#ACA39A' if gone else 'none', 1.2 if gone else 0, 2, 'stroke-dasharray="4 3"' if gone else '')
 g += T(195, 404, 'input', 15, 400, MUT, 'middle') + T(195, 62, 'output', 15, 400, MUT, 'middle')
 g += P('M296,234 L306,234 L306,92 L296,92', INK, 1.2) + T(318, 158, 'about half', 16, 600, INK) + T(318, 180, 'of the layers', 16, 400, INK) + T(318, 202, 'removed', 16, 400, INK)
-g += T(470, 120, 'Multiple choice accuracy barely moves', 24, 400, INK, extra='font-family="et-book,Georgia,serif" style="font-size-adjust:none"')
-g += T(470, 152, 'until about half the layers are gone (MMLU, BoolQ), after light repair', 16, 400, MUT)
-mt = T(470, 238, 'Remove a quarter of the layers, then repair (Llama 3.1 8B, Mistral 7B):', 16, 600, MUT)
-mt += T(470, 282, 'classification', 17, 400, INK) + R(700, 266, 340, 22, '#ACA39A', 'none', 0, 2) + R(700, 266, 400, 22, 'none', '#D7D2CB', 1, 2) + T(700, 312, '80 to 90% kept', 15, 400, MUT)
-mt += T(470, 356, 'math and code generation', 17, 400, INK) + R(700, 340, 90, 22, 'none', FAILC, 1.8, 2, 'stroke-dasharray="5 3"') + R(700, 340, 400, 22, 'none', '#D7D2CB', 1, 2) + T(700, 386, 'drop hard, and repair does not bring them back', 15, 400, FAILC)
+g += img(470, 34, 380, 191, 'figs/gromov2025-mmlu.png') + L(470, 228, 850, 228, '#D7D2CB', 1)
+g += wrap(880, 80, 'Multiple choice accuracy barely moves until about half the layers are gone', 20, 400, INK, width=24, lh=27)
+g += T(880, 200, 'their Figure 1d, MMLU', 14, 400, MUT)
+mt = T(470, 270, 'Remove a quarter of the layers, then repair (Llama 3.1 8B, Mistral 7B):', 16, 600, MUT)
+mt += T(470, 306, 'classification', 17, 400, INK) + R(700, 290, 340, 22, '#ACA39A', 'none', 0, 2) + R(700, 290, 400, 22, 'none', '#D7D2CB', 1, 2) + T(700, 330, '80 to 90% kept', 15, 400, MUT)
+mt += T(470, 370, 'math and code generation', 17, 400, INK) + R(700, 354, 90, 22, 'none', FAILC, 1.8, 2, 'stroke-dasharray="5 3"') + R(700, 354, 400, 22, 'none', '#D7D2CB', 1, 2) + T(700, 400, 'drop hard, and repair does not bring them back', 15, 400, FAILC)
 g += F(1, mt)
 g += F(2, catch('The exams were multiple choice. Multi step reasoning broke, and no exam asked.'))
 PRUNE = sec('Pruning: many layers can go, and reasoning breaks quietly', SVG(g), ch='1',
@@ -1826,17 +1827,14 @@ g += L(X0, Y0, X0 + W_, Y0, INK, 1) + L(X0, Y0, X0, Y0 - H_ - 10, INK, 1)
 g += T(X0 + W_ / 2, Y0 + 34, 'how much the fact lives in layer 6', 15, 400, MUT, 'middle') + T(X0 - 10, Y0 + 5, '0', 14, 400, MUT, 'end') + T(X0 - 10, py(1) + 5, '1', 14, 400, MUT, 'end') + T(px(1), Y0 + 18, '1', 14, 400, MUT, 'middle')
 g += T(X0 - 26, Y0 - H_ / 2, 'editing works', 15, 400, MUT, 'middle', extra=f'transform="rotate(-90 {X0-26} {Y0-H_/2})"')
 g += F(1, L(px(0), py(0), px(1), py(1), FAILC, 1.8, 'stroke-dasharray="6 5"') + T(px(.62), py(.36), 'expected:', 16, 600, FAILC) + T(px(.62), py(.36) + 22, 'lives there more,', 16, 400, FAILC) + T(px(.62), py(.36) + 44, 'edits there better', 16, 400, FAILC))
-_rh.seed(7)
-dots = ''.join(C(px(_rh.uniform(.02, .98)), py(_rh.uniform(.9, 1.0)), 4.5, '#ACA39A') for _ in range(44))
-dots += C(px(.9), py(.98), 8, ACC) + T(px(.9), py(.98) - 16, 'Space Needle', 15, 600, INK, 'middle')
-dots += C(px(.1), py(.98), 8, ACC) + T(px(.1) + 4, py(.98) - 16, 'Eiffel Tower', 15, 600, INK, 'middle')
-dots += T(px(.5), py(.8), 'observed: almost every fact edits well', 16, 600, INK, 'middle')
-dots += T(40, 262, 'Eiffel Tower barely lives in layer 6,', 19, 400, INK) + T(40, 288, 'yet editing layer 6 works.', 19, 400, INK)
+dots = R(600, 26, 570, 404, '#FBFAF7', 'none', 0, 0) + img(650, 34, 466, 370, 'figs/hase2023-fig4.png') + L(650, 408, 1116, 408, '#D7D2CB', 1)
+dots += T(40, 262, 'Most facts barely live in layer 6,', 19, 400, INK) + T(40, 288, 'yet editing layer 6 works for them.', 19, 400, INK)
+dots += T(40, 330, 'Each grey dot is one fact, from their paper.', 16, 400, MUT)
 g += F(2, dots)
 g += F(3, catch('Where a fact lives does not tell you where to edit it. The correlation is about zero.'))
 HASE = sec('Where a fact lives is not where editing works', SVG(g), ch='1',
-           ref='Hase, Bansal, Kim, Ghandeharioun, Does Localization Inform Editing?, NeurIPS 2023 (schematic, dots illustrative)',
-           notes='Two numbers for every fact. Across: causal tracing, corrupt the input, restore one layer, and see how much of the answer comes back. That says how much the fact lives in layer 6. Up: edit layer 6 with ROME and see whether the fact changes. Click. Everyone expected a diagonal: lives there more, edits there better. Click. What Hase and colleagues observed: almost every fact edits well in layer 6, whether it lives there or not. The dots are a schematic, the measured correlation was about zero, minus 0.13. Click. So an edit can land where the knowledge is not. Mechanism still matters elsewhere: choosing where to unlearn by it makes forgetting stick (Guo 2025, under the unlearning slide). The causal tracing figure from Meng 2022 is under the down arrow.')
+           ref='Hase, Bansal, Kim, Ghandeharioun, Does Localization Inform Editing?, NeurIPS 2023, Figure 4',
+           notes='Two numbers for every fact. Across: causal tracing, corrupt the input, restore one layer, and see how much of the answer comes back. That says how much the fact lives in layer 6. Up: edit layer 6 with ROME and see whether the fact changes. Click. Everyone expected a diagonal: lives there more, edits there better. Click. What Hase and colleagues observed: almost every fact edits well in layer 6, whether it lives there or not. The figure is theirs: each grey dot is one fact in GPT-J, most sit near zero tracing effect and still edit at nearly 1. The orange line is the fit, the measured correlation was about zero, slightly negative, minus 0.13. Their red dashed line is the expectation. Click. So an edit can land where the knowledge is not. Mechanism still matters elsewhere: choosing where to unlearn by it makes forgetting stick (Guo 2025, under the unlearning slide). The causal tracing figure from Meng 2022 is under the down arrow.')
 
 # ======================= ASSEMBLY =======================
 # ---- loop it1: results slide that pays off the trailer bars (P15, P10) ----
@@ -1864,6 +1862,7 @@ g += T(40, 34, 'Refusal in 13 chat models', 16, 600, MUT)
 g += T(40, 92, 'normal model', 16, 400, INK) + R(240, 74, 260, 26, AC2, 'none', 0, 2) + T(510, 92, 'refuses', 15, 400, MUT)
 g += T(40, 150, 'one direction removed', 16, 600, '#C45200') + R(240, 132, 14, 26, ACC, 'none', 0, 2) + T(264, 150, 'almost never refuses', 15, 600, '#C45200')
 g += T(40, 196, 'difference of means at one layer, removed everywhere', 13.5, 400, MUT)
+g += img(40, 226, 540, 170, 'figs/arditi2024.png') + L(40, 398, 580, 398, '#D7D2CB', 1)
 sc = T(620, 34, 'One steering vector, applied to single inputs', 16, 600, MUT)
 _r3.seed(3)
 for v in [_r3.gauss(1.2, 1.6) for _ in range(46)]:
@@ -1872,11 +1871,12 @@ for v in [_r3.gauss(1.2, 1.6) for _ in range(46)]:
 sc += L(620, 170, 1150, 170, INK, 1.5) + L(880, 60, 880, 176, '#DA291C', 1.5, 'stroke-dasharray="5 4"') + T(880, 194, '0: no effect', 13, 600, '#DA291C', 'middle')
 sc += P(f'M{880+1.2*52},56 L{880+1.2*52},170', ACC, 2.5) + T(880 + 1.2 * 52 + 8, 66, 'average: it works', 14, 600, '#C45200')
 sc += T(620, 194, 'moved the opposite way', 13, 400, MUT) + T(1150, 194, 'moved as intended', 13, 400, MUT, 'end')
+sc += img(680, 214, 400, 188, 'figs/tan2024.png') + L(680, 404, 1080, 404, '#D7D2CB', 1)
 g += F(1, sc)
-g += F(2, catch('One vector, many inputs pushed the wrong way. The average hides them.', 300))
+g += F(2, catch('One vector, many inputs pushed the wrong way. The average hides them.'))
 VEC2 = sec('Steering: right on average, wrong on many single inputs', SVG(g), ch='1',
-           ref='Arditi et al., Refusal in Language Models Is Mediated by a Single Direction, NeurIPS 2024, Figure 1 (redrawn). Tan et al., Analysing the Generalisation and Reliability of Steering Vectors, NeurIPS 2024 (schematic)',
-           notes='Two results side by side. Arditi: in 13 chat models, one direction found by a difference of means at one layer controls refusal, remove it and the model stops refusing. Tan: the same kind of vector, applied input by input, sends a large share of inputs the opposite way, on many datasets close to half. The bridge is our reading, not their claim: if the vector itself is unreliable per input, the signal for a bad change has to come from what the change did to the rest of the network.')
+           ref='Arditi et al., Refusal in Language Models Is Mediated by a Single Direction, NeurIPS 2024. Tan et al., Analysing the Generalisation and Reliability of Steering Vectors, NeurIPS 2024',
+           notes='Each drawing on top is the one point to take, the original figure sits under it. Two results side by side. Arditi: in 13 chat models, one direction found by a difference of means at one layer controls refusal, remove it and the model stops refusing. Tan: the same kind of vector, applied input by input, sends a large share of inputs the opposite way, on many datasets close to half. The bridge is our reading, not their claim: if the vector itself is unreliable per input, the signal for a bad change has to come from what the change did to the rest of the network.')
 
 def backup(sec_html):
     """a backup slide: stacked under the slide before it (down arrow), not counted in the main run"""
