@@ -1644,7 +1644,7 @@ g += F(1, nc)
 g += F(2, T(590, 400, 'Optogenetics shows a designed signal can switch brain circuits.', 19, 700, INK, 'middle') + T(590, 432, 'Could music be the switch that enters through the ear?', 19, 700, ACC, 'middle'))
 OPTO = sec('This year\'s Nobel: a switch for neurons, made of light', SVG(g), ch='0',
            ref='Nobel Prize 2026, Physiology or Medicine, Deisseroth, Hegemann, Nagel, announced Oct 5 2026. Sahel et al., Nature Medicine 2021. Tsai lab, MIT Picower Institute: 40 Hz sensory stimulation, mouse studies 2016 to 2019, PLOS ONE 2022. Cognito Therapeutics HOPE trial, enrollment completed Feb 2026',
-           notes='Step 3 of 4. One minute. The 2026 Nobel went to optogenetics: a light gated channel from an alga, put into chosen neurons, so light switches them on or off. It changed neuroscience, but it is invasive: a gene has to be delivered and light has to reach the cells, so in people it is limited, the first case was partial vision in one blind patient. The non invasive cousin is 40 Hz flicker of light and sound from Li-Huei Tsai\'s lab: in mice it drives gamma rhythms and reduces amyloid and tau, small human trials found it safe, and a phase 3 trial finished enrolling in February. If a plain 40 Hz click can do that, music, the richest sound we can design, might be a finer switch. Say clearly that this is the question, not a result.')
+           notes='Portraits: Ill. Niklas Elmehed, Nobel Prize Outreach, from nobelprize.org. Step 3 of 4. One minute. The 2026 Nobel went to optogenetics: a light gated channel from an alga, put into chosen neurons, so light switches them on or off. It changed neuroscience, but it is invasive: a gene has to be delivered and light has to reach the cells, so in people it is limited, the first case was partial vision in one blind patient. The non invasive cousin is 40 Hz flicker of light and sound from Li-Huei Tsai\'s lab: in mice it drives gamma rhythms and reduces amyloid and tau, small human trials found it safe, and a phase 3 trial finished enrolling in February. If a plain 40 Hz click can do that, music, the richest sound we can design, might be a finer switch. Say clearly that this is the question, not a result.')
 
 g = adefs('md')
 g += steps(3).replace('url(#pea)', 'url(#mda)')
@@ -1678,24 +1678,13 @@ def _card(x, title, sub):
     return R(x, 30, 360, 330, '#fff', LINE, 1.2, 8) + T(x + 20, 62, title, 18, 700, INK) + T(x + 20, 84, sub, 13.5, 400, MUT)
 # 1. circuits of neurons (Olah et al. 2020)
 c = _card(30, 'Circuits of neurons', 'Olah et al., Zoom In, Distill 2020')
-layers = [[(90, 140), (90, 200), (90, 260)], [(210, 120), (210, 180), (210, 240), (210, 300)], [(330, 170), (330, 250)]]
-for a_ in range(2):
-    for p_ in layers[a_]:
-        for q_ in layers[a_ + 1]:
-            strong = (p_[1] - q_[1]) ** 2 < 4000
-            c += L(*p_, *q_, VB if strong else '#d9d4cc', 2.2 if strong else 1)
-for col_, nm in zip(layers, ('edges', 'curves', 'circles')):
-    c += ''.join(C(x, y, 9, '#fff', VB, 1.6) for x, y in col_)
-    c += T(col_[0][0], 340, nm, 13, 600, VB, 'middle')
+c += img(45, 104, 330, 177, 'figs/olah2020-curve-circuit.png') + L(45, 284, 375, 284, '#D7D2CB', 1)
+c += T(50, 314, 'Curve detectors are wired from', 15, 400, INK) + T(50, 336, 'earlier curve and line detectors.', 15, 400, INK)
 g += c
 # 2. scene graphs (Johnson et al. 2015)
 c = _card(410, 'Objects and their relations', 'Johnson et al., scene graphs, CVPR 2015')
-SG = {'man': (500, 170), 'horse': (660, 170), 'hat': (500, 290), 'field': (660, 290)}
-for a_, b_, rel in (('man', 'horse', 'riding'), ('man', 'hat', 'wearing'), ('horse', 'field', 'on')):
-    (x1, y1), (x2, y2) = SG[a_], SG[b_]
-    c += L(x1, y1, x2, y2, VB, 1.8) + T((x1 + x2) / 2 + (10 if x1 == x2 else 0), (y1 + y2) / 2 - 8, rel, 13, 600, VB, 'start' if x1 == x2 else 'middle')
-for nm, (x, y) in SG.items():
-    c += R(x - 42, y - 17, 84, 34, '#EAF2F6', VB, 1.5, 17) + T(x, y + 5, nm, 14, 600, VB, 'middle')
+c += img(425, 104, 330, 137, 'figs/johnson2015-scenegraph.png') + L(425, 244, 755, 244, '#D7D2CB', 1)
+c += T(430, 284, 'Objects are nodes, relations are edges:', 15, 400, INK) + T(430, 306, 'girl holding racket, in front of cone.', 15, 400, INK)
 g += F(1, c)
 # 3. image as a graph of patches (Han et al. 2022)
 c = _card(790, 'Patches as nodes', 'Han et al., Vision GNN, NeurIPS 2022')
@@ -1709,7 +1698,7 @@ g += F(2, c)
 g += F(3, T(590, 410, 'Inside vision models, researchers already find graphs:', 19, 400, INK, 'middle') + T(590, 440, 'neurons wired into circuits, and objects linked by relations.', 19, 700, INK, 'middle'))
 VISION = sec('Vision models have graphs inside too', SVG(g), ch='0',
              ref='Olah et al., Zoom In: An Introduction to Circuits, Distill 2020. Johnson et al., Image Retrieval using Scene Graphs, CVPR 2015. Han et al., Vision GNN: An Image is Worth Graph of Nodes, NeurIPS 2022',
-             notes='One slide on images, because music and vision together cover the other big modalities. Left: in an image model, Olah and colleagues traced curve detectors built from edge detectors, and circle detectors built from curves: neurons wired into a circuit, which is a graph. Middle: scene graphs describe an image as objects linked by relations, man riding horse. Right: Vision GNN treats patches as nodes and links patches that look alike. So the graph view is already working in vision. Bridge: and music, the modality this talk goes deep on, has the simplest graph of all.')
+             notes='One slide on images, because music and vision together cover the other big modalities. Left: in an image model, Olah and colleagues traced curve detectors in InceptionV1 and showed they are wired from earlier curve and line detectors, the figure is theirs: neurons wired into a circuit, which is a graph. Middle: scene graphs describe an image as objects linked by relations, in their figure a girl holding a racket, in front of a cone. Right: Vision GNN treats patches as nodes and links patches that look alike. So the graph view is already working in vision. Bridge: and music, the modality this talk goes deep on, has the simplest graph of all.')
 
 # ---- Nov 14 (his request): book, creativity as a new edge, then how new music forms arise ----
 def cover(x, y, w, h, fname, label):
