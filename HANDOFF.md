@@ -1,5 +1,32 @@
 # Handoff: Is There a Graph Inside Generative Models?
 
+## CURRENT STATE (2026-11-15, read this first, the sections below it are older)
+Talk: RIT CS department, Thu Nov 19 2026, 45 min including questions, audience CS faculty. Live deck: https://aquastar.github.io/graph-inside-generative-models/ . HEAD 57453f9. 32 main slides plus backups (down arrow).
+
+How to build: `python3 src/build.py` writes index.html. src/talk.py holds new slides and `assemble()` (slide order, backups via `backup()`, spoken bridges via `bridge()`), src/build.py reuses slides from the old deck src/legacy/nn2n_index.html by index (`OLDS`), applies graph tags (`GTAGS`), src/style_v2.py is the restyle pass and CSS (f string, double braces). Preview: serve the folder, screenshot each slide with Playwright, look at every changed slide before pushing. Commit and push after each change.
+
+Current order. Opening: cover, "Today we change and explain models with vectors", "In text, knowledge has the shape of a graph" (Space Needle), "Vision models have graphs inside too" (Olah circuits, scene graphs, Vision GNN, drawn only), Für Elise graph, two claims. Part 1: divider, seven surgeries, merging, pruning, steering (VEC2), unlearning, Hase localization, three lessons, then ours: two hops (CIKM 2026, published), what is a delta graph, results. Part 2: Gardner and Fei-Fei Li, Picard and Minsky plus Meyer line, Nobel optogenetics, music medicine, creativity (five covers: Young, Koestler, Boden, Johnson, Uzzi Science 2013, then A + B graph), genre family tree plus FusionGAN ICDM 2017, fold 88 keys, Occam, richer nodes, longest memory copies, pitch helix and circle of fifths (prior work), steering one way, IDyOM predicts the brain, plan slide. Close: seven graph cards plus the question.
+
+Seven graph tags (numbered by first appearance, "graph N of 7"): 1 knowledge, 2 circuit and scene (vision), 3 note transition, 4 delta, 5 pitch helix and circle of fifths, 6 style reachability, 7 listener's expectation (IDyOM).
+
+His rules (all firm):
+- No em or en dashes, no semicolons, ranges use "to", American spelling. Talk to him in short Chinese.
+- Slides must feel human: real images (book covers, paper first pages, photos of people, real experiment photos) next to our drawings. A quoted person needs a photo or logo, never initials. Missing image: placeholder plus ask him. Do not download photos of real people from the web, he supplies them (figs/people, figs/books).
+- References: one line per slide, clearly lighter than body text (#A39E93), each work linked (arXiv, DOI, else Scholar), automatic in style_v2.ref_separators. Citations only at the bottom, never repeated in cards.
+- No status labels like In progress on the close slide. Never present unfinished work as a result. CIKM 2026 is published.
+- Do not name the NIH R16. Do not use the ICLR submission title, say "co-authored work under review".
+- Talk rules live in his KB skill presentation-craft (aquastar/zhiqian-knowledge-base, claude/skills/presentation-craft: SKILL.md, visual-style.md, reference.md). New lessons go there.
+
+Open items:
+1. Part 1 related slides come from the old deck and are dense (merging, unlearning have small labels and long side boxes). Trim each to one key result and one catch.
+2. Vision slide has no real figure. Ask him for a screenshot of Olah "Zoom In" curve circuit and a scene graph figure.
+3. Timing: probably over 45 min. Candidates to move to backup: genre family tree (slide 22), Gardner and Li (slide 17). Then redo the timing table in docs/speaker-guide-zh.md section 4 (it is out of date, slide numbers shifted).
+4. Nobel slide: three laureate photos still initials (KD, PH, GN), waiting for his photos.
+5. Speaker notes of moved slides may still reference old slide numbers, check bridges after reordering.
+6. Waiting for him: KB CHANGELOG merge on branch kb-sync/2026-11-04-funnel-it5 (reply "两段都留"), the "需要你" answers in the speaker guide, a timed rehearsal.
+7. Network: image hosts are blocked in the cloud sandbox even after he added domains. Ask him to attach images.
+
+
 RIT CS department internal talk (outreach). Title and abstract due Nov 19 2026. Live deck: https://aquastar.github.io/graph-inside-generative-models/
 
 ## Fixed decisions
