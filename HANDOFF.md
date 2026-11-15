@@ -1,33 +1,51 @@
 # Handoff: Is There a Graph Inside Generative Models?
 
-## CURRENT STATE (2026-11-15, read this first, the sections below it are older)
-Talk: RIT CS department, Thu Nov 19 2026, 45 min including questions, audience CS faculty. Live deck: https://aquastar.github.io/graph-inside-generative-models/ . HEAD 57453f9. 32 main slides plus backups (down arrow).
+## CURRENT STATE (2026-11-15, read this first, everything below "Fixed decisions" is older history)
 
-How to build: `python3 src/build.py` writes index.html. src/talk.py holds new slides and `assemble()` (slide order, backups via `backup()`, spoken bridges via `bridge()`), src/build.py reuses slides from the old deck src/legacy/nn2n_index.html by index (`OLDS`), applies graph tags (`GTAGS`), src/style_v2.py is the restyle pass and CSS (f string, double braces). Preview: serve the folder, screenshot each slide with Playwright, look at every changed slide before pushing. Commit and push after each change.
+### 1. What this is and who it is for
+- Talk: "Is There a Graph Inside Generative Models? Evidence from Language and Music" by Zhiqian Chen (陈志谦), new assistant professor, RIT Department of Computer Science (joined Aug 2026).
+- Event: RIT CS department internal talk, Thursday Nov 19 2026, 45 minutes including questions. Audience: CS faculty from many areas (systems, theory, vision, NLP, HCI), not specialists in interpretability or music.
+- Why he gives it: outreach. He is new, and wants colleagues to see one coherent research program and come to him as collaborators (knowledge graphs, NLP, vision, audio and hearing, AutoML, theory). So the talk must be clear to non specialists, interesting every minute, show presentation craft, and be honest: never overclaim, never show unfinished work as a result.
+- Deck: Reveal.js built by Python, published on GitHub Pages: https://aquastar.github.io/graph-inside-generative-models/ . HEAD at handoff: 24a9a74. 32 main slides plus backup slides under the down arrow.
 
-Current order. Opening: cover, "Today we change and explain models with vectors", "In text, knowledge has the shape of a graph" (Space Needle), "Vision models have graphs inside too" (Olah circuits, scene graphs, Vision GNN, drawn only), Für Elise graph, two claims. Part 1: divider, seven surgeries, merging, pruning, steering (VEC2), unlearning, Hase localization, three lessons, then ours: two hops (CIKM 2026, published), what is a delta graph, results. Part 2: Gardner and Fei-Fei Li, Picard and Minsky plus Meyer line, Nobel optogenetics, music medicine, creativity (five covers: Young, Koestler, Boden, Johnson, Uzzi Science 2013, then A + B graph), genre family tree plus FusionGAN ICDM 2017, fold 88 keys, Occam, richer nodes, longest memory copies, pitch helix and circle of fifths (prior work), steering one way, IDyOM predicts the brain, plan slide. Close: seven graph cards plus the question.
+### 2. The story the talk must tell (the effect he wants)
+- Throughline: we change and explain models with vectors (steering, editing, LoRA, fine tuning, probes, features). A vector says what we added, not where it went. The knowledge inside models has another shape: a graph. Reading that graph shows what a vector misses.
+- Arc: (1) context, everyone uses vectors; (2) the graph possibility in text, in vision, in music, one slide each, so the audience sees the idea is general across modalities; (3) Part 1 language: mostly the field's related work (each surgery with its best result and its catch), then our own work in only three slides; (4) Part 2 music: why music (emotion, a designed signal can switch the brain, music as medicine), then creativity as a new edge between ideas leading to music genres and our 2017 FusionGAN, then music graphs from simple to inside the generator, then the listening brain as the outside judge; (5) close: the seven graphs seen today, and the open question for the room.
+- Every new graph gets a small tag at the top of its slide ("graph N of 7, name"), so the talk is literally strung on graphs. The close slide lists all seven with small drawn icons.
+- Tone: curious and concrete. Each slide makes one point, has one diagram that builds with at most four clicks, short labels, one takeaway line at the bottom. He dislikes clutter, repeated text, decorative motion and anything that reads machine made.
 
-Seven graph tags (numbered by first appearance, "graph N of 7"): 1 knowledge, 2 circuit and scene (vision), 3 note transition, 4 delta, 5 pitch helix and circle of fifths, 6 style reachability, 7 listener's expectation (IDyOM).
+### 3. Current slide order (main slides)
+Opening: 1 cover. 2 "Today we change and explain models with vectors" (four one line formulas, plus probes and features are vectors too). 3 "In text, knowledge has the shape of a graph" (Space Needle edit ripples, graph 1). 4 "Vision models have graphs inside too" (Olah circuits, Johnson scene graphs, Han Vision GNN, graph 2). 5 Für Elise as a ball walking a note graph (graph 3, live animation, click for sound). 6 "Two claims for the rest of this talk".
+Part 1 language: 7 divider. 8 seven kinds of surgery. 9 merging. 10 pruning. 11 steering, right on average and wrong per input. 12 unlearning bypasses, not deletes. 13 where a fact lives is not where editing works (Hase). 14 every surgery, three lessons. Ours: 15 two hops break every model (CIKM 2026, published). 16 what is a delta graph (graph 4). 17 results.
+Part 2 music: 18 Gardner and Fei-Fei Li, knowledge beyond text. 19 Picard and Minsky on emotion, plus Meyer: musical emotion comes from expectation. 20 2026 Nobel, optogenetics, could music be a switch that enters through the ear. 21 music already acts on the brain as medicine. 22 creativity (five covers: Young 1940, Koestler 1964, Boden 1990, Johnson 2010, Uzzi Science 2013, then the A + B graph). 23 new music is born the same way (genre family tree, FusionGAN ICDM 2017). 24 fold 88 keys into 12 degrees. 25 Occam, the simplest graph names the tradition. 26 richer nodes beat longer memory. 27 the longest memory copies. 28 pitch helix and circle of fifths inside MusicGen (prior work, graph 5). 29 steering leaves a style easily but rarely enters one (graph 6). 30 IDyOM's expectation graph predicts the listening brain (graph 7). 31 plan: a graph from inside MusicGen judged by the brain (no graph tag, it is not done). 32 close, seven graph cards.
 
-His rules (all firm):
-- No em or en dashes, no semicolons, ranges use "to", American spelling. Talk to him in short Chinese.
-- Slides must feel human: real images (book covers, paper first pages, photos of people, real experiment photos) next to our drawings. A quoted person needs a photo or logo, never initials. Missing image: placeholder plus ask him. Do not download photos of real people from the web, he supplies them (figs/people, figs/books).
-- References: one line per slide, clearly lighter than body text (#A39E93), each work linked (arXiv, DOI, else Scholar), automatic in style_v2.ref_separators. Citations only at the bottom, never repeated in cards.
-- No status labels like In progress on the close slide. Never present unfinished work as a result. CIKM 2026 is published.
-- Do not name the NIH R16. Do not use the ICLR submission title, say "co-authored work under review".
-- Talk rules live in his KB skill presentation-craft (aquastar/zhiqian-knowledge-base, claude/skills/presentation-craft: SKILL.md, visual-style.md, reference.md). New lessons go there.
+### 4. How the code works
+- `python3 src/build.py` writes index.html. Commit index.html with the sources.
+- src/talk.py: new slides as SVG built with helpers (T text, R rect, C circle, L line, P path, F(i, ...) fragment, wrap, photo(), cover() for book covers, quote(), person()). `assemble()` at the end sets the order: `vision` list is the opening, `lang` is Part 1, `mus` is Part 2, `close`. `backup(x)` nests a slide under the previous main one. `bridge(x, line)` appends a spoken bridge to the speaker notes. `toch(x, '1')` sets the chapter.
+- src/build.py: reuses slides from the old deck src/legacy/nn2n_index.html by index through `OLDS` (indices 3, 17, 18, 21, 22, 25, 29, 30, 33, 35, 38 to 40, 43, 45 to 51), applies the graph tags from `GTAGS`.
+- src/style_v2.py: restyle pass and CSS (a Python f string, so CSS braces are doubled). `ref_separators` and `linkify` make the bottom reference line (one line, links, short "Author Year" labels when several).
+- Images: figs/people (portraits he supplied), figs/books (covers he supplied), other figs/*.png are paper figures.
+- Checking: serve the folder (python3 -m http.server), screenshot every slide with Playwright at 1280x660, open the screenshots of every slide you changed, check for overlap, clipped text, empty boxes, and that the reference line and graph tag show. Never push a slide you have not looked at.
+- After each change: commit with a short message, push to main (Pages deploys from main).
 
-Open items:
-1. Part 1 related slides come from the old deck and are dense (merging, unlearning have small labels and long side boxes). Trim each to one key result and one catch.
-2. Vision slide has no real figure. Ask him for a screenshot of Olah "Zoom In" curve circuit and a scene graph figure.
-3. Timing: probably over 45 min. Candidates to move to backup: genre family tree (slide 22), Gardner and Li (slide 17). Then redo the timing table in docs/speaker-guide-zh.md section 4 (it is out of date, slide numbers shifted).
-4. Nobel slide: three laureate photos still initials (KD, PH, GN), waiting for his photos.
-5. Speaker notes of moved slides may still reference old slide numbers, check bridges after reordering.
-6. Waiting for him: KB CHANGELOG merge on branch kb-sync/2026-11-04-funnel-it5 (reply "两段都留"), the "需要你" answers in the speaker guide, a timed rehearsal.
-7. Network: image hosts are blocked in the cloud sandbox even after he added domains. Ask him to attach images.
+### 5. His rules (firm, he has corrected each one before)
+- Text: no em dashes, en dashes or semicolons anywhere, ranges use "to", American spelling. Talk to him in short Chinese, slides in English.
+- Look: Tufte style, ET Book font family for all text, soft colors within the RIT palette, orange for language, purple for music, blue for vision. Diagrams must look polished (Transformer Circuits or TikZ quality).
+- Human touch: real images next to our drawings, book covers, a paper's first page, photos of quoted people, real photos of experiments. A quoted person must have a photo or logo, never initials only. If an image is missing, leave a visible placeholder and ask him. Do not download photos of real people yourself. The sandbox blocks image hosts, so ask him to attach images.
+- Quotes: never invent a quote. If the exact wording cannot be verified, write a paraphrase in upright text without quote marks.
+- Person cards: quote beside the photo, card only as tall as its content, no empty space, no tag chips.
+- References: only at the bottom of the slide, never repeated inside cards, at most one line, clearly lighter than body text, every work linked.
+- Status: no In progress or Planned labels on the close slide, and do not count unfinished work as a graph or a result. CIKM 2026 paper is published. Do not name the NIH R16. Do not use the ICLR submission title, say "co-authored work under review".
+- Full rule set: his knowledge base aquastar/zhiqian-knowledge-base, folder claude/skills/presentation-craft (SKILL.md, visual-style.md, reference.md, template/style_v2.py). Add any new lesson he gives you there too.
 
-
-RIT CS department internal talk (outreach). Title and abstract due Nov 19 2026. Live deck: https://aquastar.github.io/graph-inside-generative-models/
+### 6. What to do next, in order
+1. Trim Part 1 related slides (8 to 14). They come from his older talk and are dense: merging and unlearning have small labels and long side boxes. Goal per slide: the field's key result in one picture and the catch in one line, readable from the back of a room, about 60 seconds each. Keep the old content's facts, cut the rest into speaker notes.
+2. Time budget: aim for about 38 minutes of talking plus questions. Count about 70 to 80 seconds per main slide. If over, move to backup first: slide 23 genre tree (keep FusionGAN by folding it into slide 22 or 24), then slide 18 Gardner and Li. Ask him before cutting anything else.
+3. Vision slide 4: ask him for screenshots of the curve detector circuit figure from Olah et al. "Zoom In" (Distill 2020) and one scene graph figure, then put them next to the drawn diagrams.
+4. Nobel slide 20: three laureates (Deisseroth, Hegemann, Nagel) show initials, ask him for photos.
+5. Speaker notes: after the reorder, bridges and notes may mention old slide numbers or slides that moved. Read every main slide's notes and fix the chain so each slide's bridge leads into the next one.
+6. Update docs/speaker-guide-zh.md: section 4 timing table for the new 32 slides, page numbers in other sections.
+7. Waiting on him: the KB CHANGELOG merge (branch kb-sync/2026-11-04-funnel-it5), the items marked "需要你" in the speaker guide, a timed rehearsal.
 
 ## Fixed decisions
 - Title: Is There a Graph Inside Generative Models? Evidence from Language and Music
