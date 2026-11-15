@@ -1767,6 +1767,88 @@ GENRE = sec('New music is born the same way', SVG(g), ch='0',
             ref='Gioia, The History of Jazz, 2011 (genre lineages). Chen, Wu, Lu, Lerch, Lu, Learning to Fuse Music Genres with Generative Adversarial Dual Learning, IEEE ICDM 2017',
             notes='Music has a family tree, like a science genealogy. Jazz came from blues, ragtime and brass bands. Rock and roll came from rhythm and blues and country. Then jazz plus rock gave fusion, jazz plus samba gave bossa nova. Each new style inherits from its parents and adds one combination nobody had made. Click: in 2017 we asked whether a model can draw such an edge. FusionGAN takes jazz and folk melodies and learns a third style with three generator and judge pairs and a distance that keeps the fusion equally far from both parents. Listeners heard it as a fusion slightly more often than a plain GAN, a small margin. So a generator can draw a new edge. The question for the rest of this part: is there a graph inside the generator that tells us which edges it can draw? Start with the simplest graph of music.')
 
+# ======================= PART 1, related work, one result and one catch per slide =======================
+FAILC = '#DA291C'
+def catch(s_, y=446):
+    """the one line catch at the bottom of a related work slide"""
+    return T(40, y, f'<tspan fill="{FAILC}" font-weight="600">The catch.</tspan> {s_}', 21, 400, INK, extra='font-family="et-book,Georgia,serif" style="font-size-adjust:none"')
+
+def arrow(x1, y1, x2, y2, col, sw, mk, extra=''):
+    return P(f'M{x1},{y1} L{x2},{y2}', col, sw, extra=f'marker-end="url(#{mk})" ' + extra)
+
+# ---- merging ----
+g = adefs('mg')
+O, M_, Lw = (110, 390), (370, 330), (190, 170)
+S_ = (M_[0] + Lw[0] - O[0], M_[1] + Lw[1] - O[1])
+g += T(40, 34, 'Each fine tune is an arrow from the base model', 16, 600, MUT)
+g += L(*M_, *S_, '#ACA39A', 1.2, 'stroke-dasharray="5 4"') + L(*Lw, *S_, '#ACA39A', 1.2, 'stroke-dasharray="5 4"')
+g += arrow(*O, M_[0] - 4, M_[1] + 1, AC2, 2.5, 'mga') + arrow(*O, Lw[0] + 1, Lw[1] + 4, AC2, 2.5, 'mga')
+g += C(*O, 7, AC2) + T(O[0] - 12, O[1] + 26, 'base model', 15, 400, MUT)
+g += T(M_[0] + 14, M_[1] + 6, 'chemistry expert', 16, 400, INK) + T(Lw[0] - 14, Lw[1] - 6, 'math expert', 16, 400, INK, 'end')
+g += arrow(*O, S_[0] - 4, S_[1] + 4, ACC, 3, 'mgo') + C(*S_, 8, ACC)
+g += T(S_[0] + 16, S_[1] - 6, 'add the two arrows:', 16, 400, MUT) + T(S_[0] + 16, S_[1] + 18, 'both skills, no retraining', 18, 600, INK)
+g += F(1, C(*S_, 15, 'none', FAILC, 2) + T(S_[0] + 16, S_[1] + 48, 'and whatever else', 16, 400, FAILC) + T(S_[0] + 16, S_[1] + 70, 'the experts learned', 16, 400, FAILC))
+g += F(1, img(730, 60, 410, 330, 'figs/hammoud2024.png') + L(730, 394, 1140, 394, '#D7D2CB', 1))
+g += F(2, catch('Merge in one misaligned expert: every skill exam passes, and the merge now answers harmful requests.'))
+MERGE = sec('Merging: add two fine tunes and get both skills', SVG(g), ch='1',
+            ref='Ilharco et al., Editing Models with Task Arithmetic, ICLR 2023. Hammoud et al., Model Merging and Safety Alignment, EMNLP Findings 2024, Figure 1',
+            notes='The result first. Ilharco and colleagues showed that a fine tune can be treated as an arrow: the fine tuned weights minus the base weights. Add two arrows and the model has both skills with no retraining. Subtract one and the skill fades, for example minus a toxic text arrow and the model writes less toxic text. You can even build a skill with no data by analogy, Yelp minus Amazon language plus Amazon sentiment. The open model community merges public fine tunes this way. Click. The catch, from Hammoud 2024: a chemistry expert that is aligned merged with a math expert that lost its safety training. The merge passes the chemistry and the math exams, and now answers a request for how to make a poison. The exams never asked. Two technical caveats if asked: models trained separately must have their neurons aligned first, which is a graph matching problem (Ainsworth 2023), and added arrows interfere through tiny redundant changes and sign conflicts, which TIES fixes by trimming and voting (Yadav 2023). Bridge: merging adds arrows. Pruning removes parts.')
+
+# ---- pruning ----
+g = adefs('pr')
+g += T(40, 34, 'Llama 2 70B, layers removed from the deep half', 16, 600, MUT)
+NL = 16
+for k in range(NL):
+    y = 372 - k * 20
+    gone = 7 <= k <= 14
+    g += R(110, y, 170, 14, 'none' if gone else AC2, '#ACA39A' if gone else 'none', 1.2 if gone else 0, 2, 'stroke-dasharray="4 3"' if gone else '')
+g += T(195, 404, 'input', 15, 400, MUT, 'middle') + T(195, 62, 'output', 15, 400, MUT, 'middle')
+g += P('M296,234 L306,234 L306,92 L296,92', INK, 1.2) + T(318, 158, 'about half', 16, 600, INK) + T(318, 180, 'of the layers', 16, 400, INK) + T(318, 202, 'removed', 16, 400, INK)
+g += T(470, 120, 'Multiple choice accuracy barely moves', 24, 400, INK, extra='font-family="et-book,Georgia,serif" style="font-size-adjust:none"')
+g += T(470, 152, 'until about half the layers are gone (MMLU, BoolQ), after light repair', 16, 400, MUT)
+mt = T(470, 238, 'Remove a quarter of the layers, then repair (Llama 3.1 8B, Mistral 7B):', 16, 600, MUT)
+mt += T(470, 282, 'classification', 17, 400, INK) + R(700, 266, 340, 22, '#ACA39A', 'none', 0, 2) + R(700, 266, 400, 22, 'none', '#D7D2CB', 1, 2) + T(700, 312, '80 to 90% kept', 15, 400, MUT)
+mt += T(470, 356, 'math and code generation', 17, 400, INK) + R(700, 340, 90, 22, 'none', FAILC, 1.8, 2, 'stroke-dasharray="5 3"') + R(700, 340, 400, 22, 'none', '#D7D2CB', 1, 2) + T(700, 386, 'drop hard, and repair does not bring them back', 15, 400, FAILC)
+g += F(1, mt)
+g += F(2, catch('The exams were multiple choice. Multi step reasoning broke, and no exam asked.'))
+PRUNE = sec('Pruning: many layers can go, and reasoning breaks quietly', SVG(g), ch='1',
+            ref='Gromov et al., The Unreasonable Ineffectiveness of the Deeper Layers, ICLR 2025. Shrestha et al., On the Limits of Layer Pruning for Generative Reasoning, 2026',
+            notes='The result first. Gromov and colleagues deleted blocks of deep layers from Llama 2 70B, choosing the block that changes its input the least, then healed the model with a small fine tune. Question answering accuracy stays flat until about half the layers are gone. Only the first and last layers are irreplaceable, and Sun 2025 shows middle layers can even be skipped or shuffled. Click. The catch, from Shrestha 2026: with the same kind of pruning, a quarter of the layers, classification keeps 80 to 90 percent, but math (GSM8K) and code (HumanEval) drop hard, and recovery fine tuning restores classification, not reasoning. Their figure is under the down arrow. Garcia 2026 adds that two definitions of redundant disagree at 8B. Open question: an internal signal that says which deletions were safe, before the expensive test. Bridge: pruning removes parts. Steering adds a push at run time.')
+
+# ---- unlearning ----
+g = adefs('ul')
+g += img(40, 24, 520, 361, 'figs/lee2024dpo.png') + L(40, 390, 560, 390, '#D7D2CB', 1)
+g += T(650, 60, 'What the exam sees', 16, 600, MUT) + wrap(650, 96, 'After safety training (DPO), the model stops writing toxic text.', 22, 400, INK, width=38, lh=30)
+g += F(1, T(650, 200, 'What is inside', 16, 600, MUT) + wrap(650, 236, 'The toxic region is still there. Activations take a small detour around it, the purple arrow.', 22, 400, INK, width=38, lh=30))
+g += F(2, catch('One small push brings the toxicity back. A short harmless fine tune brings forgotten facts back too.'))
+UNLEARN = sec('Unlearning: the old circuit is bypassed, not deleted', SVG(g), ch='1',
+              ref='Lee et al., A Mechanistic Understanding of Alignment Algorithms, ICML 2024, Figure 3. Hu et al., ICLR 2025',
+              notes='The result first. Lee and colleagues trained GPT 2 with DPO to stop writing toxic text, and the benchmark says it worked. Then they looked inside. Click. The toxic vectors in the MLP layers are still there. DPO learned a small offset, the purple arrow, that routes activations around the toxic region. Click. The catch: one simple intervention on that offset brings toxicity back. Unlearning has the same problem: Hu 2025 shows that a short fine tune on harmless, unrelated text restores knowledge that was supposedly forgotten, and quantization, hidden state probes and adaptive attacks recover it too. Constructive answer, under the down arrow: Guo 2025 aims unlearning at the circuit that causal analysis locates, and then relearning recovers 0.20 instead of 0.47 to 0.63. Minder 2026: the difference between base and fine tuned activations reveals what the fine tune was about, even on unrelated text. That before and after difference is the premise of our own work. Bridge: so where does a fact live, and does editing there work?')
+
+# ---- localization is not editing (Hase) ----
+import random as _rh
+g = adefs('hs')
+g += T(40, 34, 'Two numbers for every fact', 16, 600, MUT)
+g += T(40, 84, 'Across: how much of the fact', 19, 400, INK) + T(40, 110, 'lives in layer 6 (causal tracing)', 19, 400, INK)
+g += T(40, 162, 'Up: does editing layer 6', 19, 400, INK) + T(40, 188, 'change the fact? (ROME)', 19, 400, INK)
+X0, Y0, W_, H_ = 660, 380, 440, 300
+px = lambda v: round(X0 + v * W_); py = lambda v: round(Y0 - v * H_)
+g += L(X0, Y0, X0 + W_, Y0, INK, 1) + L(X0, Y0, X0, Y0 - H_ - 10, INK, 1)
+g += T(X0 + W_ / 2, Y0 + 34, 'how much the fact lives in layer 6', 15, 400, MUT, 'middle') + T(X0 - 10, Y0 + 5, '0', 14, 400, MUT, 'end') + T(X0 - 10, py(1) + 5, '1', 14, 400, MUT, 'end') + T(px(1), Y0 + 18, '1', 14, 400, MUT, 'middle')
+g += T(X0 - 26, Y0 - H_ / 2, 'editing works', 15, 400, MUT, 'middle', extra=f'transform="rotate(-90 {X0-26} {Y0-H_/2})"')
+g += F(1, L(px(0), py(0), px(1), py(1), FAILC, 1.8, 'stroke-dasharray="6 5"') + T(px(.62), py(.36), 'expected:', 16, 600, FAILC) + T(px(.62), py(.36) + 22, 'lives there more,', 16, 400, FAILC) + T(px(.62), py(.36) + 44, 'edits there better', 16, 400, FAILC))
+_rh.seed(7)
+dots = ''.join(C(px(_rh.uniform(.02, .98)), py(_rh.uniform(.9, 1.0)), 4.5, '#ACA39A') for _ in range(44))
+dots += C(px(.9), py(.98), 8, ACC) + T(px(.9), py(.98) - 16, 'Space Needle', 15, 600, INK, 'middle')
+dots += C(px(.1), py(.98), 8, ACC) + T(px(.1) + 4, py(.98) - 16, 'Eiffel Tower', 15, 600, INK, 'middle')
+dots += T(px(.5), py(.8), 'observed: almost every fact edits well', 16, 600, INK, 'middle')
+dots += T(40, 262, 'Eiffel Tower barely lives in layer 6,', 19, 400, INK) + T(40, 288, 'yet editing layer 6 works.', 19, 400, INK)
+g += F(2, dots)
+g += F(3, catch('Where a fact lives does not tell you where to edit it. The correlation is about zero.'))
+HASE = sec('Where a fact lives is not where editing works', SVG(g), ch='1',
+           ref='Hase, Bansal, Kim, Ghandeharioun, Does Localization Inform Editing?, NeurIPS 2023 (schematic, dots illustrative)',
+           notes='Two numbers for every fact. Across: causal tracing, corrupt the input, restore one layer, and see how much of the answer comes back. That says how much the fact lives in layer 6. Up: edit layer 6 with ROME and see whether the fact changes. Click. Everyone expected a diagonal: lives there more, edits there better. Click. What Hase and colleagues observed: almost every fact edits well in layer 6, whether it lives there or not. The dots are a schematic, the measured correlation was about zero, minus 0.13. Click. So an edit can land where the knowledge is not. Mechanism still matters elsewhere: choosing where to unlearn by it makes forgetting stick (Guo 2025, under the unlearning slide). The causal tracing figure from Meng 2022 is under the down arrow.')
+
 # ======================= ASSEMBLY =======================
 # ---- loop it1: results slide that pays off the trailer bars (P15, P10) ----
 g = adefs('r20')
@@ -1802,8 +1884,8 @@ sc += L(620, 170, 1150, 170, INK, 1.5) + L(880, 60, 880, 176, '#DA291C', 1.5, 's
 sc += P(f'M{880+1.2*52},56 L{880+1.2*52},170', ACC, 2.5) + T(880 + 1.2 * 52 + 8, 66, 'average: it works', 14, 600, '#C45200')
 sc += T(620, 194, 'moved the opposite way', 13, 400, MUT) + T(1150, 194, 'moved as intended', 13, 400, MUT, 'end')
 g += F(1, sc)
-g += F(2, R(40, 250, 1110, 110, SOFT, 'none', 0, 3) + T(590, 296, 'A vector works on average and fails on many single inputs.', 21, 400, INK, 'middle', extra='font-family="et-book,Georgia,serif" style="font-size-adjust:none"') + T(590, 330, 'Our reading: a detector cannot be the vector we added. It has to look at what the vector did to the rest of the network.', 15, 600, '#C45200', 'middle'))
-VEC2 = sec('A vector switches a behavior on average, and fails on many single inputs', SVG(g), ch='1',
+g += F(2, catch('One vector, many inputs pushed the wrong way. The average hides them.', 300))
+VEC2 = sec('Steering: right on average, wrong on many single inputs', SVG(g), ch='1',
            ref='Arditi et al., Refusal in Language Models Is Mediated by a Single Direction, NeurIPS 2024, Figure 1 (redrawn). Tan et al., Analysing the Generalisation and Reliability of Steering Vectors, NeurIPS 2024 (schematic)',
            notes='Two results side by side. Arditi: in 13 chat models, one direction found by a difference of means at one layer controls refusal, remove it and the model stops refusing. Tan: the same kind of vector, applied input by input, sends a large share of inputs the opposite way, on many datasets close to half. The bridge is our reading, not their claim: if the vector itself is unreliable per input, the signal for a bad change has to come from what the change did to the rest of the network.')
 
@@ -1860,14 +1942,18 @@ def assemble(cover, old):
     lang_cgt = bridge(CGT.replace('</aside>', ' If asked about contamination: PhysioNet data sit behind a data use agreement, not in public corpora, which is not an absolute guarantee.</aside>', 1), 'That was the graph outside the model, a record we can draw. The harder case is a change made inside the model, where nobody drew the graph.')
     rel = lambda i, t: retitle(old[i], t) if t else old[i]
     hase = bridge(old[35].replace('The first crack: where a fact lives is not where editing works', 'Where a fact lives is not where editing works').replace('(numbers illustrative)', '(numbers illustrative. Causal tracing: corrupt the input, restore one layer)').replace('Each grey dot is one fact. Hase 2023: correlation about zero (minus 0.13).', 'Schematic, each grey dot one fact. Hase 2023 measured a correlation of about zero (minus 0.13).').replace('Guo 2025, slide 31', 'Guo 2025').replace('So an edit can land where the knowledge is not, and its side effects can land where nobody looks.', 'Mechanism still matters: choosing where to change by it makes forgetting stick (Guo 2025).').replace('But choosing where to change by mechanism makes forgetting stick (Guo 2025).', 'So an edit can land where the knowledge is not.'), 'Across all these surgeries, the same three lessons, next slide.')
+    lessons = old[40]
+    lessons = re.sub(r'(<div class="ref">).*?(</div>)', r'\1Ilharco et al., ICLR 2023. Meng et al., NeurIPS 2022. Lee et al., ICML 2024. Kornblith et al., ICML 2019. Smith et al., ICML 2025. Gröger et al., ICML 2026\2', lessons, count=1, flags=re.S)
+    for cite in ('Ilharco 2023, Meng 2022, Arditi 2024', 'Lee 2024, Hu 2025, Hammoud 2024', 'Kornblith 2019, Smith 2025, Gröger 2026'):
+        lessons = re.sub(r'<text[^>]*>' + re.escape(cite) + '</text>', '', lessons)
     lang = [DIV1, bridge(toch(surg, '1'), 'Take them one at a time, each with its best known result and the catch.'),
-            rel(17, 'Merging: a fine tune is a vector you can add or subtract'), backup(rel(18, '')),
-            rel(22, 'Pruning: half the layers go, and reasoning dies quietly'), backup(rel(21, '')),
+            MERGE, backup(rel(18, '')),
+            PRUNE, backup(rel(21, '')), backup(rel(22, 'Shrestha 2026: classification recovers, reasoning does not')),
             VEC2, backup(rel(25, '')),
-            rel(29, 'Unlearning: the old circuit is bypassed, not deleted'), backup(rel(30, '')),
-            hase, backup(rome),
+            UNLEARN, backup(rel(30, '')),
+            bridge(HASE, 'Across all these surgeries, the same three lessons, next slide.'), backup(rome),
             backup(rel(38, '')), backup(rel(39, '')),
-            bridge(rel(40, 'Every surgery, three lessons'), 'So the exam reads answers only, and the change itself is a vector that says nothing about side effects. Our work asks one thing: read the change as a graph. Three slides.'),
+            bridge(retitle(lessons, 'Every surgery, three lessons'), 'So the exam reads answers only, and the change itself is a vector that says nothing about side effects. Our work asks one thing: read the change as a graph. Three slides.'),
             backup(toch(story, '1')), backup(toch(receipts, '1')), backup(silent_b),
             lang_cgt, d46_q, RES20, backup(old[48]), backup(abl), backup(lim_main), backup(retitle(old[51], 'Limits, all four, with the numbers'))]
     four = retitle(FOUR, 'Music generation went from a visible graph to a hidden one')
