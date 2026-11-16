@@ -698,11 +698,13 @@ g += F(1, P(f'M{S0[0]+8},{S0[1]-5} L{S1[0]-10},{S1[1]+5}', ACC, 3, extra='marker
           + T(S1[0] + 14, S1[1] - 10, '… is in Paris', 16, 600, '#C45200') + T(S1[0] + 14, S1[1] + 12, 'the vector we added', 14, 400, MUT))
 ux, uy = (S1[0] - S0[0]), (S1[1] - S0[1]); nrm = _mv.hypot(ux, uy); ux, uy = ux / nrm, uy / nrm
 mv = ''
+MOVED = []
 for x, y in pts:
     d = _mv.hypot(x - S0[0], y - S0[1])
     if 12 < d < 105:
         k = 22 * (1 - d / 105)
         nx, ny = x + ux * k + _rv.gauss(0, 4), y + uy * k + _rv.gauss(0, 4)
+        MOVED.append((round(nx), round(ny)))
         mv += L(round(x), round(y), round(nx), round(ny), FAILC, 1, 'stroke-opacity=".45"') + C(round(nx), round(ny), 3, FAILC, extra='opacity=".7"')
 for (x, y), (nx, ny), (lx, ly), lab, anc in (((268, 352), (288, 344), (284, 398), 'Seattle is in Washington', 'end'), ((392, 350), (414, 340), (402, 398), 'the Needle was built in 1962', 'start')):
     mv += L(x, y, nx, ny, FAILC, 1.4) + C(nx, ny, 5, FAILC) + L(nx, ny + 7, lx + (-4 if anc == 'end' else 4), ly - 16, FAILC, .8, 'stroke-opacity=".6"') + T(lx, ly, lab, 15, 400, FAILC, anc)
@@ -711,6 +713,7 @@ r = T(820, 200, 'The arrow says what', 26, 400, INK, extra=SER) + T(820, 234, 'w
 r += T(820, 298, 'Nothing says what', 26, 400, '#C45200', extra=SER) + T(820, 332, 'else moved.', 26, 400, '#C45200', extra=SER)
 r += T(820, 400, 'Probes and features are vectors too.', 15, 400, MUT)
 g += F(3, r)
+VC = dict(cloud=cloud, mv=mv, S0=S0, S1=S1, moved=list(MOVED))
 g = top_g + '<g transform="translate(70,82) scale(.86)">' + g + '</g>'
 VECTOR = sec('Every surgery is stored as a vector', SVG(g), ch='0',
              ref='Arditi et al., NeurIPS 2024. Meng et al., NeurIPS 2022. Hu et al., LoRA, ICLR 2022. Ilharco et al., ICLR 2023',
@@ -1084,24 +1087,37 @@ def _g7(k, x, y, col):
     return o
 
 g = adefs('tk2')
-SEVEN = [(1, 'Knowledge graph', 'facts as edges: Space Needle, Seattle, USA'),
-         (8, 'Circuit and scene graphs', 'neurons wired into circuits, objects linked'),
-         (3, 'Note transition graph', 'which note follows which, a Markov chain'),
-         (2, 'Delta graph', 'what an edit rewired inside the model'),
-         (5, 'Pitch helix and circle of fifths', 'music theory as shape inside MusicGen'),
-         (4, 'Style reachability graph', 'which styles steering can reach, and from where'),
-         (6, "The listener's expectation graph", 'what the brain expects next, and its surprise')]
-for k, (ic, name, line) in enumerate(SEVEN):
-    cx, cy = 40 + (k % 2) * 560, 24 + (k // 2) * 96
-    col, bg = [('#C45200', '#FDF3EA'), ('#2f6f8f', '#EAF2F6'), (MU, '#F4F0F9'), ('#C45200', '#FDF3EA')][min(k, 3)] if k < 4 else (MU, '#F4F0F9')
-    g += R(cx, cy, 540, 86, bg, 'none', 0, 4)
-    g += C(cx + 18, cy + 18, 11, col, 'none', 0) + T(cx + 18, cy + 22.5, str(k + 1), 12.5, 700, '#fff', 'middle')
-    g += _g7(ic, cx + 82, cy + 45, col)
-    g += T(cx + 150, cy + 40, name, 19, 600, INK) + T(cx + 150, cy + 64, line, 14, 400, MUT)
-g += T(870, 360, 'The same question fits any generative model:', 16, 400, INK, 'middle')
-g += T(870, 388, 'is there a graph inside?', 20, 700, MU, 'middle')
-TAKEAWAY = sec('Seven graphs today, from facts to the listening brain', SVG(g), ch='4',
-               notes='Walk the seven cards by number, a few words each, the same numbers as the tags on earlier slides. One and four are language, two is vision, the rest are music. Then close on the question at the bottom: it fits any generative model, and someone in this department may already have the model or the data to ask it.')
+# left: the cloud from slide 2 returns, and the graph shows where the edit went
+TR = 'translate(-30,-42) scale(.93)'
+S0_, S1_ = VC['S0'], VC['S1']
+named = [(288, 344), (414, 340)]
+mvd = sorted(VC['moved'], key=lambda q: math.hypot(q[0] - S0_[0], q[1] - S0_[1]))[:10] + named
+ed = ''.join(L(*S0_, *q, '#007A94', 1.8) for q in mvd[:6] + named)
+seen = set()
+for q in mvd:
+    for r in sorted(mvd, key=lambda r: math.hypot(r[0] - q[0], r[1] - q[1]))[1:3]:
+        key = tuple(sorted((q, r)))
+        if key not in seen:
+            seen.add(key); ed += L(*q, *r, '#007A94', 1.1, 'stroke-opacity=".75"')
+ed += ''.join(C(*q, 4, '#007A94') for q in mvd)
+top = C(*S0_, 7, INK) + T(S0_[0] - 12, S0_[1] + 28, 'Space Needle is in Seattle', 16, 400, INK, 'middle', extra='paint-order="stroke" stroke="#FBFAF7" stroke-width="5"')
+top += P(f"M{S0_[0]+8},{S0_[1]-5} L{S1_[0]-10},{S1_[1]+5}", ACC, 3, extra='marker-end="url(#tk2o)"') + C(*S1_, 7, ACC)
+g += f'<g transform="{TR}">' + VC['cloud'] + VC['mv'] + '</g>'
+g += F(1, f'<g transform="{TR}">' + ed + '</g>' + T(40, 420, 'Draw the graph, and the ripple has a shape you can test.', 18, 600, '#007A94'))
+g += f'<g transform="{TR}">' + top + '</g>'
+# right: the seven graphs, one line each
+SEVEN = [(1, 'Knowledge graph'), (8, 'Circuit and scene graphs'), (3, 'Note transition graph'), (2, 'Delta graph'),
+         (5, 'Pitch helix, circle of fifths'), (4, 'Style reachability graph'), (6, "Listener's expectation graph")]
+rt = T(700, 34, 'Seven graphs today', 16, 600, MUT)
+for k, (ic, name) in enumerate(SEVEN):
+    y = 74 + k * 50
+    col = '#C45200' if k in (0, 3) else ('#2f6f8f' if k == 1 else MU)
+    rt += f'<g transform="translate({730},{y}) scale(.62) translate({-730},{-y})">' + _g7(ic, 730, y, col) + '</g>'
+    rt += T(772, y + 6, name, 18, 400, INK)
+g += F(2, rt)
+g += F(3, T(700, 440, 'Is there a graph inside your model?', 24, 400, '#C45200', extra='font-family="et-book,Georgia,serif" style="font-size-adjust:none"'))
+TAKEAWAY = sec('A vector says what we added. A graph shows where it went.', SVG(g), ch='4',
+               notes='The cloud from slide 2 comes back: the same edit, the same facts that moved with it. Click: now draw the graph over them, which facts lean on the edited one. That is the whole talk in one picture: the arrow says what we added, the graph says where it went, and that is something we can test. Click: the seven graphs we met today, one line each. Click: the question for the room. Say who you would love to hear from: anyone who edits, merges or steers models, audiology and EEG labs for the listener side. Do not say thank you as the last line. Walk the seven cards by number, a few words each, the same numbers as the tags on earlier slides. One and four are language, two is vision, the rest are music. Then close on the question at the bottom: it fits any generative model, and someone in this department may already have the model or the data to ask it.')
 
 # ======================= ROUND 4 (Nov 2 2026): Space Needle anchor =======================
 RED = '#c0392b'
@@ -1867,7 +1883,7 @@ g += F(1, img(730, 60, 410, 330, 'figs/hammoud2024.png') + L(730, 394, 1140, 394
 g += F(2, catch('Merge in one misaligned expert: every skill exam passes, and the merge now answers harmful requests.'))
 MERGE = sec('Merging: add two fine tunes and get both skills', SVG(g), ch='1',
             ref='Ilharco et al., Editing Models with Task Arithmetic, ICLR 2023. Hammoud et al., Model Merging and Safety Alignment, EMNLP Findings 2024, Figure 1',
-            notes='The result first. Ilharco and colleagues showed that a fine tune can be treated as an arrow: the fine tuned weights minus the base weights. Add two arrows and the model has both skills with no retraining. Subtract one and the skill fades, for example minus a toxic text arrow and the model writes less toxic text. You can even build a skill with no data by analogy, Yelp minus Amazon language plus Amazon sentiment. The open model community merges public fine tunes this way. Click. The catch, from Hammoud 2024: a chemistry expert that is aligned merged with a math expert that lost its safety training. The merge passes the chemistry and the math exams, and now answers a request for how to make a poison. The exams never asked. Two technical caveats if asked: models trained separately must have their neurons aligned first, which is a graph matching problem (Ainsworth 2023), and added arrows interfere through tiny redundant changes and sign conflicts, which TIES fixes by trimming and voting (Yadav 2023). Bridge: merging adds arrows. Pruning removes parts.')
+            notes='The result first. Ilharco and colleagues showed that a fine tune can be treated as an arrow: the fine tuned weights minus the base weights. Add two arrows and the model has both skills with no retraining. Subtract one and the skill fades, for example minus a toxic text arrow and the model writes less toxic text. You can even build a skill with no data by analogy, Yelp minus Amazon language plus Amazon sentiment. The open model community merges public fine tunes this way. Click. The catch, from Hammoud 2024: a chemistry expert that is aligned merged with a math expert that lost its safety training. The merge passes the chemistry and the math exams, and now answers a request for how to make a poison. The exams never asked. Two technical caveats if asked: models trained separately must have their neurons aligned first, which is a graph matching problem (Ainsworth 2023), and added arrows interfere through tiny redundant changes and sign conflicts, which TIES fixes by trimming and voting (Yadav 2023). Bridge: merging adds arrows to the weights. Steering adds one at run time. Pruning, the opposite surgery, is under the down arrow.')
 
 # ---- pruning ----
 g = adefs('pr')
@@ -2032,7 +2048,7 @@ def assemble(cover, old):
         lessons = re.sub(r'<text[^>]*>' + re.escape(cite) + '</text>', '', lessons)
     lang = [DIV1, bridge(toch(surg, '1'), 'Take them one at a time, each with its best known result and the catch.'),
             MERGE, backup(rel(18, '')),
-            PRUNE, backup(rel(21, '')), backup(rel(22, 'Shrestha 2026: classification recovers, reasoning does not')),
+            backup(PRUNE), backup(rel(21, '')), backup(rel(22, 'Shrestha 2026: classification recovers, reasoning does not')),
             VEC2, backup(rel(25, '')),
             UNLEARN, backup(rel(30, '')),
             bridge(HASE, 'Across all these surgeries, the same three lessons, next slide.'), backup(rome),
@@ -2057,7 +2073,7 @@ def assemble(cover, old):
     emo_b = bridge(toch(EMOTION2, '2'), 'Emotion is one way music acts on the brain. Before we model music, one detour through this year\'s Nobel Prize, because it shows what a designed signal can do to brain circuits. The history of music models is under the down arrow.')
     copy_b = bridge(COPY, 'Before we go inside a generator, one honest line from the literature: in music, graphs win only when the edges carry something the sequence throws away, and often they do not (survey under the down arrow). The one place nobody has looked for such edges is inside the generator itself.')
     corpus_b = bridge(corpus, 'How much memory should the graph have? One note gives the right vocabulary with the wrong syntax, three notes memorize the piece (the picture is under the down arrow on the next slide).')
-    mus = [beyond2, emo_b, backup(hist), toch(OPTO, '2'), toch(MEDIC, '2'), toch(CREATE, '2'), toch(GENRE, '2'), FOLD, corpus_b, RICHER, backup(path), copy_b, backup(WHEN), PROBE, backup(MGEN), musres_b, bri, backup(BRL), backup(BRR), EEGDEMO, PLAN, backup(BRG)]
+    mus = [beyond2, emo_b, backup(hist), toch(OPTO, '2'), toch(MEDIC, '2'), toch(CREATE, '2'), toch(GENRE, '2'), FOLD, corpus_b, backup(RICHER), backup(path), copy_b, backup(WHEN), PROBE, backup(MGEN), musres_b, bri, backup(BRL), backup(BRR), EEGDEMO, PLAN, backup(BRG)]
     beyond = []
     close = [TAKEAWAY.replace('</section>', CLIP_JSON + '</section>')]
     parts = {'vision': vision, 'language': lang, 'music': mus, 'beyond': beyond, 'close': close}
