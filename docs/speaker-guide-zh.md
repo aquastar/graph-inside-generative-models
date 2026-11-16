@@ -4,7 +4,7 @@
 
 ## 一、我们自己的工作（最容易被追问）
 
-### 1. Delta-Graph Signatures（SDM 2026，第 3、13 到 16 页）
+### 1. Delta-Graph Signatures（SDM 2026，第 14、15 页）
 **一句话**：编辑前后各记录一遍模型内部每个模块的活动，把"哪些模块一起动"画成图，两张图相减就是 delta graph，用它的形状给编辑排风险。
 
 **打个比方**：体检只问"你感觉好吗"（考试只看答案），我们拍一张"术前术后的神经连接图"，看哪里重新接了线。
@@ -24,7 +24,7 @@
 - *"0.797 不算高。"* 答：它是分诊工具，不是裁判，价值在于先查谁。风险最高的 20% 里 86% 真的失败，其余 80% 里是 49%。
 - *"为什么不用 SAE 或探针？"* 答：那些读的是一个向量方向，我们读的是模块之间关系的变化，两者互补。
 
-### 2. Query-Graph Compatibility（CIKM 2026 正式版，第 15 页）
+### 2. Query-Graph Compatibility（CIKM 2026 正式版，第 13 页）
 
 论文：ALMutairi, Alotaibi, Alkulaib, Chen, Alsalamah, Lu，Query-Graph Compatibility: A Formal Pre-Condition for Faithful Knowledge-Grounded Language Model Generation，CIKM 2026，11 月 6 日上线，doi 10.1145/3799682.3840697。第一作者是 Mariam ALMutairi。
 
@@ -45,7 +45,7 @@
 - *"怎么知道模型没见过 MIMIC？"* 答：不能绝对保证，MIMIC-III 和 CORAL 需要数据使用协议，不在公开语料里。
 - *"这和编辑有什么关系？"* 答：它是"图在模型外面"的那一半。知识本身有结构，答不对有时是结构缺了。后面讲"模型里面的图"。
 
-### 3. 音乐的马尔可夫图实验（进行中，第 5、21 到 24 页）
+### 3. 音乐的马尔可夫图实验（进行中，第 5、21 到 23 页）
 **一句话**：把旋律折叠成 12 个音级，数"哪个音后面跟哪个音"得到 12 乘 12 的表（144 个数），一个普通分类器就能认出旋律来自哪个传统。
 
 **数字**：1,000 首旋律、六个语料库，一阶图 70.9%（随机 17%）。重建后的 992 首上，一阶 70.2%，二阶 78.2%，加上音长的节点 86.8% 到 88.7%。
@@ -55,7 +55,7 @@
 - *"为什么用逻辑回归而不是 n 元语法的似然分类？"* 答：两种都可以，逻辑回归把 144 个数当特征，好解释。
 - *"语料混杂吗？"* 答：有，巴赫众赞歌同一首调子会有多个和声版本，抬高长记忆的分数，帕莱斯特里那和 Trecento 的版本音值较长，抬高音长特征。这两点已经写在备注里。
 
-### 4. 风格的单向 steering（投稿中，第 6、26 页）
+### 4. 风格的单向 steering（投稿中，第 6、25 页）
 **一句话**：在 MusicGen 里减去一个风格方向，很容易让音乐离开这个风格，但加上方向很难让它进入另一个风格。
 
 **规矩**：不说论文标题，不说投稿会议。爵士和古典两个例子标的是示意。
@@ -136,7 +136,7 @@
 
 **Q4（敌意，知识图谱）** "Models still get many no path questions right, so the graph does not decide correctness."
 "Right, and the paper does not claim that. It claims a model cannot answer those faithfully from the record. On MIMIC-III every one of five models is 20 to 30 points less accurate without a path, and a third of the questions have none."
-在哪：第 15 页和备注。
+在哪：第 13 页和备注。
 
 **Q5（安全或系统）** "Can an editor game your scorer? Does it transfer from Qwen to Llama?"
 "We have not tested an adversary who knows the scorer, and cross model transfer is also untested, our cross validation is grouped by fact within each model and editor pair. Those are the next two experiments: train on Qwen and test on Llama, and let an editor optimize against the scorer."
@@ -167,18 +167,19 @@
 "If graph meant any matrix the title would be empty. The claim in Part 1 is that graph properties of the change carry information its size does not: 0.52 to 0.59 for single numbers against 0.798 with the shape. In Part 2 it is falsifiable: if the graph read from inside the generator explains the listener no better than the generator itself, it was our drawing, not the model's."
 在哪：第 7、15、26 页。
 
-## 四、时间预算（主线 29 页）
+## 四、时间预算（主线 29 页，讲 50 分钟，11 月 16 日新顺序）
 
-在第 4 轮的逐页估计上，加上 11 月 4 日新加的两页（光遗传学、音乐医学），主线约 37 分钟，加上过渡约 38 到 39 分钟，留 6 分钟左右提问。排练后按实际改。
+一小时的报告，讲 50 分钟，留 10 分钟提问。有内容的页按 1.5 到 2.5 分钟算，封面和过渡页按半分钟到一分钟算。排练后按实际改。
 
 | 段落 | 页 | 秒数 | 累计 |
 |---|---|---|---|
-| 开场预告 | 1 到 7 | 45, 90, 75, 60, 90, 60, 45 | 7:45 |
-| Part 1 语言 | 8 到 16 | 20, 100, 75, 90, 75, 150, 90, 75, 70 | 20:00 |
-| Part 2 开场与音乐医学 | 17 到 20 | 60, 75, 60, 75 | 24:30 |
-| Part 2 音乐建模 | 21 到 26 | 90, 75, 90, 135, 75, 40 | 33:15 |
-| 大脑与收尾 | 27 到 29 | 105, 90, 45 | 37:15 |
+| 开场 | 1 封面，2 改一个事实下一问就错，3 改模型的工具都是向量，4 视觉模型里已经找到图，5 Für Elise 小图，6 两个主张 | 45, 120, 120, 90, 120, 60 | 9:15 |
+| Part 1 别人的工作 | 7 七种手术，8 合并，9 steering，10 unlearning，11 Hase，12 三个教训 | 60, 105, 120, 105, 105, 75 | 19:45 |
+| Part 1 我们的工作 | 13 CIKM 缺路径，14 delta graph，15 结果 | 150, 150, 120 | 26:45 |
+| Part 2 为什么是音乐 | 16 知识不只是文字，17 情感，18 诺奖光遗传学，19 音乐当药 | 75, 90, 120, 90 | 33:00 |
+| Part 2 音乐的图 | 20 新想法是新边（含 FusionGAN），21 88 键折成 12 级，22 Occam 70.2%，23 记忆太长会抄（现场投票），24 MusicGen 里的乐理形状，25 steering 单向 | 120, 105, 105, 150, 105, 105 | 44:30 |
+| 大脑与收尾 | 26 IDyOM 预测大脑，27 现场 EEG demo，28 计划，29 结尾 | 105, 135, 75, 90 | 50:15 |
 
-超时的话先压第 19 页（光遗传学，讲 45 秒）和第 20 页（右边五条只念两条）。
+超时先压：第 16 页（30 秒带过），第 23 页（不投票，直接放 B），第 27 页（只放一个意外音符）。
 
-backup 页（按向下键）：9 下四类失败，10 下七种手术和四个证据，11 下"向量在单个输入上失败"，12 下 Meng 的因果追踪图，13 下方法八步，16 下完整四个局限，18 下最早的音乐模型，23 下记忆长度那张图，24 下"何时图有用"综述，25 下 MusicGen 是什么，27 下语言模型预测大脑和 Brain2Music，28 下"见过层，但从没见过转移图"的四篇工作。
+备用页（按向下键）：8 下 Hammoud 原图、剪枝三页（Gromov 曲线、Shrestha 原图），9 下 Tan 原图，10 下 Guo 机制性遗忘，11 下 ROME 因果追踪等三页，12 下故事总结、四个证据、静默失败，15 下方法细节和四个局限，17 下最早的音乐模型，20 下创造力完整版（A + B 图），22 下 Richer nodes 86.8% 和记忆长度图，23 下"何时图有用"综述，24 下 MusicGen 是什么，26 下语言模型预测大脑和 Brain2Music，28 下"见过层，但从没见过转移图"。

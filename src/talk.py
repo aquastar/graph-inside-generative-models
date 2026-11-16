@@ -232,6 +232,7 @@ for i, s in enumerate(styles):
 g += F(1, cm)
 g += F(2, R(820, 70, 330, 120, ACL, ACC, 1.5, 10) + T(985, 128, '70.2%', 44, 700, ACC, 'middle') + T(985, 166, 'five fold accuracy, chance 17%', 14, 600, INK, 'middle'))
 g += F(3, R(820, 210, 330, 150, '#fff', LINE, 1.5, 10) + T(840, 240, 'Confusions make musical sense', 15, 700, AC2) + T(840, 268, 'Bach and Palestrina swap about 17%', 13.5, 400, INK) + T(840, 292, 'folk and fiddle swap 10 to 12%', 13.5, 400, INK) + T(840, 316, 'Monteverdi and fiddle: never', 13.5, 400, INK) + T(840, 344, 'row normalized, percent', 12, 400, MUT))
+g += F(3, T(820, 396, 'Richer nodes help more than longer memory:', 13.5, 400, MUT) + T(820, 416, 'note plus its length reaches 86.8% (down arrow).', 13.5, 600, INK))
 g += F(4, T(590, 465, 'A first order graph already carries a style. 144 numbers name the corpus.', 18, 700, INK, 'middle'))
 CORPUS = sec('144 numbers name the corpus', SVG(g), ch='2', status='prog',
              ref='992 melodies, six public corpora (Bach chorales, Essen, Monteverdi, Palestrina, Ryan\'s Mammoth Collection, Trecento), parsed with music21, five fold cross validation. zhiqian.ai/music-markov',
@@ -706,11 +707,11 @@ for x, y in pts:
         nx, ny = x + ux * k + _rv.gauss(0, 4), y + uy * k + _rv.gauss(0, 4)
         MOVED.append((round(nx), round(ny)))
         mv += L(round(x), round(y), round(nx), round(ny), FAILC, 1, 'stroke-opacity=".45"') + C(round(nx), round(ny), 3, FAILC, extra='opacity=".7"')
-for (x, y), (nx, ny), (lx, ly), lab, anc in (((268, 352), (288, 344), (284, 398), 'Seattle is in Washington', 'end'), ((392, 350), (414, 340), (402, 398), 'the Needle was built in 1962', 'start')):
+for (x, y), (nx, ny), (lx, ly), lab, anc in (((268, 352), (288, 344), (284, 398), '... which country?', 'end'), ((392, 350), (414, 340), (402, 398), '... which currency?', 'start')):
     mv += L(x, y, nx, ny, FAILC, 1.4) + C(nx, ny, 5, FAILC) + L(nx, ny + 7, lx + (-4 if anc == 'end' else 4), ly - 16, FAILC, .8, 'stroke-opacity=".6"') + T(lx, ly, lab, 15, 400, FAILC, anc)
 g += F(2, mv)
 r = T(820, 200, 'The arrow says what', 26, 400, INK, extra=SER) + T(820, 234, 'we added.', 26, 400, INK, extra=SER)
-r += T(820, 298, 'Nothing says what', 26, 400, '#C45200', extra=SER) + T(820, 332, 'else moved.', 26, 400, '#C45200', extra=SER)
+r += T(820, 298, 'Nothing says what else', 26, 400, '#C45200', extra=SER) + T(820, 332, 'moved, or should have.', 26, 400, '#C45200', extra=SER)
 r += T(820, 400, 'Probes and features are vectors too.', 15, 400, MUT)
 g += F(3, r)
 VC = dict(cloud=cloud, mv=mv, S0=S0, S1=S1, moved=list(MOVED))
@@ -953,12 +954,12 @@ for k, (a, b, col, fill, solid) in enumerate(mods):
     x = 30 + k * 141
     strip += R(x, 372, 130, 62, fill, col, 2 if solid else 1.5, 12, '' if solid else 'stroke-dasharray="6 5" opacity=".75"')
     strip += T(x + 65, 399, a, 16, 700, col, 'middle', '' if solid else 'opacity=".8"') + T(x + 65, 420, b, 12, 400, INK if solid else MUT, 'middle')
-g += F(3, strip + T(590, 462, 'Text and music in depth today, images in passing. None is a substitute for another.', 17, 700, INK, 'middle'))
+g += F(3, T(590, 420, 'Part 1 starts with language: first the graph outside the model, then the graph inside.', 18, 400, MUT, 'middle'))
 g += T(590, 136, 'A graph inside a model: nodes are its parts or states, edges are how they move together or follow each other.', 15, 600, MUT, 'middle')
 g += F(1, T(840, 166, 'nodes: parts of the network', 15, 600, '#C45200') + T(840, 188, 'edges: parts that fire together', 15, 600, '#C45200'))
 g += F(2, T(840, 266, 'nodes: notes, or states of a generator', 15, 600, MU) + T(840, 288, 'edges: what follows what', 15, 600, MU))
 FORECAST2 = sec('Two claims for the rest of this talk', SVG(g), ch='0',
-                notes='The dashed tiles are the point of the vision: knowledge comes in many forms, and text is only one of them. Today covers text and music. Language is published and the result is solid. Music is in progress: the data side has numbers, the generator side is being tested, and the brain is the judge.')
+                notes='Say the throughline once, here, and once more on the last slide. Today covers text and music, images were only a glance. Language is published and the result is solid. Music is in progress: the data side has numbers, the generator side is being tested, and the brain is the judge.')
 
 # ---- part dividers, plain ----
 def divider(title, line, ch):
@@ -1797,8 +1798,8 @@ for a_, b_ in ((0, 7), (7, 13), (13, 19), (2, 7), (5, 11), (11, 17), (3, 9), (9,
     c += L(*P_[a_], *P_[b_], VB, 1.6)
 c += ''.join(C(x, y, 5, VB, 'none', 0) for x, y in P_)
 g += F(2, c)
-g += F(3, T(590, 410, 'Inside vision models, researchers already find graphs:', 19, 400, INK, 'middle') + T(590, 440, 'neurons wired into circuits, and objects linked by relations.', 19, 700, INK, 'middle'))
-VISION = sec('Vision models have graphs inside too', SVG(g), ch='0',
+g += F(3, T(590, 430, 'Neurons wired into circuits, objects linked by relations: graphs, not single vectors.', 19, 400, INK, 'middle'))
+VISION = sec('Inside vision models, researchers already find graphs', SVG(g), ch='0',
              ref='Olah et al., Zoom In: An Introduction to Circuits, Distill 2020. Johnson et al., Image Retrieval using Scene Graphs, CVPR 2015. Han et al., Vision GNN: An Image is Worth Graph of Nodes, NeurIPS 2022',
              notes='One slide on images, because music and vision together cover the other big modalities. Left: in an image model, Olah and colleagues traced curve detectors in InceptionV1 and showed they are wired from earlier curve and line detectors, the figure is theirs: neurons wired into a circuit, which is a graph. Middle: scene graphs describe an image as objects linked by relations, in their figure a girl holding a racket, in front of a cone. Right: Vision GNN treats patches as nodes and links patches that look alike. So the graph view is already working in vision. Bridge: and music, the modality this talk goes deep on, has the simplest graph of all.')
 
@@ -1844,7 +1845,7 @@ for a_, b_ in GE:
 for nm, (x, y) in G.items():
     new = nm in ('jazz', 'rock and roll', 'jazz fusion', 'bossa nova')
     g += R(x - 54, y - 17, 108, 34, MU if new else '#fff', MU, 1.5, 17) + T(x, y + 5, nm, 13.5, 600, '#fff' if new else MU, 'middle')
-g += T(40, 404, 'Every new style keeps its parents and adds one new edge.', 16, 400, INK)
+TREE = g
 m = R(660, 40, 490, 330, '#F4F0F9', 'none', 0, 8)
 m += T(690, 80, 'Can a model draw that edge?', 19, 700, MU) + T(690, 104, 'Our 2017 test: FusionGAN, IEEE ICDM', 14.5, 400, MUT) + img(680, 120, 450, 38, 'figs/chen2017-fusiongan-title.png')
 for (x, y, lab) in ((760, 248, 'jazz'), (1050, 248, 'folk')):
@@ -1852,11 +1853,17 @@ for (x, y, lab) in ((760, 248, 'jazz'), (1050, 248, 'folk')):
 m += P('M786,232 Q905,170 1024,232', MU, 2.4, extra='stroke-dasharray="6 4"') + C(905, 204, 22, MU, 'none', 0) + T(905, 209, 'fusion', 12.5, 700, '#fff', 'middle')
 m += T(690, 300, 'Three generators and judges: jazz, folk, and the', 14.5, 400, INK) + T(690, 322, 'fusion, kept equally far from both parents.', 14.5, 400, INK)
 m += T(690, 350, 'A GAN learned a style the data never contained.', 14.5, 700, INK)
-g += F(1, m)
-g += F(2, T(590, 452, 'New music is inheritance plus one new combination.', 19, 700, INK, 'middle'))
-GENRE = sec('New music is born the same way', SVG(g), ch='0',
-            ref='Gioia, The History of Jazz, 2011 (genre lineages). Chen, Wu, Lu, Lerch, Lu, Learning to Fuse Music Genres with Generative Adversarial Dual Learning, IEEE ICDM 2017',
-            notes='Music has a family tree, like a science genealogy. Jazz came from blues, ragtime and brass bands. Rock and roll came from rhythm and blues and country. Then jazz plus rock gave fusion, jazz plus samba gave bossa nova. Each new style inherits from its parents and adds one combination nobody had made. Click: in 2017 we asked whether a model can draw such an edge. FusionGAN takes jazz and folk melodies and learns a third style with three generator and judge pairs and a distance that keeps the fusion equally far from both parents. Listeners heard it as a fusion slightly more often than a plain GAN, a small margin. So a generator can draw a new edge. The question for the rest of this part: is there a graph inside the generator that tells us which edges it can draw? Start with the simplest graph of music.')
+g = ''
+for k, (f, who, lines) in enumerate(BK):
+    x = 40 + k * 86
+    g += cover(x, 14, 72, 108, f, '') + T(x, 138, who, 11.5, 400, MUT)
+g += T(500, 52, 'Four books and one study, over seventy years:', 17, 400, INK) + T(500, 84, 'a new idea is a new edge between old ones, A + B.', 22, 400, '#C45200', extra='font-family="et-book,Georgia,serif" style="font-size-adjust:none"')
+g += L(40, 160, 1140, 160, '#D7D2CB', 1)
+g += F(1, '<g transform="translate(30,182) scale(.74)">' + TREE + '</g>' + T(40, 466, 'Music: every new style keeps its parents and adds one new edge.', 16, 400, INK))
+g += F(2, '<g transform="translate(118,156) scale(.8)">' + m + '</g>')
+GENRE = sec('A new idea is a new edge, and so is a new style of music', SVG(g), ch='0',
+            ref='Young, A Technique for Producing Ideas, 1940. Koestler, The Act of Creation, 1964. Boden, The Creative Mind, 1990. Johnson, Where Good Ideas Come From, 2010. Uzzi et al., Atypical Combinations and Scientific Impact, Science 2013. Gioia, The History of Jazz, 2011. Chen, Wu, Lu, Lerch, Lu, Learning to Fuse Music Genres with Generative Adversarial Dual Learning, IEEE ICDM 2017',
+            notes='Top row, half a minute: four books on creativity over seventy years, Young 1940, Koestler 1964, Boden 1990, Johnson 2010, and the Science 2013 study of millions of papers by Uzzi and colleagues, say one thing: a new idea is a new combination of old ones, a new edge, A plus B. The longer version with the graph picture is under the down arrow. Click: music has a family tree, like a science genealogy. Jazz came from blues, ragtime and brass bands. Rock and roll came from rhythm and blues and country. Then jazz plus rock gave fusion, jazz plus samba gave bossa nova. Each new style inherits from its parents and adds one combination nobody had made. Click: in 2017 we asked whether a model can draw such an edge. FusionGAN takes jazz and folk melodies and learns a third style with three generator and judge pairs and a distance that keeps the fusion equally far from both parents. Listeners heard it as a fusion slightly more often than a plain GAN, a small margin. So a generator can draw a new edge. The question for the rest of this part: is there a graph inside the generator that tells us which edges it can draw? Start with the simplest graph of music.')
 
 # ======================= PART 1, related work, one result and one catch per slide =======================
 FAILC = '#DA291C'
@@ -2021,8 +2028,8 @@ def assemble(cover, old):
     vector = retitle(vector, 'Yet every change to a model is applied as a vector')
     # per domain: the structure is a graph, our graph sees the problem, yet the field uses vectors
     vector = retitle(vector, 'Today we change and explain models with vectors')
-    kgt_o = retitle(KGT, 'In text, knowledge has the shape of a graph')
-    vision = [cover, vector, kgt_o, VISION, DEMO2, FORECAST2]
+    kgt_o = retitle(KGT, 'Change one fact, and the next question goes wrong')
+    vision = [cover, kgt_o, vector, VISION, DEMO2, FORECAST2]
     rome = old[33]
     a = rome.find('<div class="note"'); e = rome.find('  <div class="ref">')
     rome = rome[:a] + '<div class="note" style="font-size:.62em"><div class="key">The finding</div><p class="one" style="font-size:1.25em">A fact sits in two places. Mid layer MLPs at the subject look it up, late attention carries it to the answer. Editing a fact means changing the first place.</p></div>\n  </div>\n' + rome[e:]
@@ -2042,11 +2049,11 @@ def assemble(cover, old):
     lang_cgt = bridge(CGT.replace('</aside>', ' If asked about contamination: the clinical questions come from MIMIC-III and CORAL records, which sit behind a data use agreement, not an absolute guarantee.</aside>', 1), 'That was the graph outside the model, a record we can draw. The harder case is a change made inside the model, where nobody drew the graph.')
     rel = lambda i, t: retitle(old[i], t) if t else old[i]
     hase = bridge(old[35].replace('The first crack: where a fact lives is not where editing works', 'Where a fact lives is not where editing works').replace('(numbers illustrative)', '(numbers illustrative. Causal tracing: corrupt the input, restore one layer)').replace('Each grey dot is one fact. Hase 2023: correlation about zero (minus 0.13).', 'Schematic, each grey dot one fact. Hase 2023 measured a correlation of about zero (minus 0.13).').replace('Guo 2025, slide 31', 'Guo 2025').replace('So an edit can land where the knowledge is not, and its side effects can land where nobody looks.', 'Mechanism still matters: choosing where to change by it makes forgetting stick (Guo 2025).').replace('But choosing where to change by mechanism makes forgetting stick (Guo 2025).', 'So an edit can land where the knowledge is not.'), 'Across all these surgeries, the same three lessons, next slide.')
-    lessons = old[40]
+    lessons = old[40].replace('>DPO, unlearning, editing, merging:<', '>Unlearning, merging, pruning:<')
     lessons = re.sub(r'(<div class="ref">).*?(</div>)', r'\1Ilharco et al., ICLR 2023. Meng et al., NeurIPS 2022. Lee et al., ICML 2024. Kornblith et al., ICML 2019. Smith et al., ICML 2025. Gröger et al., ICML 2026\2', lessons, count=1, flags=re.S)
     for cite in ('Ilharco 2023, Meng 2022, Arditi 2024', 'Lee 2024, Hu 2025, Hammoud 2024', 'Kornblith 2019, Smith 2025, Gröger 2026'):
         lessons = re.sub(r'<text[^>]*>' + re.escape(cite) + '</text>', '', lessons)
-    lang = [DIV1, bridge(toch(surg, '1'), 'Take them one at a time, each with its best known result and the catch.'),
+    lang = [bridge(toch(surg, '1'), 'Take them one at a time, each with its best known result and the catch.'),
             MERGE, backup(rel(18, '')),
             backup(PRUNE), backup(rel(21, '')), backup(rel(22, 'Shrestha 2026: classification recovers, reasoning does not')),
             VEC2, backup(rel(25, '')),
@@ -2073,8 +2080,35 @@ def assemble(cover, old):
     emo_b = bridge(toch(EMOTION2, '2'), 'Emotion is one way music acts on the brain. Before we model music, one detour through this year\'s Nobel Prize, because it shows what a designed signal can do to brain circuits. The history of music models is under the down arrow.')
     copy_b = bridge(COPY, 'Before we go inside a generator, one honest line from the literature: in music, graphs win only when the edges carry something the sequence throws away, and often they do not (survey under the down arrow). The one place nobody has looked for such edges is inside the generator itself.')
     corpus_b = bridge(corpus, 'How much memory should the graph have? One note gives the right vocabulary with the wrong syntax, three notes memorize the piece (the picture is under the down arrow on the next slide).')
-    mus = [beyond2, emo_b, backup(hist), toch(OPTO, '2'), toch(MEDIC, '2'), toch(CREATE, '2'), toch(GENRE, '2'), FOLD, corpus_b, backup(RICHER), backup(path), copy_b, backup(WHEN), PROBE, backup(MGEN), musres_b, bri, backup(BRL), backup(BRR), EEGDEMO, PLAN, backup(BRG)]
+    mus = [beyond2, emo_b, backup(hist), toch(OPTO, '2'), toch(MEDIC, '2'), toch(GENRE, '2'), backup(toch(CREATE, '2')), FOLD, corpus_b, backup(RICHER), backup(path), copy_b, backup(WHEN), PROBE, backup(MGEN), musres_b, bri, backup(BRL), backup(BRR), EEGDEMO, PLAN, backup(BRG)]
     beyond = []
     close = [TAKEAWAY.replace('</section>', CLIP_JSON + '</section>')]
+    # one bridge per main slide, so each slide leads into the next one (order of Nov 16 2026)
+    FIXB = [('Change one fact, and the next question goes wrong', None, 'Bridge: why do our tools miss this? Because every tool we use to change or read a model is a vector.'),
+            ('Today we change and explain models with vectors', 'Bridge: yet the knowledge these models hold has another shape, a graph, in text, in images and in music.', 'Bridge: people who look inside models already find graphs, first in vision.'),
+            ('A tiny graph is enough to represent a piece of music', None, 'Bridge: so, two claims for the rest of the talk.'),
+            ('Two claims for the rest of this talk', None, 'Bridge: Part 1, language. First, all the ways we change a model after release.'),
+            ('Steering: right on average', None, 'Bridge: unlearning tries the opposite, to take something out.'),
+            ('What is a delta graph?', None, 'Bridge: does it catch more bad edits? Results next.'),
+            ('Results: same checking budget', None, 'Bridge: that is language. Part 2: knowledge that is not text.'),
+            ("This year's Nobel", None, 'Bridge: and music already acts on the brain, as medicine.'),
+            ('Music already acts on the brain, as medicine', 'Bridge: music and the brain are this closely tied, so let us model music from the beginning, starting with the simplest graph, and end where music meets the brain.', 'Bridge: before we model music, how does anything new come about, in ideas and in music?'),
+            ("Occam's razor", '(the picture is under the down arrow on the next slide)', '(the picture is under the down arrow here)'),
+            ('Inside a music generator, music theory has a shape', 'Bridge: a probe tells us what is stored, not how the states move. That is the graph question.', 'Bridge: a probe tells us what is stored, not how the states move. Next, what happens when we push those states with a vector.'),
+            ('A note transition graph predicts the listening brain', None, "Bridge: can we watch the same thing with MusicGen's own surprise? Live."),
+            ('Our plan: a graph from inside MusicGen', None, 'Bridge: so, back to the picture from the start of the talk.')]
+    def _fixb(sec_):
+        t = re.search(r'<h2>(.*?)</h2>', sec_, re.S)
+        if not t or 'class="backup' in sec_[:80]:
+            return sec_
+        for key, old_, new_ in FIXB:
+            if t.group(1).startswith(key.replace("'", '&#39;')) or t.group(1).startswith(key):
+                if old_ and old_ in sec_:
+                    return sec_.replace(old_, new_, 1)
+                if '<aside class="notes">' in sec_:
+                    return sec_.replace('</aside>', ' ' + new_ + '</aside>', 1)
+                return sec_.replace('</section>', f'  <aside class="notes">{new_}</aside>\n</section>', 1)
+        return sec_
+    vision, lang, mus = [_fixb(x) for x in vision], [_fixb(x) for x in lang], [_fixb(x) for x in mus]
     parts = {'vision': vision, 'language': lang, 'music': mus, 'beyond': beyond, 'close': close}
     return parts

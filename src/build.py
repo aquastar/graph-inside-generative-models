@@ -375,8 +375,8 @@ allsecs = [x.replace('<rect x="924" y="100" width="227" height="30" rx="4" fill=
 allsecs = [re.sub(r'\s*<div class="lessontag">[^<]*</div>', '', x) for x in allsecs]
 
 # graph tags: every slide that shows a graph says which one, so the talk is strung on graphs
-GTAGS = [('In text, knowledge has the shape of a graph', 1, 'knowledge graph'),
-         ('Vision models have graphs inside too', 2, 'circuit and scene graphs'),
+GTAGS = [('Change one fact, and the next question goes wrong', 1, 'knowledge graph'),
+         ('Inside vision models, researchers already find graphs', 2, 'circuit and scene graphs'),
          ('A tiny graph is enough to represent', 3, 'note transition graph, a Markov chain'),
          ('A missing path in the record', 1, 'knowledge graph, a clinical record'),
          ('What is a delta graph?', 4, 'delta graph, how the inside rewired'),
