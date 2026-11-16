@@ -652,21 +652,51 @@ CLAIMS = [('Language: a graph of how a model rewires after an edit catches failu
 
 # ---- every surgery is stored as a vector (concrete) ----
 g = adefs('vc')
-cols4 = [('Steer', 'h ← h + α r', 'add a direction to the', 'activations at run time', 'refusal direction, Arditi et al. 2024'),
-         ('Edit', 'W ← W + u vᵀ', 'add a rank one matrix', 'to one layer', 'ROME, Meng et al. 2022'),
-         ('LoRA', 'W ← W + B A', 'add a low rank matrix', 'to many layers', 'LoRA, Hu et al. 2022'),
-         ('Fine tune', 'θ ← θ + τ', 'add a task vector', 'to all weights', 'task arithmetic, Ilharco et al. 2023')]
-for k, (a, eq, d1, d2, cite) in enumerate(cols4):
-    x = 30 + k * 283
-    blk = R(x, 30, 265, 230, '#fff', LINE, 1.5, 12) + T(x + 132, 70, a, 22, 700, AC2, 'middle')
-    blk += R(x + 20, 92, 225, 58, ACL, ACC, 1.5, 10) + T(x + 132, 130, eq, 23, 700, ACC, 'middle', extra='font-family="Fira Mono,monospace"')
-    blk += T(x + 132, 182, d1, 14.5, 600, INK, 'middle') + T(x + 132, 202, d2, 14.5, 600, INK, 'middle') + T(x + 132, 238, cite, 12.5, 400, MUT, 'middle')
-    g += F(k, blk) if k else blk
-g += F(4, R(30, 285, 1120, 100, SOFT, LINE, 1, 12) + T(590, 323, 'Each one tells you exactly what was added.', 22, 700, INK, 'middle') + T(590, 362, 'None tells you which other facts, behaviors or styles moved with it.', 22, 700, ACC, 'middle')
-          + T(590, 430, 'Mechanistic tools read models the same way: a probe, a feature, a steering direction is a vector.', 17, 600, MUT, 'middle'))
+FAILC = '#DA291C'
+SER = 'font-family="et-book,Georgia,serif" style="font-size-adjust:none"'
+import random as _rv, math as _mv
+# four tools, one row, same kind of object
+tools = [('Steer', 'h ← h + αr', 'a direction, at run time'), ('Edit', 'W ← W + uvᵀ', 'rank one, one layer'),
+         ('LoRA', 'W ← W + BA', 'low rank, many layers'), ('Fine tune', 'θ ← θ + τ', 'a task vector, all weights')]
+for k, (nm, eq, d) in enumerate(tools):
+    x = 40 + k * 285
+    g += P(f'M{x},{58} L{x+34},{40}', AC2, 2, extra='marker-end="url(#vca)"')
+    g += T(x + 48, 50, nm, 19, 600, INK) + T(x + 148, 50, eq, 18, 400, AC2, extra=SER + ' font-style="italic"')
+    g += T(x + 48, 74, d, 14, 400, MUT)
+g += L(40, 104, 1140, 104, '#D7D2CB', 1)
+# a quiet cloud of facts and behaviors
+_rv.seed(11)
+KEEP = [(200, 460, 296, 348), (548, 770, 172, 236), (60, 300, 368, 420), (390, 640, 368, 420)]
+cl = [(170, 250, 60), (330, 340, 55), (470, 230, 60), (620, 330, 55), (300, 180, 40), (560, 410, 40)]
+pts = []
+for cx, cy, sd in cl:
+    for _ in range(26):
+        x, y = _rv.gauss(cx, sd), _rv.gauss(cy, sd * .7)
+        if 50 < x < 760 and 130 < y < 440 and not any(a0 < x < a1 and b0 < y < b1 for a0, a1, b0, b1 in KEEP):
+            pts.append((x, y))
+S0, S1 = (330, 300), (560, 210)
+cloud = ''.join(C(round(x), round(y), 3.2, '#ACA39A', extra='opacity=".75"') for x, y in pts)
+g += cloud + C(*S0, 7, INK) + T(S0[0] - 12, S0[1] + 28, 'Space Needle is in Seattle', 16, 400, INK, 'middle')
+g += F(1, P(f'M{S0[0]+8},{S0[1]-5} L{S1[0]-10},{S1[1]+5}', ACC, 3, extra='marker-end="url(#vco)"') + C(*S1, 7, ACC)
+          + T(S1[0] + 14, S1[1] - 10, '… is in Paris', 16, 600, '#C45200') + T(S1[0] + 14, S1[1] + 12, 'the vector we added', 14, 400, MUT))
+ux, uy = (S1[0] - S0[0]), (S1[1] - S0[1]); nrm = _mv.hypot(ux, uy); ux, uy = ux / nrm, uy / nrm
+mv = ''
+for x, y in pts:
+    d = _mv.hypot(x - S0[0], y - S0[1])
+    if 12 < d < 105:
+        k = 22 * (1 - d / 105)
+        nx, ny = x + ux * k + _rv.gauss(0, 4), y + uy * k + _rv.gauss(0, 4)
+        mv += L(round(x), round(y), round(nx), round(ny), FAILC, 1, 'stroke-opacity=".45"') + C(round(nx), round(ny), 3, FAILC, extra='opacity=".7"')
+for (x, y), (nx, ny), (lx, ly), lab, anc in (((268, 352), (288, 344), (284, 398), 'Seattle is in Washington', 'end'), ((392, 350), (414, 340), (402, 398), 'the Needle was built in 1962', 'start')):
+    mv += L(x, y, nx, ny, FAILC, 1.4) + C(nx, ny, 5, FAILC) + L(nx, ny + 7, lx + (-4 if anc == 'end' else 4), ly - 16, FAILC, .8, 'stroke-opacity=".6"') + T(lx, ly, lab, 15, 400, FAILC, anc)
+g += F(2, mv)
+r = T(820, 200, 'The arrow says what', 26, 400, INK, extra=SER) + T(820, 234, 'we added.', 26, 400, INK, extra=SER)
+r += T(820, 298, 'Nothing says what', 26, 400, '#C45200', extra=SER) + T(820, 332, 'else moved.', 26, 400, '#C45200', extra=SER)
+r += T(820, 400, 'Probes and features are vectors too.', 15, 400, MUT)
+g += F(3, r)
 VECTOR = sec('Every surgery is stored as a vector', SVG(g), ch='0',
              ref='Arditi et al., NeurIPS 2024. Meng et al., NeurIPS 2022. Hu et al., LoRA, ICLR 2022. Ilharco et al., ICLR 2023',
-             notes='Context first. Four surgeries, four one line formulas a CS audience can read. ROME is a rank one LoRA on one layer, which links knowledge editing to something most of the room has used. The point is not the math, it is that each operation is a single added object, and that object carries no information about its side effects. The tools we use to understand models read them the same way: a linear probe, a sparse autoencoder feature, a steering direction, all vectors. Bridge: yet the knowledge these models hold has another shape, a graph, in text, in images and in music.')
+             notes='Top row: four ways we change a model today, each one line of math, all the same kind of object, an added vector. Below, a schematic: every dot is something the model knows or does. Click: an edit moves one fact, Space Needle from Seattle to Paris, that arrow is the vector we added. Click: the facts nearby moved too, Seattle is in Washington, the Needle was built in 1962, and nothing in the arrow says so. The dots are an illustration, not data. Click: the takeaway. Four surgeries, four one line formulas a CS audience can read. ROME is a rank one LoRA on one layer, which links knowledge editing to something most of the room has used. The point is not the math, it is that each operation is a single added object, and that object carries no information about its side effects. The tools we use to understand models read them the same way: a linear probe, a sparse autoencoder feature, a steering direction, all vectors. Bridge: yet the knowledge these models hold has another shape, a graph, in text, in images and in music.')
 
 # ---- demo: a tiny graph is enough to represent a piece ----
 g = adefs('dm2')
