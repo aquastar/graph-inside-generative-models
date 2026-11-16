@@ -14,3 +14,4 @@ Square images work best, at least 200 by 200 pixels.
 | karl-deisseroth.jpg | Karl Deisseroth | Nobel slide (Ill. Niklas Elmehed, Nobel Prize Outreach) |
 | peter-hegemann.jpg | Peter Hegemann | Nobel slide (same credit) |
 | georg-nagel.jpg | Georg Nagel | Nobel slide (same credit) |
+| leonard-meyer.jpg | Leonard B. Meyer | Music is where emotion can be measured (supplied by Zhiqian) |

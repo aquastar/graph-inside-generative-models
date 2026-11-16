@@ -1234,16 +1234,9 @@ HIST = sec('Part 2. The oldest music model is a graph', SVG(g), ch='2', cls='div
 
 # ---- M2: fold 88 keys into 12 degrees ----
 g = adefs('fd')
-wk = 14
-for k in range(wk):
-    x = 40 + k * 34
-    g += R(x, 60, 32, 120, '#fff', '#9aa6ae', 1.2, 3)
-blk_pos = [0, 1, 3, 4, 5, 7, 8, 10, 11, 12]
-for k in blk_pos:
-    x = 40 + k * 34 + 22
-    g += R(x, 60, 22, 74, INK, 'none', 0, 2)
-g += T(278, 44, 'a piano: 88 keys, the same 12 notes repeating', 15, 700, INK, 'middle')
-g += T(278, 205, 'E4 and E5 are the same note an octave apart', 14, 400, MUT, 'middle')
+g += img(40, 72, 476, 82, 'figs/fur-elise-opening.png') + L(40, 160, 516, 160, '#D7D2CB', 1)
+g += T(278, 44, 'Für Elise, the opening bars', 15, 700, INK, 'middle')
+g += T(278, 190, 'Its notes repeat on every octave of the piano', 14, 400, MUT, 'middle')
 cx, cy, r = 278, 345, 95
 names = ['0 tonic', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']
 ring = ''
@@ -1266,7 +1259,7 @@ g += F(2, tb)
 g += F(3, playbtn(640, 410, 230, 'fe_orig', 'Für Elise, the opening', AC2) + playbtn(890, 410, 260, 'fe_graph', 'a tune drawn from the table', ACC))
 FOLD = sec('Fold 88 keys into 12 scale degrees, and a melody becomes 144 numbers', SVG(g), ch='2',
            ref='Scale degrees are counted from each piece\'s key (its tonic). The overview animation used real pitches, the classifier uses these 12 degrees',
-           notes='For non musicians: the 12 notes repeat across the piano, and a melody in C and the same melody in G should look the same, so we fold octaves and count from the home note of the key. Each row of the table says where the melody goes next from that note. Play the two buttons: the second tune uses only the 144 numbers. It sounds like the right material with the wrong sentences. That is the next slides.')
+           notes='Score excerpt: pianocoda.com engraving. For non musicians: the 12 notes repeat across the piano, and a melody in C and the same melody in G should look the same, so we fold octaves and count from the home note of the key. Each row of the table says where the melody goes next from that note. Play the two buttons: the second tune uses only the 144 numbers. It sounds like the right material with the wrong sentences. That is the next slides.')
 
 # ---- M5: when graphs help ----
 g = adefs('gh')
@@ -1647,8 +1640,8 @@ g += c1
 c2 = person(605, 50, 545, 180, 'marvin-minsky.jpg', 'MM', 'Marvin Minsky', ['MIT, cofounder of the AI Lab, Turing Award 1969'], AC2)
 c2 += quote(760, 160, [[('Each of our major ', False), ('emotional states', True)], [('results from turning certain ', False), ('resources on', True)], [('while turning others off.', False)]], 18, 26)
 g += F(1, c2)
-g += F(2, T(590, 290, 'And in music, since 1956: emotion comes from expectation that is held back or broken.', 17, 400, MU, 'middle'))
-g += F(3, T(590, 340, 'Emotion lives in expectation: what comes next, and whether it arrives.', 20, 700, INK, 'middle'))
+g += F(2, R(30, 250, 1120, 104, '#fff', LINE, 1.5, 14) + photo(82, 302, 36, 'leonard-meyer.jpg', 'LM', AC2) + T(136, 288, 'Leonard B. Meyer', 20, 700, INK) + T(310, 288, 'music theorist, Emotion and Meaning in Music, 1956', 13.5, 600, AC2) + T(136, 326, 'Musical emotion comes from expectation that is held back or broken.', 20, 400, MU))
+g += F(3, T(590, 410, 'Emotion lives in expectation: what comes next, and whether it arrives.', 20, 700, INK, 'middle'))
 EMOTION2 = sec('Music is where emotion can be measured', SVG(g), ch='0',
                ref='Picard, Affective Computing, MIT Press 1997, introduction. Minsky, The Emotion Machine, 2006. Meyer, Emotion and Meaning in Music, 1956, p. 31, via Margulis 2005. Huron, Sweet Anticipation, 2006. Photos: Wikimedia Commons',
                notes='Step 2 of 4. Two AI pioneers say machines need emotion. Then the music side, one line: the music theorist Leonard Meyer, in 1956, said musical emotion comes from expectation that is held back or broken. Expectation is exactly what a note transition graph computes, and its effect is measurable in the brain. That is why music is the place where a brain can judge whether a model has a graph inside.')
