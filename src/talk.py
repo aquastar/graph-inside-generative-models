@@ -1850,7 +1850,8 @@ def _bar20(k, who, n_, rate, col, bold=False):
     y = 66 + k * 72
     return T(40, y + 18, who, 18, 600 if bold else 400, INK) + R(40, y + 28, n_ * 30, 26, col, 'none', 0, 2) + T(52 + n_ * 30, y + 48, str(n_), 20, 600, INK) + T(110 + n_ * 30, y + 48, f'{rate}% of checks bad', 14, 400, MUT)
 g += _bar20(0, 'at random', 11, 56, '#ACA39A') + _bar20(1, 'by editor and model', 14, 70, '#ACA39A')
-g += F(1, _bar20(2, 'by the delta graph', 17, 86, ACC, True))
+g += img(810, 44, 340, 55, 'figs/benbrahim2026-title.png') + L(810, 102, 1150, 102, '#D7D2CB', 1)
+g += F(1, _bar20(2, 'by the delta graph', 17, 86, ACC, True) + img(830, 112, 310, 162, 'figs/benbrahim2026-fig5-1-left.png') + T(830, 290, 'their Figure 5.1, red dashed: delta graph', 13.5, 400, MUT))
 box = ''
 for k, (big, a, b) in enumerate([('0.703 to 0.797', 'ranking quality (AUC), editor and model only,', 'then with the delta graph'), ('0.853 to 0.904', 'second dataset (wiki_recent), 500 real', 'Wikipedia facts, the same pattern')]):
     x = 40 + k * 560
