@@ -378,7 +378,7 @@ allsecs = [re.sub(r'\s*<div class="lessontag">[^<]*</div>', '', x) for x in alls
 GTAGS = [('In text, knowledge has the shape of a graph', 1, 'knowledge graph'),
          ('Vision models have graphs inside too', 2, 'circuit and scene graphs'),
          ('A tiny graph is enough to represent', 3, 'note transition graph, a Markov chain'),
-         ('Two hops break every model', 1, 'knowledge graph, a clinical record'),
+         ('A missing path in the record', 1, 'knowledge graph, a clinical record'),
          ('What is a delta graph?', 4, 'delta graph, how the inside rewired'),
          ('Fold 88 keys', 3, 'note transition graph'),
          ('the simplest graph already names the tradition', 3, 'note transition graph'),

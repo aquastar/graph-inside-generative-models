@@ -24,19 +24,25 @@
 - *"0.797 不算高。"* 答：它是分诊工具，不是裁判，价值在于先查谁。风险最高的 20% 里 86% 真的失败，其余 80% 里是 49%。
 - *"为什么不用 SAE 或探针？"* 答：那些读的是一个向量方向，我们读的是模块之间关系的变化，两者互补。
 
-### 2. 多跳 KGQA 诊断（CIKM 2026，第 9 页）
-**一句话**：多跳问答在第二跳普遍掉下悬崖，其中一部分不是模型笨，而是知识图谱里根本没有那条路径。论文给出判断条件和修补方法。
+### 2. Query-Graph Compatibility（CIKM 2026 正式版，第 15 页）
+
+论文：ALMutairi, Alotaibi, Alkulaib, Chen, Alsalamah, Lu，Query-Graph Compatibility: A Formal Pre-Condition for Faithful Knowledge-Grounded Language Model Generation，CIKM 2026，11 月 6 日上线，doi 10.1145/3799682.3840697。第一作者是 Mariam ALMutairi。
+
+**一句话**：把问题写成一个带类型的小图，看它能不能映射进知识图谱（QGC）。映射不进去，任何模型都不可能根据这份记录给出忠实的答案，而且模型实际答得也更差。
 
 **关键概念**
-- 类型同态（typed homomorphism）：把问题的结构（病人到入院到过敏）映射到病历图里，节点类型和边类型都要对得上。找不到这样的映射，就没有正确答案。
-- 四类失败：EF、RF、CompF、OOB。临床数据里的失败全部是 CompF，也就是组合缺边。
-- Yannakakis 算法：无环连接查询的经典多项式时间算法，用来构造性地求答案，保证"能答的一定找得到"。
+- QGC：问题的带类型合取查询能否以类型同态的方式映射进图。QGC = 0 时没有忠实答案。
+- 理论：一般情况下 NP 完全，问题图树宽有界时可以多项式时间判定（定理 4.1 到 4.3）。
 
-**数字**：MIMIC-III 上 9 个模型（3B 到 1.6T），9 个里有 7 个一跳在 76%，两跳掉到 6% 到 12%，落差 52 到 70 个百分点。1.6T 那个是 DeepSeek-V4-Pro（MoE）。CORAL 上补 51 条边，结构性遗漏从 8.22% 降到 0%。
+**数字（只用正式版）**
+- MIMIC-III（Table 9）：524 个问题，32.3% 在记录里没有路径。5 个模型（3.2B 到 1.65T）有路径时都比没路径时准确，差距 +20.5 到 +30.5 个百分点。Mistral 7B 93.2 对 62.7，DeepSeek-V4-Pro 48.0 对 21.9。
+- CORAL：422 个问题，20.9% 没有路径，差距小一些，+5.3 到 +16.3。
+- MetaQA 人为删边（Table 4）：1 跳差距 +72 到 +86，AUC 0.87 到 0.93。2 跳 +55 到 +79，AUC 0.78 到 0.90。
+- 检索（Table 11）：QGC = 1 就停止扩展子图，MetaQA 3 跳覆盖率同样 99.8%，三元组少 81.1%。
 
 **会被问的问题**
-- *"怎么知道模型没见过 MIMIC？"* 答：不能绝对保证，能说的是 PhysioNet 受限数据，不在任何公开预训练语料里。
-- *"51 条边是人工加的吗？"* 答：按 2 个模板补的类型兼容边。具体是人工还是自动，讲之前确认一下。
+- *"没路径的问题模型怎么还能答对 20% 到 60%？"* 答：靠参数里记住的知识猜对了，但答案不来自这份记录，不算忠实。论文的保证是"不可能忠实"，不是"一定答错"。
+- *"怎么知道模型没见过 MIMIC？"* 答：不能绝对保证，MIMIC-III 和 CORAL 需要数据使用协议，不在公开语料里。
 - *"这和编辑有什么关系？"* 答：它是"图在模型外面"的那一半。知识本身有结构，答不对有时是结构缺了。后面讲"模型里面的图"。
 
 ### 3. 音乐的马尔可夫图实验（进行中，第 5、21 到 24 页）
@@ -128,9 +134,9 @@
 "Reading the outputs is the better judge, and we say so on the slide. Ours is triage: the costly generation and scoring then run only on the flagged 20 percent, about 5 times less follow up work. With a handful of edits, read the outputs. The method is for thousands of edits on a model that keeps changing."
 在哪：第 16 页和备注。需要你：7.4 分钟包含哪些步骤，以及读输出这个基线每个编辑要多久。没有这个数字之前，不要说"更便宜"，只说"少做五倍的后续检查"。
 
-**Q4（敌意，知识图谱）** "Only 1.3 percent lack a path, so the graph explains one point of a 60 point cliff."
-"The graph's job is to split the cliff into two causes before any model runs. On MIMIC it says the record is not the problem, 3 of 239, so the remaining 50 to 70 points are the models' reasoning. On CORAL it goes the other way, 8.2 percent have no path and adding 51 edges takes that to zero."
-在哪：第 9 页和备注（已加）。需要你：51 条边是人工加的还是模板自动加的。
+**Q4（敌意，知识图谱）** "Models still get many no path questions right, so the graph does not decide correctness."
+"Right, and the paper does not claim that. It claims a model cannot answer those faithfully from the record. On MIMIC-III every one of five models is 20 to 30 points less accurate without a path, and a third of the questions have none."
+在哪：第 15 页和备注。
 
 **Q5（安全或系统）** "Can an editor game your scorer? Does it transfer from Qwen to Llama?"
 "We have not tested an adversary who knows the scorer, and cross model transfer is also untested, our cross validation is grouped by fact within each model and editor pair. Those are the next two experiments: train on Qwen and test on Llama, and let an editor optimize against the scorer."

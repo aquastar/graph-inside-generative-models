@@ -893,7 +893,7 @@ KGT = sec('Knowledge is a graph, and an edit has to follow it', SVG(g), ch='0',
           ref='Cohen et al., Evaluating the Ripple Effects of Knowledge Editing in Language Models, TACL 2024. Zhong et al., MQuAKE, EMNLP 2023. Space Needle answers are an illustration of the failure type',
           notes='Open on the photo: a landmark everyone knows, in Seattle, built for the 1962 World\'s Fair. Click: this is what a model knows about it, drawn as a knowledge graph. Facts link to other facts. The Space Needle is in Seattle, Seattle is in Washington, Washington is in the United States. Suppose an editor moves the Space Needle to Paris and changes only that one edge. Now every question one step further is wrong: the model still says United States, still says Washington, still says dollar. This is the ripple effect, measured by RippleEdits and MQuAKE. The knowledge has a graph. The question for the talk: does the model have one inside?')
 
-# ---- Part 1 opener: multi-hop questions fall off a cliff, and the graph says why (our CIKM 2026 paper) ----
+# ---- Part 1 opener: a missing path in the record predicts a worse answer (our CIKM 2026 paper, published version) ----
 g = adefs('cgt')
 g += T(30, 26, 'A clinical record, drawn as a knowledge graph', 16, 600, MUT)
 PT, AD, AL, SY = (80, 150), (290, 150), (480, 90), (480, 230)
@@ -902,43 +902,39 @@ g += P(f'M{AD[0]+11},{AD[1]-6} L{SY[0]-12},{SY[1]-4}', AC2, 1.8, extra='marker-e
 g += P(f'M{AD[0]+11},{AD[1]-6} L{AL[0]-12},{AL[1]+4}', '#DA291C', 1.8, extra='stroke-dasharray="5 5"') + T(352, 70, 'allergy edge', 13, 400, '#DA291C', 'middle') + T(352, 86, 'never recorded', 13, 400, '#DA291C', 'middle')
 for (x, y), lab in ((PT, 'Patient'), (AD, 'Admission'), (AL, 'Allergy'), (SY, 'chest pain')):
     g += C(x, y, 9, '#009CBD') + T(x, y + 30, lab, 16, 600, INK, 'middle')
-g += T(30, 300, '1 hop: why was this patient admitted?', 15.5, 600, INK) + T(30, 324, '2 hops: what allergy does the patient admitted', 15.5, 600, INK) + T(30, 346, 'for chest pain have?', 15.5, 600, INK)
-g += T(30, 386, 'Our test: does the question map into the record?', 16, 600, '#C45200') + T(30, 410, 'No path in the graph, no correct answer, for any model.', 16, 600, '#C45200')
-# slope chart, MIMIC-III exact match, 9 models
-X1, X2, Y0, YS = 680, 940, 400, 4.0
-H = [('Kimi-K2.5', 76.7, 9.1), ('GPT-OSS-120B', 76.0, 6.0), ('DeepSeek-V4-Pro', 76.0, 7.0), ('GLM-5.1', 76.0, 9.0), ('Gemma4-31B', 76.0, 6.0),
-     ('Nemotron-3-Super', 76.0, 8.0), ('Qwen3.5', 59.0, 7.0), ('Llama3.2-3B', 76.0, 12.0), ('Mistral-7B', 75.0, 12.0)]
-ch = T(600, 26, 'Exact match on MIMIC-III, 9 models from 3B to 1.6T parameters', 15, 600, MUT)
-ch += L(X1, 70, X1, Y0, '#D7D2CB', 1) + L(X2, 70, X2, Y0, '#D7D2CB', 1) + T(X1, Y0 + 24, '1 hop', 15, 600, INK, 'middle') + T(X2, Y0 + 24, '2 hops', 15, 600, INK, 'middle')
-for name, a, b in H:
-    ch += P(f'M{X1},{Y0 - a * YS:.1f} L{X2},{Y0 - b * YS:.1f}', '#7C878E', 1.6, extra='stroke-opacity=".75"') + C(X1, round(Y0 - a * YS, 1), 4, '#5F5D50') + C(X2, round(Y0 - b * YS, 1), 4, '#5F5D50')
-ch += T(X1 - 14, Y0 - 76 * YS + 5, 'about 76%', 16, 600, INK, 'end') + T(X1 - 14, Y0 - 59 * YS + 5, '59%', 14, 400, MUT, 'end')
-ch += T(X2 + 14, Y0 - 9 * YS + 5, '6 to 12%', 16, 600, INK) + T(860, 118, 'a cliff of', 16, 600, '#C45200', 'middle') + T(860, 138, 'about 50 to 70 points', 16, 600, '#C45200', 'middle')
+g += T(30, 300, 'Question: what allergy does the patient', 16, 600, INK) + T(30, 322, 'admitted for chest pain have?', 16, 600, INK)
+g += T(30, 366, 'Our test (QGC): does the question map into', 16, 600, '#C45200') + T(30, 388, 'the record, types and edges kept? If not,', 16, 600, '#C45200') + T(30, 410, 'no model can answer faithfully from it.', 16, 600, '#C45200')
+g += img(600, 8, 540, 74, 'figs/almutairi2026-title.png')
+# dumbbells, Table 9, MIMIC-III
+TB9 = [('Mistral 7B', 93.2, 62.7, '+30.5'), ('GPT-OSS 120B', 66.4, 43.2, '+23.2'), ('Llama 3.2 3B', 67.2, 46.7, '+20.5'), ('Qwen3 4B', 54.4, 30.6, '+23.9'), ('DeepSeek-V4-Pro', 48.0, 21.9, '+26.1')]
+px_ = lambda v: 790 + v * 3.4
+ch = T(600, 124, 'MIMIC-III, 524 questions, accuracy (%)', 15, 600, MUT)
+ch += T(px_(93.2), 150, 'path exists', 13.5, 600, INK, 'middle') + T(px_(62.7), 150, 'no path', 13.5, 600, '#DA291C', 'middle')
+for k, (nm, a1, a0, gp) in enumerate(TB9):
+    y = 176 + k * 34
+    ch += T(772, y + 5, nm, 15, 400, INK, 'end') + L(px_(a0), y, px_(a1), y, '#D7D2CB', 3) + C(px_(a0), y, 6.5, '#DA291C') + C(px_(a1), y, 6.5, INK)
+    ch += T(px_(a1) + 12, y + 5, gp, 13.5, 600, MUT)
+ch += L(px_(0), 340, px_(100), 340, '#ACA39A', 1) + ''.join(T(px_(v), 358, str(v), 12.5, 400, MUT, 'middle') for v in (0, 50, 100))
 g += F(1, ch)
-rep = R(1000, 86, 180, 262, SOFT, 'none', 0, 3) + T(1016, 114, 'The graph splits', 15, 600, INK) + T(1016, 134, 'the failures', 15, 600, INK)
-rep += T(1016, 170, 'missing edges:', 14, 600, '#C45200') + T(1016, 190, 'fix the graph. On', 14, 400, INK) + T(1016, 210, 'CORAL, 51 edges cut', 14, 400, INK) + T(1016, 230, 'misses 8.2% to 0%', 14, 600, INK)
-rep += T(1016, 270, 'On MIMIC-III only', 14, 600, INK) + T(1016, 290, '1.3% of 2 hop questions', 14, 600, INK) + T(1016, 310, 'have no path: the cliff', 14, 400, INK) + T(1016, 330, 'is the models\' reasoning', 14, 400, INK)
-g += F(2, rep)
-g += F(3, T(590, 466, 'A graph tells which questions cannot be answered, before any model tries.', 19, 700, INK, 'middle'))
-CGT = sec('Two hops break every model. The graph says why', SVG(g), ch='1', status='acc',
-          ref='Ours, Query-Graph Compatibility: A Formal Pre-Condition for Faithful Knowledge-Grounded Language Model Generation, CIKM 2026, Table 4 and Table 6. MIMIC-III, CORAL from PhysioNet',
-          notes='Our CIKM 2026 paper, the knowledge graph from the opening made concrete. On clinical records kept behind a data use agreement, seven of nine models reach about 76 percent at one hop and fall to 6 to 12 percent at two hops, from 3B up to a 1.6T mixture of experts. Part of that cliff is not the model at all: if the record never stored the edge, no model can answer. The paper turns that into a theorem and a test that runs before retrieval. On CORAL, adding 51 missing edges removes every structural miss, 8.2 percent to zero. What remains is the model reasoning gap. On MIMIC-III, only 3 of 239 two hop questions (1.3 percent) have no path, so almost all of that cliff is the models reasoning, not the record.')
+g += F(2, T(600, 404, '32.3%', 30, 400, INK, extra='font-family="et-book,Georgia,serif" style="font-size-adjust:none"') + L(600, 412, 676, 412, ACC, 3) + T(694, 396, 'of these clinical questions have no path in the record', 15, 400, INK) + T(694, 416, 'at all (CORAL: 20.9%). Every model does worse on them.', 15, 400, INK))
+g += F(3, T(590, 466, 'A graph tells which questions cannot be answered faithfully, before any model tries.', 19, 700, INK, 'middle'))
+CGT = sec('A missing path in the record means a worse answer, for every model', SVG(g), ch='1', status='acc',
+          ref='ALMutairi et al., Query-Graph Compatibility, CIKM 2026, Table 9, doi 10.1145/3799682.3840697',
+          notes='Our CIKM 2026 paper, published Nov 6, first author Mariam ALMutairi. The knowledge graph from the opening, made concrete on clinical records. A question becomes a small typed graph, and QGC asks whether it maps into the record with types and edges kept. If it does not, as with the allergy edge nobody recorded, no model can give a faithful answer from that record, whatever its size. Click: Table 9, MIMIC-III, 524 questions, five models from 3B to 1.65T parameters. Every model is more accurate when a path exists than when it does not, by 20.5 to 30.5 points. Models still answer some no path questions correctly from what they memorized, but those answers are not grounded in the record. Click: and this is common, 32.3 percent of the MIMIC-III questions and 20.9 percent on CORAL have no path at all. On CORAL the gaps are smaller, 5.3 to 16.3 points, because both kinds of questions are hard there. Under the down arrow: the controlled test on MetaQA where edges are deleted on purpose.')
 
-# ---- backup under the CIKM slide: the four classes ----
-g = T(40, 40, 'The "no path" side of slide 9, checked in this order. Each question gets exactly one label.', 14, 600, MUT)
-cls4 = [('1', 'Out of scope', 'more hops than the graph is certified for', 'no change to the graph, the workload asks too much'),
-        ('2', 'Entity failure', 'a needed entity type has no instances at all', 'fix how the graph is populated'),
-        ('3', 'Relation failure', 'a needed relation type is not in the schema', 'fix the schema'),
-        ('4', 'Composition failure', 'types exist, but this patient\'s path is missing', 'repair that edge')]
-for k, (n_, name, why, fix) in enumerate(cls4):
-    y = 64 + k * 74
-    g += R(40, y, 1100, 62, SOFT, 'none', 0, 6) + T(70, y + 38, n_, 22, 700, '#C45200', 'middle') + T(100, y + 27, name, 17, 700, INK) + T(100, y + 49, why, 14.5, 400, INK) + T(1120, y + 38, fix, 14.5, 600, '#C45200', 'end')
-g += T(590, 392, 'None of the four applies: a path exists, so a wrong answer is the model\'s own reasoning.', 17, 700, INK, 'middle')
-g += T(590, 420, 'Typed homomorphism: read the question as a small typed graph. It must map into the record, types and edges preserved.', 14.5, 400, MUT, 'middle')
-g += T(590, 446, 'MIMIC-III: 3 of 239 two hop questions land in the four classes. CORAL: 8.2%, and repairing 51 edges brings it to 0%.', 14.5, 400, MUT, 'middle')
-CGT4 = sec('Four ways a question can be impossible before any model tries', SVG(g), ch='1', status='acc',
-           ref='Ours, CIKM 2026, Definition 8 (priority ordered failure classes), Theorem 1 and Table 6',
-           notes='Only if asked. The four classes refine the missing edge box on slide 9. The order matters: each question gets the first label that applies. Entity and relation failures are design errors in the graph, composition failure is a documentation gap fixed by adding the edge, out of scope means the questions ask for more hops than we can certify, so nothing in the graph changes.')
+# ---- backup under the CIKM slide: the controlled test ----
+g = T(40, 40, 'MetaQA, five models. Delete edges on purpose, then ask: does QGC predict which answers fail?', 15, 600, MUT)
+rows = [('1 hop', '+72 to +86', '0.87 to 0.93'), ('2 hops', '+55 to +79', '0.78 to 0.90')]
+g += T(300, 92, 'accuracy gap, path vs no path (points)', 14, 600, MUT) + T(760, 92, 'AUC of QGC as a failure predictor', 14, 600, MUT)
+for k, (h, gap, auc) in enumerate(rows):
+    y = 140 + k * 70
+    g += R(40, y - 36, 1100, 56, SOFT, 'none', 0, 6) + T(60, y, h, 20, 600, INK) + T(300, y, gap, 26, 400, INK, extra='font-family="et-book,Georgia,serif" style="font-size-adjust:none"') + T(760, y, auc, 26, 400, INK, extra='font-family="et-book,Georgia,serif" style="font-size-adjust:none"')
+g += T(40, 330, 'Theory: QGC is NP-complete in general, and tractable when the question graph has bounded treewidth,', 16, 400, INK)
+g += T(40, 356, 'which covers most real knowledge graph questions (Theorems 4.1 to 4.3).', 16, 400, INK)
+g += T(40, 410, 'Retrieval: stop expanding the subgraph once QGC = 1. Same 99.8% coverage on MetaQA 3 hop, 81.1% fewer triples.', 16, 400, INK)
+CGT4 = sec('Delete edges on purpose, and QGC predicts which answers fail', SVG(g), ch='1', status='acc',
+           ref='ALMutairi et al., CIKM 2026, Tables 4 and 11, Theorems 4.1 to 4.3',
+           notes='Only if asked. On MetaQA the same question is asked with the full graph and with edges deleted, so only the graph changes. The accuracy gap between path and no path questions is 72 to 86 points at one hop and 55 to 79 at two hops, and QGC as a failure predictor reaches AUC 0.87 to 0.93 and 0.78 to 0.90. The check is NP-complete in general but tractable for bounded treewidth questions. Used as a stopping rule for retrieval it keeps 99.8 percent coverage with 81.1 percent fewer triples.')
 
 # ---- forecast, two claims ----
 g = adefs('fc2')
@@ -1953,7 +1949,7 @@ def assemble(cover, old):
     vec2_b = bridge(VEC2, 'If not the vector, look where the fact lives. Causal tracing (Meng et al.) finds a fact in mid layer MLPs at the subject, the figure is under the down arrow on the next slide. The next slide shows why that is still not where editing works.')
     d46_q = bridge(d46, 'Nearest 2026 cousin, if asked: Circuit-Diff (Friedman and Song, arXiv 2609.23892, Sep 2026) also compares attribution graphs before and after a factual edit, but to label features, not to rank which edits went wrong. If asked how a partial correlation over 64 blocks is estimated from 12 prompts: it is not well posed alone, ridge with one fixed lambda shapes the graph, which is why the paper leans on held out evidence. Hard question to expect: is the delta graph real, or an artifact of the 12 probe prompts? Three answers from the paper. The probe prompts are disjoint from the prompts that define failure. Trained on 200 facts and tested on 500 new ones, the AUC holds at 0.840 to 0.862. Rerun the 50 riskiest edits from scratch and only 2 of 50 flip.')
     silent_b = bridge(toch(SILENT, '1'), 'And the usual fix, a vector, is unreliable too: it switches a behavior on average but sends many single inputs the wrong way (Tan et al., under the down arrow). So instead of the vector, look where the fact lives, which the next slide does.')
-    lang_cgt = bridge(CGT.replace('</aside>', ' If asked about contamination: PhysioNet data sit behind a data use agreement, not in public corpora, which is not an absolute guarantee.</aside>', 1), 'That was the graph outside the model, a record we can draw. The harder case is a change made inside the model, where nobody drew the graph.')
+    lang_cgt = bridge(CGT.replace('</aside>', ' If asked about contamination: the clinical questions come from MIMIC-III and CORAL records, which sit behind a data use agreement, not an absolute guarantee.</aside>', 1), 'That was the graph outside the model, a record we can draw. The harder case is a change made inside the model, where nobody drew the graph.')
     rel = lambda i, t: retitle(old[i], t) if t else old[i]
     hase = bridge(old[35].replace('The first crack: where a fact lives is not where editing works', 'Where a fact lives is not where editing works').replace('(numbers illustrative)', '(numbers illustrative. Causal tracing: corrupt the input, restore one layer)').replace('Each grey dot is one fact. Hase 2023: correlation about zero (minus 0.13).', 'Schematic, each grey dot one fact. Hase 2023 measured a correlation of about zero (minus 0.13).').replace('Guo 2025, slide 31', 'Guo 2025').replace('So an edit can land where the knowledge is not, and its side effects can land where nobody looks.', 'Mechanism still matters: choosing where to change by it makes forgetting stick (Guo 2025).').replace('But choosing where to change by mechanism makes forgetting stick (Guo 2025).', 'So an edit can land where the knowledge is not.'), 'Across all these surgeries, the same three lessons, next slide.')
     lessons = old[40]
