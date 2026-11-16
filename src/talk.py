@@ -655,15 +655,32 @@ g = adefs('vc')
 FAILC = '#DA291C'
 SER = 'font-family="et-book,Georgia,serif" style="font-size-adjust:none"'
 import random as _rv, math as _mv
-# four tools, one row, same kind of object
+# four tools, one row, each drawn as the matrices it adds
+CS = 11; BASEC = '#DDD7CF'; ADDC = '#5F5D50'
+def mat(x, y, r_, c_, fill):
+    return ''.join(R(x + j * CS, y + i * CS, CS - 2, CS - 2, fill, 'none', 0, 1.5) for i in range(r_) for j in range(c_))
+def op(x, y, ch):
+    return T(x, y, ch, 20, 400, MUT, 'middle', extra=SER)
+GY, M6 = 22, 6 * CS
+def glyph(k, x):
+    if k == 0:
+        return mat(x, GY, 6, 1, BASEC) + op(x + 26, GY + 38, '+') + mat(x + 40, GY, 6, 1, ADDC)
+    out = mat(x, GY, 6, 6, BASEC) + op(x + M6 + 14, GY + 38, '+')
+    x2 = x + M6 + 28
+    if k == 1:
+        return out + mat(x2, GY, 6, 1, ADDC) + op(x2 + CS + 9, GY + 37, '·') + mat(x2 + CS + 18, GY + 2.5 * CS, 1, 6, ADDC)
+    if k == 2:
+        return out + mat(x2, GY, 6, 2, ADDC) + op(x2 + 2 * CS + 9, GY + 37, '·') + mat(x2 + 2 * CS + 18, GY + 2 * CS, 2, 6, ADDC)
+    return out + mat(x2, GY, 6, 6, ADDC)
+GW = [51, 66 + 28 + 11 + 18 + 66, 66 + 28 + 22 + 18 + 66, 66 + 28 + 66]
 tools = [('Steer', 'h ← h + αr', 'a direction, at run time'), ('Edit', 'W ← W + uvᵀ', 'rank one, one layer'),
          ('LoRA', 'W ← W + BA', 'low rank, many layers'), ('Fine tune', 'θ ← θ + τ', 'a task vector, all weights')]
 for k, (nm, eq, d) in enumerate(tools):
-    x = 40 + k * 285
-    g += P(f'M{x},{58} L{x+34},{40}', AC2, 2, extra='marker-end="url(#vca)"')
-    g += T(x + 48, 50, nm, 19, 600, INK) + T(x + 148, 50, eq, 18, 400, AC2, extra=SER + ' font-style="italic"')
-    g += T(x + 48, 74, d, 14, 400, MUT)
-g += L(40, 104, 1140, 104, '#D7D2CB', 1)
+    cx = 182 + k * 285
+    g += glyph(k, cx - GW[k] / 2)
+    g += T(cx, GY + M6 + 30, nm, 19, 600, INK, 'middle') + T(cx, GY + M6 + 52, eq, 17, 400, AC2, 'middle', extra=SER + ' font-style="italic"') + T(cx, GY + M6 + 72, d, 13.5, 400, MUT, 'middle')
+g += L(40, 176, 1140, 176, '#D7D2CB', 1)
+top_g = g; g = ''
 # a quiet cloud of facts and behaviors
 _rv.seed(11)
 KEEP = [(200, 460, 296, 348), (548, 770, 172, 236), (60, 300, 368, 420), (390, 640, 368, 420)]
@@ -694,9 +711,10 @@ r = T(820, 200, 'The arrow says what', 26, 400, INK, extra=SER) + T(820, 234, 'w
 r += T(820, 298, 'Nothing says what', 26, 400, '#C45200', extra=SER) + T(820, 332, 'else moved.', 26, 400, '#C45200', extra=SER)
 r += T(820, 400, 'Probes and features are vectors too.', 15, 400, MUT)
 g += F(3, r)
+g = top_g + '<g transform="translate(70,82) scale(.86)">' + g + '</g>'
 VECTOR = sec('Every surgery is stored as a vector', SVG(g), ch='0',
              ref='Arditi et al., NeurIPS 2024. Meng et al., NeurIPS 2022. Hu et al., LoRA, ICLR 2022. Ilharco et al., ICLR 2023',
-             notes='Top row: four ways we change a model today, each one line of math, all the same kind of object, an added vector. Below, a schematic: every dot is something the model knows or does. Click: an edit moves one fact, Space Needle from Seattle to Paris, that arrow is the vector we added. Click: the facts nearby moved too, Seattle is in Washington, the Needle was built in 1962, and nothing in the arrow says so. The dots are an illustration, not data. Click: the takeaway. Four surgeries, four one line formulas a CS audience can read. ROME is a rank one LoRA on one layer, which links knowledge editing to something most of the room has used. The point is not the math, it is that each operation is a single added object, and that object carries no information about its side effects. The tools we use to understand models read them the same way: a linear probe, a sparse autoencoder feature, a steering direction, all vectors. Bridge: yet the knowledge these models hold has another shape, a graph, in text, in images and in music.')
+             notes='Top row: four ways we change a model today, each drawn as what it adds. Light cells are the model, dark cells are the change: a vector added to the activations, a rank one matrix u times v transposed, LoRA as a tall thin B times a short wide A, and fine tuning as a full matrix of small changes. All the same kind of object, something added. Below, a schematic: every dot is something the model knows or does. Click: an edit moves one fact, Space Needle from Seattle to Paris, that arrow is the vector we added. Click: the facts nearby moved too, Seattle is in Washington, the Needle was built in 1962, and nothing in the arrow says so. The dots are an illustration, not data. Click: the takeaway. Four surgeries, four one line formulas a CS audience can read. ROME is a rank one LoRA on one layer, which links knowledge editing to something most of the room has used. The point is not the math, it is that each operation is a single added object, and that object carries no information about its side effects. The tools we use to understand models read them the same way: a linear probe, a sparse autoencoder feature, a steering direction, all vectors. Bridge: yet the knowledge these models hold has another shape, a graph, in text, in images and in music.')
 
 # ---- demo: a tiny graph is enough to represent a piece ----
 g = adefs('dm2')
