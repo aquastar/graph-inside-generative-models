@@ -1372,33 +1372,17 @@ BRL = sec('Predict the next word well, and you predict the brain', SVG(g), ch='2
           ref='Schrimpf et al., PNAS 2021. Caucheteux and King, Communications Biology 2022. Goldstein et al., Nature Neuroscience 2022. Kell et al., Neuron 2018. Tuckute et al., Nature Human Behaviour 2024',
           notes='The unifying theme of the brain section. A model and a brain can be compared without any theory of language or music: fit a map from model activity to brain activity and test it on new stimuli. In language this works, and models that predict the next word better also predict the brain better. Caucheteux and King found the same with 102 people in fMRI and MEG.')
 
-# ---- B2: a graph predicts the listening brain (IDyOM) ----
+# ---- B2: a graph predicts the listening brain (IDyOM), with their Figure 1 ----
 g = adefs('id')
-g += T(260, 44, 'a melody, note by note', 15, 700, AC2, 'middle')
-nts = [(90, 135), (150, 115), (210, 145), (270, 105), (330, 130), (390, 90)]
-g += ''.join(L(60, 80 + k * 14, 430, 80 + k * 14, GRY, 1) for k in range(5)) + ''.join(f'<ellipse cx="{x}" cy="{y}" rx="10" ry="7.5" fill="{INK}"/>' for x, y in nts)
-idy = R(500, 50, 300, 130, ACL, ACC, 2, 10) + T(650, 82, 'IDyOM: a note transition graph', 16, 700, ACC, 'middle') + T(650, 108, 'with several memory lengths,', 14, 400, INK, 'middle') + T(650, 130, 'learned from thousands of melodies', 14, 400, INK, 'middle') + T(650, 160, 'the cousin of our 12 node graph', 13, 700, ACC, 'middle')
-idy += P('M436,115 L496,115', AC2, 2.5, extra='marker-end="url(#ida)"')
-g += F(1, idy)
-hs = [0.3, 0.5, 0.95, 0.35, 0.7, 1.0]
-sur = T(990, 44, 'how surprising is each note?', 15, 700, ACC, 'middle') + ''.join(R(880 + k * 38, 170 - 100 * h, 28, 100 * h, ACC, 'none', 0, 3) for k, h in enumerate(hs)) + L(870, 172, 1110, 172, INK, 1.5) + P('M804,115 L866,115', AC2, 2.5, extra='marker-end="url(#ida)"')
-g += F(2, sur)
-eeg = R(60, 220, 1090, 150, MUL, MU, 2, 10) + T(80, 252, 'EEG while 20 people listen to Bach', 16, 700, MU)
-ons = [110 + k * 100 for k in range(6)]
-def _erp(x):
-    v = 0
-    for t0, h in zip(ons, hs):
-        v += 6 * math.exp(-((x - t0 - 14) / 9) ** 2) - 34 * h * math.exp(-((x - t0 - 42) / 15) ** 2)
-    return 318 - v
-eeg += ''.join(L(t0, 270, t0, 356, '#C9C4BD', 1, 'stroke-dasharray="3 3"') + C(t0, 270, 4, INK) for t0 in ons)
-eeg += P('M80,318 ' + ' '.join(f'L{x},{_erp(x):.1f}' for x in range(83, 700, 3)), MU, 2, extra='stroke-linejoin="round"')
-eeg += T(110, 290, 'note', 11.5, 400, MUT, 'middle') + T(ons[5] + 42, 362, 'big surprise, big response', 12.5, 600, MU, 'middle')
-eeg += T(740, 290, 'Surprise explains the brain response', 16, 700, INK) + T(740, 316, 'beyond the sound itself, within 350 ms', 15, 400, INK) + T(740, 340, 'after each note, in 16 of 20 listeners.', 15, 400, INK)
-g += F(3, eeg)
-g += F(4, T(590, 420, 'A graph of note transitions is something the listening brain is measurably tracking.', 19, 700, INK, 'middle') + T(590, 452, 'So the brain can judge a graph.', 18, 700, ACC, 'middle'))
+g += img(30, 14, 470, 397, 'figs/diliberto2020-fig1.png') + L(30, 414, 500, 414, '#D7D2CB', 1)
+g += T(560, 50, 'Every note gets a surprise value', 16, 600, MUT)
+g += wrap(560, 84, 'IDyOM, a note transition graph with several memory lengths, scores how unexpected each note is (rows S and H in A).', 20, 400, INK, width=50, lh=27)
+g += F(1, T(560, 196, 'Listeners wear EEG', 16, 600, MUT) + wrap(560, 230, '20 people listen to Bach (B). The sound alone predicts part of the brain response.', 20, 400, INK, width=50, lh=27))
+g += F(2, T(560, 314, 'Surprise adds to it', 16, 600, MUT) + wrap(560, 348, 'Adding the surprise predicts more, within 350 ms of each note, in 16 of 20 listeners (C).', 20, 400, INK, width=50, lh=27))
+g += F(3, T(30, 452, 'The listening brain tracks a graph of note transitions.', 21, 400, INK, extra='font-family="et-book,Georgia,serif" style="font-size-adjust:none"') + T(560, 452, 'So the brain can judge a graph.', 21, 400, '#C45200', extra='font-family="et-book,Georgia,serif" style="font-size-adjust:none"'))
 BRI = sec('A note transition graph predicts the listening brain', SVG(g), ch='2',
-          ref='Pearce, IDyOM, 2005 and 2018. Di Liberto et al., Cortical encoding of melodic expectations in human temporal cortex, eLife 2020',
-          notes='This is where graphs and brains meet. IDyOM is a variable order Markov model, the grown up version of our 12 node graph. It assigns every note a surprise value. Di Liberto and colleagues show that this surprise explains EEG responses beyond acoustic features, strongest within the first 350 ms, in 16 of 20 participants, with a large effect (d about 1.6). ECoG locates it near auditory cortex.')
+          ref='Pearce, IDyOM, 2005 and 2018. Di Liberto et al., Cortical encoding of melodic expectations in human temporal cortex, eLife 2020, Figure 1',
+          notes='The figure is theirs, Figure 1 of the eLife paper. This is where graphs and brains meet. IDyOM is a variable order Markov model, the grown up version of our 12 node graph. It assigns every note a surprise value. Di Liberto and colleagues show that this surprise explains EEG responses beyond acoustic features, strongest within the first 350 ms, in 16 of 20 participants, with a large effect (d about 1.6). ECoG locates it near auditory cortex.')
 
 # ---- B3: rebuild ----
 g = adefs('rb')
