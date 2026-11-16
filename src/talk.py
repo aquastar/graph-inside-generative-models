@@ -1922,6 +1922,14 @@ HASE = sec('Where a fact lives is not where editing works', SVG(g), ch='1',
            ref='Hase, Bansal, Kim, Ghandeharioun, Does Localization Inform Editing?, NeurIPS 2023, Figure 4',
            notes='Two numbers for every fact. Across: causal tracing, corrupt the input, restore one layer, and see how much of the answer comes back. That says how much the fact lives in layer 6. Up: edit layer 6 with ROME and see whether the fact changes. Click. Everyone expected a diagonal: lives there more, edits there better. Click. What Hase and colleagues observed: almost every fact edits well in layer 6, whether it lives there or not. The figure is theirs: each grey dot is one fact in GPT-J, most sit near zero tracing effect and still edit at nearly 1. The orange line is the fit, the measured correlation was about zero, slightly negative, minus 0.13. Their red dashed line is the expectation. Click. So an edit can land where the knowledge is not. Mechanism still matters elsewhere: choosing where to unlearn by it makes forgetting stick (Guo 2025, under the unlearning slide). The causal tracing figure from Meng 2022 is under the down arrow.')
 
+# ---- live demo: MusicGen surprise next to listeners' EEG (his demo page) ----
+EEGDEMO = ('<section data-ch="2">\n  <h2>Live: what MusicGen expects, next to what listeners\' brains do</h2><span class="status progress">In progress</span>\n'
+           '  <div style="width:1150px;height:452px;overflow:hidden;margin:6px auto 0;border-radius:6px;box-shadow:0 0 0 1px #D7D2CB">'
+           '<iframe data-src="https://aquastar.github.io/music-to-brain/eeg-demo/" title="Music surprise and EEG demo" '
+           'style="position:relative;top:-92px;width:1643px;height:780px;border:0;transform:scale(.7);transform-origin:0 0;max-width:none;max-height:none;margin:0"></iframe></div>\n'
+           '  <div class="ref">Demo: aquastar.github.io/music-to-brain/eeg-demo. EEG of 14 to 21 listeners per song, MusicGen large surprise per note</div>\n'
+           '  <aside class="notes">Live demo, in progress, not a result. Pick a song, press play, and the score, MusicGen\'s surprise for every note and the average EEG of the listeners scroll together. Jump to the next surprising note and look at the EEG right after it. Say the honest part out loud: note by note, this link is not yet distinguishable from an untrained model, so the demo shows the measurement we built, and the next slide is the experiment that can actually test it. If the network fails, describe it in one sentence and move on.</aside>\n</section>')
+
 # ======================= ASSEMBLY =======================
 # ---- loop it1: results slide that pays off the trailer bars (P15, P10) ----
 g = adefs('r20')
@@ -2049,7 +2057,7 @@ def assemble(cover, old):
     emo_b = bridge(toch(EMOTION2, '2'), 'Emotion is one way music acts on the brain. Before we model music, one detour through this year\'s Nobel Prize, because it shows what a designed signal can do to brain circuits. The history of music models is under the down arrow.')
     copy_b = bridge(COPY, 'Before we go inside a generator, one honest line from the literature: in music, graphs win only when the edges carry something the sequence throws away, and often they do not (survey under the down arrow). The one place nobody has looked for such edges is inside the generator itself.')
     corpus_b = bridge(corpus, 'How much memory should the graph have? One note gives the right vocabulary with the wrong syntax, three notes memorize the piece (the picture is under the down arrow on the next slide).')
-    mus = [beyond2, emo_b, backup(hist), toch(OPTO, '2'), toch(MEDIC, '2'), toch(CREATE, '2'), toch(GENRE, '2'), FOLD, corpus_b, RICHER, backup(path), copy_b, backup(WHEN), PROBE, backup(MGEN), musres_b, bri, backup(BRL), backup(BRR), PLAN, backup(BRG)]
+    mus = [beyond2, emo_b, backup(hist), toch(OPTO, '2'), toch(MEDIC, '2'), toch(CREATE, '2'), toch(GENRE, '2'), FOLD, corpus_b, RICHER, backup(path), copy_b, backup(WHEN), PROBE, backup(MGEN), musres_b, bri, backup(BRL), backup(BRR), EEGDEMO, PLAN, backup(BRG)]
     beyond = []
     close = [TAKEAWAY.replace('</section>', CLIP_JSON + '</section>')]
     parts = {'vision': vision, 'language': lang, 'music': mus, 'beyond': beyond, 'close': close}
