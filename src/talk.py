@@ -1248,9 +1248,28 @@ HIST = sec('Part 2. The oldest music model is a graph', SVG(g), ch='2', cls='div
 
 # ---- M2: fold 88 keys into 12 degrees ----
 g = adefs('fd')
-g += img(40, 72, 476, 82, 'figs/fur-elise-opening.png') + L(40, 160, 516, 160, '#D7D2CB', 1)
+ST0, SG = 84, 12          # top staff line (F5), line gap
+sty = lambda idx: ST0 + 48 - idx * SG / 2   # idx 0 = E4 on the bottom line
+sc = ''.join(L(40, ST0 + k * SG, 500, ST0 + k * SG, '#5F5D50', 1.1) for k in range(5))
+sc += T(46, ST0 + 47, '\U0001D11E', 64, 400, INK, extra='font-family="Noto Music,Bravura,DejaVu Sans,Apple Symbols,Segoe UI Symbol,serif"')
+sc += T(100, ST0 + 22, '3', 24, 700, INK, 'middle', extra='font-family="Georgia,serif"') + T(100, ST0 + 46, '8', 24, 700, INK, 'middle', extra='font-family="Georgia,serif"')
+FE = [(138, 7, 'E', 0), (174, 6, 'D♯', 1), (230, 7, 'E', 0), (266, 6, 'D♯', 1), (296, 7, 'E', 0), (326, 4, 'B', 0), (356, 6, 'D', 0), (386, 5, 'C', 0), (444, 3, 'A', 0)]
+def head(x, y):
+    return f'<ellipse cx="{x}" cy="{y}" rx="7.2" ry="5.2" transform="rotate(-20 {x} {y})" fill="{INK}"/>'
+for x, idx, nm, sh in FE:
+    y = sty(idx)
+    sc += head(x, y) + T(x, ST0 + 104, nm, 15, 600, '#C45200' if nm == 'A' else AC2, 'middle')
+    if sh:
+        sc += T(x - 15, y + 6, '♯', 17, 400, INK, 'middle')
+    if nm == 'A':
+        sc += L(x + 6.5, y - 2, x + 6.5, y - 36, INK, 1.4) + P(f'M{x+6.5},{y-36} q10,8 6,22', INK, 1.6)
+    else:
+        sc += L(x - 6.5, y + 2, x - 6.5, ST0 + 74, INK, 1.4)
+for xa, xb in ((138, 174), (230, 386)):
+    sc += R(xa - 7.5, ST0 + 70, xb - xa + 1.5, 4.5, INK, 'none', 0, 0) + R(xa - 7.5, ST0 + 62, xb - xa + 1.5, 4.5, INK, 'none', 0, 0)
+sc += L(202, ST0, 202, ST0 + 48, INK, 1.2) + L(414, ST0, 414, ST0 + 48, INK, 1.2) + L(496, ST0, 496, ST0 + 48, INK, 1.2)
+g += sc
 g += T(278, 44, 'Für Elise, the opening bars', 15, 700, INK, 'middle')
-g += T(278, 190, 'Its notes repeat on every octave of the piano', 14, 400, MUT, 'middle')
 cx, cy, r = 278, 345, 95
 names = ['0 tonic', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11']
 ring = ''
@@ -1273,7 +1292,7 @@ g += F(2, tb)
 g += F(3, playbtn(640, 410, 230, 'fe_orig', 'Für Elise, the opening', AC2) + playbtn(890, 410, 260, 'fe_graph', 'a tune drawn from the table', ACC))
 FOLD = sec('Fold 88 keys into 12 scale degrees, and a melody becomes 144 numbers', SVG(g), ch='2',
            ref='Scale degrees are counted from each piece\'s key (its tonic). The overview animation used real pitches, the classifier uses these 12 degrees',
-           notes='Score excerpt: pianocoda.com engraving. For non musicians: the 12 notes repeat across the piano, and a melody in C and the same melody in G should look the same, so we fold octaves and count from the home note of the key. Each row of the table says where the melody goes next from that note. Play the two buttons: the second tune uses only the 144 numbers. It sounds like the right material with the wrong sentences. That is the next slides.')
+           notes='The score line is drawn by us: the first nine notes, E D sharp E D sharp E B D C A. For non musicians: the 12 notes repeat across the piano, and a melody in C and the same melody in G should look the same, so we fold octaves and count from the home note of the key. Each row of the table says where the melody goes next from that note. Play the two buttons: the second tune uses only the 144 numbers. It sounds like the right material with the wrong sentences. That is the next slides.')
 
 # ---- M5: when graphs help ----
 g = adefs('gh')
@@ -1646,50 +1665,97 @@ EMOTION2 = sec('Music is where emotion can be measured', SVG(g), ch='0',
 # ---- Nov 4 (his request): optogenetics, then music medicine ----
 g = adefs('op')
 g += steps(2).replace('url(#pea)', 'url(#opa)')
-oc = R(30, 50, 545, 300, '#fff', LINE, 1.5, 14) + T(52, 84, 'Nobel Prize in Physiology or Medicine, 2026', 17, 700, INK) + T(52, 106, 'light gated ion channels and optogenetics', 14, 600, AC2)
-for q_, (fn, ini, nm, af) in enumerate([('karl-deisseroth.jpg', 'KD', 'Karl Deisseroth', 'Stanford'), ('peter-hegemann.jpg', 'PH', 'Peter Hegemann', 'Humboldt, Berlin'), ('georg-nagel.jpg', 'GN', 'Georg Nagel', 'Würzburg')]):
-    x = 52 + q_ * 176
-    oc += photo(x + 24, 154, 24, fn, ini, AC2) + T(x + 56, 150, nm, 13, 700, INK) + T(x + 56, 168, af, 12, 400, MUT)
-oc += T(52, 222, 'Put a light switch, an algal protein, into chosen neurons.', 15, 600, INK) + T(52, 246, 'Blue light turns them on, related light switches turn them off.', 15, 400, INK)
-oc += T(52, 282, 'Precise, but it needs a gene delivered into the brain', 14.5, 400, MUT) + T(52, 304, 'and light brought to the cells.', 14.5, 400, MUT)
-oc += T(52, 334, 'In people so far: partial sight restored in one blind patient, 2021.', 13.5, 600, AC2)
+BLUE = '#2F7FD0'
+def blink(vals, dur, kt, attr='opacity'):
+    return f'<animate attributeName="{attr}" values="{vals}" keyTimes="{kt}" dur="{dur}s" repeatCount="indefinite"/>'
+def sweep(x0, x1, dur):
+    return f'<animateTransform attributeName="transform" type="translate" from="0 0" to="{x1-x0} 0" dur="{dur}s" repeatCount="indefinite"/>'
+# left card: light switches a neuron
+PER = 1.2
+oc = R(30, 50, 545, 360, '#fff', LINE, 1.5, 14) + T(52, 80, 'Nobel Prize 2026: optogenetics', 16, 700, INK)
+for q_, (fn, ini, nm) in enumerate([('karl-deisseroth.jpg', 'KD', 'Deisseroth'), ('peter-hegemann.jpg', 'PH', 'Hegemann'), ('georg-nagel.jpg', 'GN', 'Nagel')]):
+    x = 330 + q_ * 82
+    oc += photo(x, 76, 20, fn, ini, AC2) + T(x, 112, nm, 11.5, 600, INK, 'middle')
+# fiber and light cone
+oc += R(129, 128, 22, 54, '#C9C4BD', 'none', 0, 3) + T(119, 150, 'light', 13, 400, MUT, 'end')
+oc += f'<polygon points="129,182 151,182 177,226 103,226" fill="{BLUE}" opacity="0">' + blink('0;0.55;0.55;0;0', PER, '0;0.04;0.2;0.26;1') + '</polygon>'
+# neuron
+NX, NY = 140, 262
+oc += P(f'M{NX-22},{NY-10} C{NX-50},{NY-30} {NX-62},{NY-40} {NX-80},{NY-36}', AC2, 2) + P(f'M{NX-24},{NY+8} C{NX-52},{NY+20} {NX-60},{NY+40} {NX-82},{NY+46}', AC2, 2)
+oc += P(f'M{NX+24},{NY} L{NX+120},{NY} M{NX+120},{NY} l14,-12 M{NX+120},{NY} l14,12', AC2, 2)
+oc += C(NX, NY, 26, '#EFEBE5', AC2, 2)
+oc += f'<circle cx="{NX}" cy="{NY}" r="26" fill="{ACC}" opacity="0">' + blink('0;0;0.85;0;0', PER, '0;0.06;0.12;0.32;1') + '</circle>'
+oc += T(NX, NY + 50, 'neuron', 13, 400, MUT, 'middle')
+# voltage trace with spikes locked to the light pulses
+TX0, TX1, TB = 290, 550, 300
+SP = 52   # px per period
+tr = f'M{TX0},{TB}'
+x = TX0
+while x + SP <= TX1 + 1:
+    tr += f' L{x+8},{TB} L{x+11},{TB-62} L{x+15},{TB+10} L{x+20},{TB} L{x+SP},{TB}'
+    x += SP
+oc += T(TX0, 196, 'blue light', 13, 600, BLUE) + ''.join(R(TX0 + 6 + k * SP, 204, 8, 10, BLUE, 'none', 0, 1) for k in range(5))
+oc += P(tr, INK, 1.6, extra='stroke-linejoin="round"') + T(TX0, 336, 'the neuron fires, every time', 13, 600, INK)
+oc += f'<g>' + L(TX0, 200, TX0, 316, ACC, 1.6) + sweep(TX0, TX0 + 5 * SP, 5 * PER) + '</g>'
+oc += T(52, 372, 'A light sensitive protein from algae, put into chosen neurons.', 15, 400, INK) + T(52, 394, 'Precise, but it needs a gene and light inside the brain.', 14, 400, MUT)
 g += oc
-nc = R(605, 50, 545, 300, MUL, 'none', 0, 14) + T(627, 84, 'A switch that needs no surgery?', 17, 700, MU)
-nc += T(627, 122, '40 Hz light and sound, through the eyes and ears:', 15, 600, INK)
-nc += T(627, 146, 'brain rhythms follow the beat. In Alzheimer model mice,', 14.5, 400, INK) + T(627, 168, 'less amyloid and tau, better memory (Tsai lab).', 14.5, 400, INK)
-nc += T(627, 198, 'In people: safe in small trials, a phase 3 trial', 14.5, 400, INK) + T(627, 220, 'finished enrolling in Feb 2026, results not yet out.', 14.5, 400, INK)
-nc += T(627, 262, 'A 40 Hz click is the simplest sound there is.', 15, 600, MU) + T(627, 286, 'Music is the richest sound we can design.', 15, 700, MU)
-nc += T(627, 330, 'Our question, not a result.', 13, 400, MUT)
+# right card: sound through the ear
+P2 = 0.8; SP2 = 40
+nc = R(605, 50, 545, 360, MUL, 'none', 0, 14) + T(627, 80, 'Through the ear, no surgery?', 17, 700, MU)
+nc += T(627, 120, 'sound: 40 Hz clicks (slowed down)', 13, 600, MU)
+CX0 = 640
+nc += ''.join(R(CX0 + 4 + k * SP2, 132, 5, 26, MU, 'none', 0, 1) for k in range(12))
+nc += T(627, 200, 'brain rhythm (EEG)', 13, 600, INK)
+wv = f'M{CX0},{250}' + ''.join(f' Q{CX0 + k*SP2 + 6},{214} {CX0 + k*SP2 + 14},{250} T{CX0 + (k+1)*SP2},{250}' for k in range(12))
+nc += P(wv, INK, 1.6)
+nc += f'<g>' + L(CX0, 126, CX0, 284, ACC, 1.6) + sweep(CX0, CX0 + 12 * SP2, 12 * P2) + '</g>'
+nc += T(627, 318, 'The brain rhythm locks to the beat.', 16, 600, INK)
+nc += T(627, 344, 'Alzheimer model mice: less amyloid, better memory.', 14, 400, MUT) + T(627, 366, 'People: safe in small trials, phase 3 results not out.', 14, 400, MUT)
+nc += T(627, 394, 'Our question, not a result.', 13, 400, MUT)
 g += F(1, nc)
-g += F(2, T(590, 400, 'Optogenetics shows a designed signal can switch brain circuits.', 19, 700, INK, 'middle') + T(590, 432, 'Could music be the switch that enters through the ear?', 19, 700, ACC, 'middle'))
+g += F(2, T(590, 446, 'A click is the simplest sound. Music is the richest one we can design. Could it be the switch?', 19, 400, '#C45200', 'middle', extra='font-family="et-book,Georgia,serif" style="font-size-adjust:none"'))
 OPTO = sec('This year\'s Nobel: a switch for neurons, made of light', SVG(g), ch='0',
            ref='Nobel Prize 2026, Physiology or Medicine, Deisseroth, Hegemann, Nagel, announced Oct 5 2026. Sahel et al., Nature Medicine 2021. Tsai lab, MIT Picower Institute: 40 Hz sensory stimulation, mouse studies 2016 to 2019, PLOS ONE 2022. Cognito Therapeutics HOPE trial, enrollment completed Feb 2026',
            notes='Portraits: Ill. Niklas Elmehed, Nobel Prize Outreach, from nobelprize.org. Step 3 of 4. One minute. The 2026 Nobel went to optogenetics: a light gated channel from an alga, put into chosen neurons, so light switches them on or off. It changed neuroscience, but it is invasive: a gene has to be delivered and light has to reach the cells, so in people it is limited, the first case was partial vision in one blind patient. The non invasive cousin is 40 Hz flicker of light and sound from Li-Huei Tsai\'s lab: in mice it drives gamma rhythms and reduces amyloid and tau, small human trials found it safe, and a phase 3 trial finished enrolling in February. If a plain 40 Hz click can do that, music, the richest sound we can design, might be a finer switch. Say clearly that this is the question, not a result.')
 
 g = adefs('md')
 g += steps(3).replace('url(#pea)', 'url(#mda)')
-g += T(30, 66, 'How music reaches the brain', 15, 700, MUT)
-chain = [('music', 'a melody unfolds', MU, MUL), ('expectation', 'what comes next?', ACC, ACL), ('reward', 'dopamine at the peak', PURP, '#eef0ff'), ('brain response', 'tracked note by note', MU, MUL)]
-for k, (a_, b_, col, fill) in enumerate(chain):
-    y = 80 + k * 72
-    g += R(30, y, 330, 58, fill, 'none', 0, 10) + T(48, y + 25, a_, 16.5, 700, col) + T(48, y + 46, b_, 13.5, 400, INK)
-    if k < 3:
-        g += P(f'M195,{y+59} L195,{y+71}', AC2, 2.2, extra='marker-end="url(#mda)"')
-g += T(30, 374, 'Salimpoor 2011 (dopamine), Di Liberto 2020 (EEG)', 12, 400, MUT)
-g += T(400, 66, 'Music already works as medicine', 15, 700, MUT)
-ev = [('Parkinson\'s', 'a steady beat improves gait speed and stride length', 'meta analysis, low quality evidence'),
-      ('Surgery', 'recorded music lowers anxiety before an operation', 'Cochrane review, 26 trials'),
-      ('Depression', 'music added to usual care improves symptoms', 'Cochrane review, moderate quality'),
-      ('Dementia', 'probably fewer depressive symptoms, little effect on cognition', 'Cochrane review, 22 trials'),
-      ('Pain', 'may lower pain intensity and distress, and pain medicine use', 'meta analysis, 97 trials')]
-for k, (a_, b_, c_) in enumerate(ev):
-    y = 80 + k * 58
-    g += F(1 if k < 2 else 2, R(400, y, 750, 50, SOFT, 'none', 0, 8) + T(418, y + 31, a_, 15.5, 700, MU) + T(540, y + 22, b_, 14, 400, INK) + T(540, y + 41, c_, 12.5, 400, MUT))
-g += F(3, T(590, 412, 'Most trials are small, and nobody knows which part of the music does the work.', 17, 700, INK, 'middle')
-          + T(590, 444, 'That is a modeling question. So let us model music, from the start.', 18, 700, ACC, 'middle'))
+# left: rhythmic cueing, footsteps land on the beat
+BEAT, NB_ = 0.6, 8
+CYC = BEAT * NB_
+lc = R(30, 50, 545, 360, '#fff', LINE, 1.5, 14) + T(52, 82, "Parkinson's: walk to a steady beat", 17, 700, INK)
+MX, MY = 110, 214
+lc += f'<polygon points="{MX-34},{MY+60} {MX+34},{MY+60} {MX+16},{MY-50} {MX-16},{MY-50}" fill="#EFEBE5" stroke="{AC2}" stroke-width="1.6"/>'
+lc += f'<g><line x1="{MX}" y1="{MY+40}" x2="{MX}" y2="{MY-44}" stroke="{INK}" stroke-width="2.2"/><circle cx="{MX}" cy="{MY-20}" r="6" fill="{INK}"/>'
+lc += f'<animateTransform attributeName="transform" type="rotate" values="-24 {MX} {MY+40};24 {MX} {MY+40};-24 {MX} {MY+40}" dur="{2*BEAT}s" repeatCount="indefinite" calcMode="spline" keySplines=".45 0 .55 1;.45 0 .55 1"/></g>'
+lc += f'<circle cx="{MX}" cy="{MY-66}" r="6" fill="{ACC}" opacity="0"><animate attributeName="opacity" values="1;0;0" keyTimes="0;0.35;1" dur="{BEAT}s" repeatCount="indefinite"/></circle>'
+lc += T(MX, MY + 84, 'metronome', 13, 400, MUT, 'middle')
+def foot(x, y, flip):
+    s_ = -1 if flip else 1
+    return (f'<ellipse cx="{x}" cy="{y}" rx="9" ry="16" fill="{MU}"/>' + f'<ellipse cx="{x}" cy="{y+21}" rx="7" ry="6" fill="{MU}"/>'
+            + ''.join(f'<circle cx="{x + s_*(-6 + 4*t)}" cy="{y - 19 - (2 if t in (1, 2) else 0)}" r="2.4" fill="{MU}"/>' for t in range(4)))
+fp = ''
+for k in range(NB_):
+    t0 = k / NB_
+    kt = f'0;{max(t0, 0.001):.3f};{t0 + 0.01:.3f};0.96;1'
+    fx, fy = 210 + k * 44, (190 if k % 2 else 246)
+    fp += f'<g opacity="0" transform="translate({fx} {fy}) rotate(90) scale(1.35) translate({-fx} {-fy})">' + foot(fx, fy, k % 2) + f'<animate attributeName="opacity" values="0;0;1;1;0" keyTimes="{kt}" dur="{CYC}s" repeatCount="indefinite"/></g>'
+lc += fp + T(210, 314, 'one step on every beat', 14, 600, MU)
+lc += T(52, 370, 'Walking speed and stride length improve.', 16, 400, INK) + T(52, 394, 'Meta analysis, low quality evidence.', 13.5, 400, MUT)
+g += lc
+# right: four more uses, one short line each
+ev = [('Surgery', 'less anxiety before the operation'), ('Depression', 'fewer symptoms, added to usual care'),
+      ('Dementia', 'fewer depressive symptoms'), ('Pain', 'less pain, and less pain medicine')]
+rc = R(605, 50, 545, 360, MUL, 'none', 0, 14) + T(627, 82, 'In trials, for much more', 17, 700, MU)
+for k, (a_, b_) in enumerate(ev):
+    y = 136 + k * 64
+    rc += C(636, y - 6, 6, MU) + T(654, y, a_, 18, 600, INK) + T(654, y + 24, b_, 15, 400, INK)
+rc += T(627, 394, 'Cochrane reviews and meta analyses, mostly small trials.', 13.5, 400, MUT)
+g += F(1, rc)
+g += F(2, T(590, 446, 'Nobody knows which part of the music does the work. That is a modeling question.', 19, 400, '#C45200', 'middle', extra='font-family="et-book,Georgia,serif" style="font-size-adjust:none"'))
 MEDIC = sec('Music already acts on the brain, as medicine', SVG(g), ch='0',
             ref='NCCIH, Music and Health: What the Science Says, 2022: Burrai 2021 (Parkinson\'s), Bradt, Dileo, Shim, Cochrane 2013 (surgery), Aalbers, Cochrane 2017 (depression), van der Steen, Cochrane 2018 (dementia), Lee 2016 (pain). Salimpoor et al., Nature Neuroscience 2011. Di Liberto et al., eLife 2020',
-            notes='Step 4 of 4. Left, the mechanism in one chain: a melody sets up an expectation of what comes next, a fulfilled or delayed expectation releases dopamine at the peak of pleasure (Salimpoor 2011), and listeners\' brains track that expectation note by note (Di Liberto 2020). Right, music medicine in five lines, with the evidence quality said honestly: Parkinson\'s gait with rhythmic auditory stimulation, anxiety before surgery, depression, dementia, pain. Most trials are small and at risk of bias, and none tells us which part of the music works. That is where a model comes in. Bridge: music and the brain are this closely tied, so let us model music from the beginning, starting with the simplest graph, and end where music meets the brain.')
+            notes='Step 4 of 4. Left, the best known case, animated: people with Parkinson\'s walk to a metronome or to music with a clear beat, one step per beat, and walking speed and stride length improve, rhythmic auditory stimulation. Why music works at all: a melody sets up an expectation, a fulfilled or delayed one releases dopamine at the peak of pleasure (Salimpoor 2011), and listeners\' brains track it note by note (Di Liberto 2020). Right, music medicine in four more lines, with the evidence quality said honestly: Parkinson\'s gait with rhythmic auditory stimulation, anxiety before surgery, depression, dementia, pain. Most trials are small and at risk of bias, and none tells us which part of the music works. That is where a model comes in. Bridge: music and the brain are this closely tied, so let us model music from the beginning, starting with the simplest graph, and end where music meets the brain.')
 
 # ---- Nov 14 (his request): vision models have graphs inside too ----
 VB = '#2f6f8f'
